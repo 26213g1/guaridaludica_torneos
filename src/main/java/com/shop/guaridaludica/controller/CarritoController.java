@@ -1,0 +1,32 @@
+package com.shop.guaridaludica.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.shop.guaridaludica.carrito.Carrito;
+
+@Controller
+@RequestMapping("/carrito")
+public class CarritoController {
+
+    @Autowired
+    private Carrito carrito; // Spring inyecta automáticamente el carrito de la sesión
+
+    @GetMapping
+    public String verCarrito(Model model) {
+        model.addAttribute("items", carrito.getItems());
+        model.addAttribute("total", carrito.getTotal());
+        return "carrito"; // Nombre de tu template HTML
+    }
+
+    @PostMapping("/agregar")
+    public String agregar(@RequestParam Long id) {
+        carrito.agregarProducto(id);
+        return "redirect:/carrito";
+    }
+}
