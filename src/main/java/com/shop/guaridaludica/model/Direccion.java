@@ -21,6 +21,7 @@ public class Direccion {
     private String numero;
     private String ciudad;
     private String codigoPostal;
+    private String pais;
 
     private boolean esPrincipal;
 
@@ -90,6 +91,14 @@ public class Direccion {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
     
 }

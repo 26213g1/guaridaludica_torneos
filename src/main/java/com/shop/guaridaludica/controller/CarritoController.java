@@ -29,4 +29,12 @@ public class CarritoController {
         carrito.agregarProducto(id);
         return "redirect:/carrito";
     }
+
+    @PostMapping("/eliminar")
+    public String eliminar(@RequestParam Long id) {
+        // Asumiendo que tu clase Carrito tiene un método eliminarProducto(Long id)
+        // Si no lo tienes, puedes crearlo en la clase Carrito
+        carrito.eliminarProducto(id); 
+        return "redirect:/carrito";
+    }
 }

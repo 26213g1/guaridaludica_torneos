@@ -16,19 +16,34 @@
                                     <th>Precio</th>
                                     <th>Cantidad</th>
                                     <th>Subtotal</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="item : ${items}">
                                     <td th:text="${item.nombre}">Juego</td>
-                                    <!-- Aquí recuperamos tu lógica de precio y moneda -->
                                     <td th:text="${#numbers.formatDecimal(item.precio, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</td>
                                     <td th:text="${item.cantidad}">1</td>
-                                    <!-- Cálculo del subtotal -->
                                     <td th:text="${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</td>
+                                    <td>
+                                        <!-- Botón para eliminar el item del carrito -->
+                                        <form th:action="@{/carrito/eliminar}" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" th:value="${item.productoId}">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Botones de navegación inferiores (Seguir comprando) -->
+                    <div class="d-flex justify-content-between my-3">
+                        <a th:href="@{/}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Seguir comprando
+                        </a>
                     </div>
                 </div>
 
@@ -40,10 +55,10 @@
                             <p class="fs-5">Total: 
                                 <strong class="text-success" th:text="${#numbers.formatDecimal(total, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</strong>
                             </p>
-                            <!-- Botón de acción -->
-                            <form th:action="@{/pedido/checkout}" method="get">
-                                <button type="submit" class="btn btn-success w-100 py-2">Tramitar Pedido</button>
-                            </form>
+                            <!-- Botón de acción principal (Verde) -->
+                            <a th:href="@{/pedido/checkout}" class="btn btn-success w-100 py-2">
+                                Tramitar Pedido <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

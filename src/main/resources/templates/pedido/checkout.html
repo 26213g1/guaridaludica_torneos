@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout-simple :: layout(~{::main})}">
+<body>
+    <main>
+        <div class="container my-4">
+            <h2 class="mb-4">Finalizar Pedido</h2>
+
+            <!-- Selector de direcciones -->
+            <div class="mb-3">
+                <label>Tus direcciones guardadas:</label>
+                <select class="form-select" id="selectorDireccion" onchange="autocompletar()">
+                    <option value="">-- Nueva dirección --</option>
+                    <option th:each="dir : ${direccionesGuardadas}" 
+                        th:value="${dir.id}"
+                        th:data-alias="${dir.alias}"
+                        th:data-calle="${dir.calle}"
+                        th:data-numero="${dir.numero}"
+                        th:data-ciudad="${dir.ciudad}"
+                        th:data-cp="${dir.codigoPostal}"
+                        th:text="${dir.alias} + ' - ' + ${dir.calle} + ' ' + ${dir.numero}">
+                </option>
+                </select>
+            </div>
+
+            <form th:action="@{/pedido/procesar}" th:object="${direccion}" method="post">
+                <div class="row">
+                    <!-- Formulario de Envío -->
+                    <div class="col-lg-7">
+                        <div class="card shadow-sm border-0 p-4 mb-4">
+                            <h4 class="mb-3 text-secondary"><i class="bi bi-geo-alt"></i> Dirección de Envío</h4>
+                            
+                            <div class="mb-3">
+                                <label for="alias" class="form-label">Guardar como (ej. Casa, Trabajo)</label>
+                                <input type="text" class="form-control" th:field="*{alias}" id="alias" placeholder="Mi dirección principal">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="calle" class="form-label">Calle</label>
+                                    <input type="text" class="form-control" id="calle" th:field="*{calle}" required placeholder="Ej. Calle Mayor">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="numero" class="form-label">Número / Piso</label>
+                                    <input type="text" class="form-control" id="numero" th:field="*{numero}" required placeholder="Ej. 12, 3ºB">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="ciudad" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="ciudad" th:field="*{ciudad}" required placeholder="Ej. Madrid">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="codigoPostal" class="form-label">Código Postal</label>
+                                    <input type="text" class="form-control" id="codigoPostal" th:field="*{codigoPostal}" required placeholder="28001">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen del Pedido Lateral -->
+                    <div class="col-lg-5">
+                        <div class="card shadow-sm border-0 p-4 bg-white">
+                            <h4 class="mb-3 text-secondary"><i class="bi bi-receipt"></i> Resumen de Compra</h4>
+                            
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item d-flex justify-content-between lh-sm" th:each="item : ${items}">
+                                    <div>
+                                        <h6 class="my-0" th:text="${item.nombre}">Juego</h6>
+                                        <small class="text-muted" th:text="'Cant: ' + ${item.cantidad}">1</small>
+                                    </div>
+                                    <span class="text-muted" th:text="${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                    <span class="fw-bold">Total a Pagar</span>
+                                    <strong class="text-success fs-5" th:text="${#numbers.formatDecimal(total, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</strong>
+                                </li>
+                            </ul>
+
+                            <button type="submit" class="btn btn-success w-100 py-3 fw-bold">
+                                <i class="bi bi-lock-fill"></i> Confirmar y Pagar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-4">
+                    <a th:href="@{/carrito}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Volver al Carrito
+                    </a>
+                    <a th:href="@{/}" class="btn btn-outline-danger btn-sm">
+                        Cancelar pedido
+                    </a>
+                </div>
+
+            </form>
+            <!-- Enlace al archivo JS externo usando Thymeleaf -->
+            <script th:src="@{/js/checkout.js}"></script>
+        </div>
+    </main>
+</body>
+</html>

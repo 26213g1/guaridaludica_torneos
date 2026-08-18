@@ -19,7 +19,7 @@
             <!-- Si SÍ está autenticado (Logueado) -->
             <div sec:authorize="isAuthenticated()" class="d-flex align-items-center me-3">
                 <span class="text-light me-3" th:if="${#authentication.principal != null}">
-                    🎲 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
+                👤 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
                 </span>
                 <form th:action="@{/logout}" method="post" class="d-inline m-0">
                     <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
@@ -27,7 +27,13 @@
             </div>
 
             <!-- Carrito (siempre visible para todos) -->
-            <a href="/carrito" class="btn btn-outline-light btn-sm">🛒 (0)</a>
+            <a th:href="@{/carrito}" class="btn btn-outline-light btn-sm position-relative">
+                🛒 
+                <span class="badge rounded-pill bg-danger" th:text="${cantidadCarrito != null ? cantidadCarrito : 0}">
+                    0
+                </span>
+            </a>
+
         </div>
     </div>
 </nav>

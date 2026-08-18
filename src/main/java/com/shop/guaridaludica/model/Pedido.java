@@ -23,7 +23,8 @@ public class Pedido {
     private BigDecimal total;
 
     @Column(nullable = false)
-    private String estado = "PENDIENTE";
+    @Enumerated(EnumType.STRING)
+    private EstadoPedido estado = EstadoPedido.PENDIENTE_PAGO;
 
     // --- SNAPSHOT DE LA DIRECCIÓN (Inmutable para el histórico) ---
     @Column(name = "direccion_calle")
@@ -46,6 +47,14 @@ public class Pedido {
             this.direccionCiudad = direccion.getCiudad();
             this.direccionCP = direccion.getCodigoPostal();
         }
+    }
+
+    // Enum para los estados del pedido
+    public enum EstadoPedido {
+        PENDIENTE_PAGO,
+        PAGADO,
+        ENVIADO,
+        CANCELADO
     }
 
     public Long getId() {
@@ -80,13 +89,6 @@ public class Pedido {
         this.total = total;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public String getDireccionCalle() {
         return direccionCalle;
@@ -118,6 +120,14 @@ public class Pedido {
 
     public void setDireccionCP(String direccionCP) {
         this.direccionCP = direccionCP;
+    }
+
+    public EstadoPedido getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
     }
 
     
