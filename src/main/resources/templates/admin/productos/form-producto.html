@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/admin-layout :: layout(~{::main})}">
+<body>
+    <main>
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm p-4">
+                        <!-- Título dinámico según si el ID es nulo o tiene valor -->
+                        <h3 class="mb-4 fw-bold" th:text="${producto.id == null} ? '🎲 Añadir Nuevo Producto' : '✏️ Editar Producto'">Gestión de Producto</h3>
+                        
+                        <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+                            
+                            <!-- Campo oculto crucial para que Spring sepa que estamos editando -->
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del Juego</label>
+                                <input type="text" th:field="*{nombre}" class="form-control" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Precio (€)</label>
+                                    <input type="number" step="0.01" th:field="*{precio}" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Stock disponible</label>
+                                    <input type="number" th:field="*{stock}" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Mínimo Jugadores</label>
+                                    <input type="number" th:field="*{minJugadores}" class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Máximo Jugadores</label>
+                                    <input type="number" th:field="*{maxJugadores}" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Categorías (Puedes seleccionar varias)</label>
+                                <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                                    <div class="form-check" th:each="cat : ${todasCategorias}">
+                                        <input class="form-check-input" type="checkbox" 
+                                            th:field="*{categorias}" 
+                                            th:value="${cat.id}" 
+                                            th:id="'cat-' + ${cat.id}">
+                                        <label class="form-check-label" th:for="'cat-' + ${cat.id}" th:text="${cat.nombre}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea th:field="*{descripcion}" class="form-control" rows="4"></textarea>
+                            </div>
+
+                            <!-- Sección para ver y gestionar imágenes existentes (Solo se muestra en Edición) -->
+                            <div class="mb-4" th:if="${producto.id != null and !#lists.isEmpty(producto.imagenes)}">
+                                <label class="form-label fw-bold">Imágenes actuales (Selecciona cuál es la Principal)</label>
+                                <div class="row g-2">
+                                    <div class="col-md-3 text-center" th:each="img : ${producto.imagenes}">
+                                        <div class="card p-2 border">
+                                            <img th:src="${img.url}" class="img-fluid mb-2" style="height: 80px; object-fit: contain;" alt="Imagen producto">
+                                            <!-- Radio button para marcar la imagen principal -->
+                                            <div class="form-check d-flex justify-content-center mb-1">
+                                                <input class="form-check-input" type="radio" name="imagenPrincipalId" th:value="${img.id}" th:checked="${img.esPrincipal}">
+                                                <label class="form-check-label ms-1 small">Principal</label>
+                                            </div>
+                                            <!-- Checkbox para marcar la imagen para eliminación -->
+                                            <div class="form-check d-flex justify-content-center">
+                                                <input class="form-check-input border-danger" type="checkbox" name="idsImagenesAEliminar" th:value="${img.id}" th:id="'del-' + ${img.id}">
+                                                <label class="form-check-label ms-1 small text-danger" th:for="'del-' + ${img.id}">Eliminar</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selector de múltiples imágenes -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold" th:text="${producto.id == null} ? 'Imágenes para el Carrusel' : 'Añadir más imágenes al Carrusel'">Imágenes</label>
+                                
+                                <!-- Añadimos un id="inputImagenes" para controlarlo desde JavaScript -->
+                                <input type="file" name="files" id="inputImagenes" class="form-control" multiple accept="image/*">
+                                
+                                <div class="form-text" th:text="${producto.id == null} ? 'La primera imagen seleccionada será la principal automáticamente.' : 'Si seleccionas nuevas imágenes, se añadirán a las que ya tenía el producto.'">Ayuda de archivos</div>
+
+                                <!-- CONTENEDOR PARA LAS MINIATURAS NUEVAS -->
+                                <div id="preview-container" class="d-flex flex-wrap gap-2 mt-3"></div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ENLAZAMOS EL FICHERO JS EXTERNO AQUÍ -->
+        <script th:src="@{/js/form-producto.js}"></script>
+    </main>
+</body>
+</html>

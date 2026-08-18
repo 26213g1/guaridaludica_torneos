@@ -1,0 +1,18 @@
+<div th:fragment="carrusel" id="carruselProducto" class="carousel slide shadow-sm rounded carrusel-detalle-contenedor" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <!-- USAMOS EL MÉTODO ORDENADO -->
+        <div th:each="img, iterStat : ${producto.imagenesOrdenadas}" 
+             th:classappend="${iterStat.first} ? 'active'" 
+             class="carousel-item">
+            
+            <img th:src="${img.url}" class="d-block w-100" alt="Imagen del producto">
+        </div>
+    </div>
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carruselProducto" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carruselProducto" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>

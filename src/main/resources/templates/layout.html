@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <title>Guarida Lúdica - Tu Tienda de Juegos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para los iconos (¡Importante para la lupa!) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Nuestro CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <!-- Barra superior (Navbar) -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <div class="row">
+            <!-- Menú Lateral -->
+            <aside class="col-md-3">
+                <div class="sidebar">
+                    <h5 class="fw-bold mb-3">Categorías</h5>
+                    <div id="categorias">
+                        <a th:each="cat : ${categorias}" th:href="@{/categoria/{id}(id=${cat.id})}" class="nav-link-cat"
+                            th:text="${cat.nombre}">Nombre Categoría</a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Zona de contenido dinámico -->
+            <main class="col-md-9">
+                <div th:replace="${content}"></div>
+            </main>
+        </div>
+    </div>
+
+</body>
+
+</html>
