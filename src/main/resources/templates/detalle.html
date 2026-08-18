@@ -43,7 +43,17 @@
                     </div>
                     <p class="mb-4"><strong>📦 Stock disponible:</strong> <span th:text="${producto.stock}"></span> unidades</p>
                     
-                    <button class="btn btn-success btn-lg w-100">Añadir al Carrito</button>
+                    <form th:action="@{/carrito/agregar}" method="post">
+                        <input type="hidden" name="id" th:value="${producto.id}">
+                        <div class="input-group mb-3">
+                            <!-- Opcional: Selector de cantidad si quieres permitir elegir cuántos añadir -->
+                            <!--<input type="number" name="cantidad" value="1" min="1" max="${producto.stock}" class="form-control" style="max-width: 90px;" />-->
+                            <button type="submit" class="btn btn-success btn-lg flex-grow-1">
+                                <i class="fas fa-cart-plus me-2"></i> Añadir al Carrito
+                            </button>
+                        </div>
+                    </form>
+                    
                 </div>
                 
             </div>
