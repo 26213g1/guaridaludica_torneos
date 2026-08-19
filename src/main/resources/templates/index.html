@@ -22,12 +22,19 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${producto.nombre}">Nombre</h5>
                         <p class="card-text text-muted" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</p>
-                        <p class="card-text small" th:text="${#strings.abbreviate(producto.descripcion, 80)}">Desc...</p>
+                        <p class="card-text small" th:text="${#strings.abbreviate(producto.descripcion, 70)}">Desc...</p>
                         <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn btn-primary btn-sm">Ver Detalles</a>
                         
                         <div class="mt-2">
                             <span th:if="${producto.stock > 0}" class="badge bg-success">En Stock</span>
                             <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
+                            <!-- Indicador de stock discreto -->
+                            <span th:if="${producto.stock > 0}" class="text-muted small">
+                                <i class="bi bi-box-seam me-1"></i><strong th:text="${producto.stock}">10</strong> uds.
+                            </span>
+                            <span th:if="${producto.stock == 0}" class="text-danger small fw-bold">
+                                <i class="bi bi-x-circle me-1"></i> Agotado
+                            </span>
                             
                             <!-- Formulario para añadir al carrito -->
                             <form th:action="@{/carrito/agregar}" method="post" class="mt-2">

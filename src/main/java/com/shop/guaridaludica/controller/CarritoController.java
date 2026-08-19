@@ -37,4 +37,13 @@ public class CarritoController {
         carrito.eliminarProducto(id); 
         return "redirect:/carrito";
     }
+
+    @PostMapping("/actualizar")
+    public String actualizarCantidad(@RequestParam Long id, @RequestParam int cantidad) {
+        // Llamamos al método de la clase Carrito en sesión
+        carrito.actualizarCantidad(id, cantidad);
+        
+        // Recargamos la vista del carrito para que se reflejen los nuevos subtotales y el total
+        return "redirect:/carrito";
+    }
 }

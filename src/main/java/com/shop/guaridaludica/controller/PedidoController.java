@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shop.guaridaludica.carrito.Carrito;
 import com.shop.guaridaludica.carrito.CarritoItem;
@@ -21,6 +22,7 @@ import com.shop.guaridaludica.repository.DireccionRepository;
 import com.shop.guaridaludica.repository.PedidoRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
 import com.shop.guaridaludica.repository.UsuarioRepository;
+import com.shop.guaridaludica.service.PedidoService;
 
 import org.springframework.security.core.Authentication;
 
@@ -45,6 +47,9 @@ public class PedidoController {
 
     @Autowired
     private DireccionRepository direccionRepository;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @GetMapping("/checkout")
     public String mostrarCheckout(Model model, Authentication authentication) {
@@ -134,17 +139,26 @@ public class PedidoController {
     }
 
     @PostMapping("/confirmar-pago/{id}")
-    public String confirmarPago(@PathVariable Long id) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    public String confirmarPago(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
-        // 1. Actualizar estado a pagado
-        pedido.setEstado(Pedido.EstadoPedido.PAGADO);
-        pedidoRepository.save(pedido);
+            // 1. Descontar el stock de forma segura antes de darlo por pagado
+            pedidoService.descontarStock(pedido);
 
-        // 2. AHORA SÍ: Vaciar el carrito de la sesión
-        carrito.vaciar();
+            // 2. Actualizar estado a pagado
+            pedido.setEstado(Pedido.EstadoPedido.PAGADO);
+            pedidoRepository.save(pedido);
 
-        return "redirect:/pedido/exitoso?id=" + pedido.getId();
+            // 3. Vaciar el carrito de la sesión
+            carrito.vaciar();
+
+            return "redirect:/pedido/exitoso?id=" + pedido.getId();
+        } catch (RuntimeException e) {
+            // Si salta un error de stock en el último segundo, cancelamos el pedido y avisamos
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/carrito";
+        }
     }
 
     @PostMapping("/cancelar/{id}")
@@ -164,4 +178,5 @@ public class PedidoController {
         model.addAttribute("idPedido", id);
         return "pedido/pedido-exitoso";
     }
+
 }

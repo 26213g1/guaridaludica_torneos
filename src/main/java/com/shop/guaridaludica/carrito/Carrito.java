@@ -49,4 +49,18 @@ public class Carrito {
         // Buscamos y eliminamos el ítem cuyo producto coincida con el ID recibido
         items.removeIf(item -> item.getProductoId().equals(productoId));
     }
+
+    public void actualizarCantidad(Long productoId, int nuevaCantidad) {
+        for (CarritoItem item : items) {
+            if (item.getProductoId().equals(productoId)) {
+                if (nuevaCantidad > 0) {
+                    item.setCantidad(nuevaCantidad);
+                } else {
+                    // Si ponen 0 o negativo, podemos eliminarlo directamente
+                    items.remove(item);
+                }
+                break;
+            }
+        }
+    }
 }
