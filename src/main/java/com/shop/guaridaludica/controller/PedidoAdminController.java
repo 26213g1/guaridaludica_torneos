@@ -6,11 +6,14 @@ import com.shop.guaridaludica.repository.ProductoRepository;
 import com.shop.guaridaludica.model.DetallePedido;
 import com.shop.guaridaludica.model.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/admin/pedidos")
@@ -21,11 +24,34 @@ public class PedidoAdminController {
     @Autowired
     private ProductoRepository productoRepository;
 
+    // Inyectamos el mismo tamaño de paginación de administración que usas en productos
+    @Value("${shop.pagination.admin-size}")
+    private int adminSize;
+
     // Listar todos los pedidos de la tienda para el admin
     @GetMapping
-    public String listarPedidosAdmin(Model model) {
-        List<Pedido> pedidos = pedidoRepository.findAll(); // O ordenados por fecha desc
-        model.addAttribute("pedidos", pedidos);
+    public String listarPedidosAdmin(@RequestParam(required = false) String query,
+            @RequestParam(required = false) Pedido.EstadoPedido estado,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, adminSize);
+
+        //List<Pedido> pedidos = pedidoRepository.findAll(); // O ordenados por fecha desc
+        // Llamamos al repositorio con los filtros
+        Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, pageable);
+        
+        model.addAttribute("pedidos", pedidosPage.getContent());
+        model.addAttribute("currentPage", pedidosPage.getNumber());
+        model.addAttribute("totalPages", pedidosPage.getTotalPages());
+        model.addAttribute("hasPrevious", pedidosPage.hasPrevious());
+        model.addAttribute("hasNext", pedidosPage.hasNext());
+
+        // Parámetros para mantener los filtros seleccionados en la vista HTML
+        model.addAttribute("query", query);
+        model.addAttribute("estadoSeleccionado", estado);
+        model.addAttribute("estadosDisponibles", Pedido.EstadoPedido.values()); // Para poblar el select de estados
+        
         return "admin/pedidos/listar"; // Vista HTML en templates/admin/pedidos.html
     }
 
@@ -47,6 +73,6 @@ public class PedidoAdminController {
         pedido.setEstado(nuevoEstado);
         pedidoRepository.save(pedido);
 
-        return "redirect:/admin/pedidos/listar";
+        return "redirect:/admin/pedidos";
     }
 }
