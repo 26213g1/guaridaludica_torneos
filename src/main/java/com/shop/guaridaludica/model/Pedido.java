@@ -3,6 +3,8 @@ package com.shop.guaridaludica.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
@@ -38,6 +40,9 @@ public class Pedido {
 
     @Column(name = "direccion_cp")
     private String direccionCP;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles = new ArrayList<>();
 
     // Método útil para congelar la dirección al crear el pedido
     public void setDireccionEnvio(Direccion direccion) {
@@ -130,5 +135,11 @@ public class Pedido {
         this.estado = estado;
     }
 
-    
+    public List<DetallePedido> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
+    }
 }

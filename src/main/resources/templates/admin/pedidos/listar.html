@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/admin-layout :: layout(~{::section})}">
+<head>
+    <title>Gestión de Pedidos - Admin</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📦 Gestión de Pedidos de la Tienda</h2>
+        </div>
+
+        <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info">
+            No hay ningún pedido registrado en la plataforma todavía.
+        </div>
+
+        <div th:unless="${#lists.isEmpty(pedidos)}" class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones / Cambiar Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="pedido : ${pedidos}">
+                                <td class="fw-bold" th:text="'#' + ${pedido.id}">#1</td>
+                                <td>
+                                    <span th:text="${pedido.usuario.nombre != null ? pedido.usuario.nombre : pedido.usuario.alias}">Usuario</span><br>
+                                    <small class="text-muted" th:text="${pedido.usuario.email}">email@test.com</small>
+                                </td>
+                                <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+                                <td class="fw-semibold" th:text="${pedido.total + ' €'}">45.00 €</td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${pedido.estado.name() == 'PAGADO'} ? 'bg-success' : (${pedido.estado.name() == 'ENVIADO'} ? 'bg-info' : (${pedido.estado.name() == 'CANCELADO'} ? 'bg-danger' : 'bg-warning text-dark'))"
+                                          th:text="${pedido.estado}">PENDIENTE_PAGO</span>
+                                </td>
+                                <td class="text-center">
+                                    <!-- Contenedor flexible para alinear el botón de ver detalle y el formulario -->
+                                    <div class="d-flex justify-content-center gap-2 align-items-center">
+                                        <!-- Botón para abrir el modal de detalles -->
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" th:data-bs-target="'#adminDetalleModal' + ${pedido.id}">
+                                            <i class="fa-solid fa-eye"></i> Detalle
+                                        </button>
+
+                                        <!-- Formulario para cambiar el estado de forma rápida desde el admin -->
+                                        <form th:action="@{/admin/pedidos/actualizar-estado/{id}(id=${pedido.id})}" method="post" class="d-inline-flex gap-2 align-items-center m-0">
+                                            <select name="nuevoEstado" class="form-select form-select-sm">
+                                                <option th:each="est : ${T(com.shop.guaridaludica.model.Pedido.EstadoPedido).values()}"
+                                                        th:value="${est}" 
+                                                        th:text="${est}" 
+                                                        th:selected="${est == pedido.estado}">
+                                                </option>
+                                            </select>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">Actualizar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODALES DE DETALLE (Generados dinámicamente uno por cada pedido) -->
+        <div th:each="pedido : ${pedidos}">
+            <div class="modal fade" th:id="'adminDetalleModal' + ${pedido.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title">Detalle del Pedido <span th:text="'#' + ${pedido.id}">#1</span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Cliente:</strong> <span th:text="${pedido.usuario.nombre != null ? pedido.usuario.nombre : pedido.usuario.alias}"></span></p>
+                                    <p class="mb-1"><strong>Email:</strong> <span th:text="${pedido.usuario.email}"></span></p>
+                                    <p class="mb-1"><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Estado actual:</strong> <span class="badge bg-secondary" th:text="${pedido.estado}"></span></p>
+                                    <p class="mb-1"><strong>Dirección de envío:</strong></p>
+                                    <small class="text-muted" th:text="${pedido.direccionCalle + ' ' + pedido.direccionNumero + ', ' + pedido.direccionCiudad + ' (' + pedido.direccionCP + ')'}"></small>
+                                </div>
+                            </div>
+                            
+                            <h6 class="text-primary mb-2">Juegos de mesa incluidos:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Juego</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-end">Precio Unidad</th>
+                                            <th class="text-end">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="det : ${pedido.detalles}">
+                                            <td th:text="${det.producto.nombre}">Catan</td>
+                                            <td class="text-center" th:text="${det.cantidad}">1</td>
+                                            <td class="text-end" th:text="${det.precioUnitario + ' €'}">39.99 €</td>
+                                            <td class="text-end fw-bold" th:text="${det.precioUnitario * det.cantidad + ' €'}">39.99 €</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-end mt-3">
+                                <h5 class="text-dark">Total del pedido: <span class="text-primary" th:text="${pedido.total + ' €'}">45.00 €</span></h5>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

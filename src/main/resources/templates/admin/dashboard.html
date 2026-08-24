@@ -70,6 +70,23 @@
                     </div>
                 </div>
 
+                <!-- Tarjeta de Pedidos para el panel principal -->
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm border-0 border-top border-danger border-4">
+                        <div class="card-body text-center p-4">
+                            <div class="display-5 text-danger mb-3">
+                                <i class="fa-solid fa-box"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Pedidos</h5>
+                            <p class="card-text text-muted small my-3">
+                                Revisa y gestiona los pedidos realizados por los clientes.
+                            </p>
+                            <a th:href="@{/admin/pedidos}" class="btn btn-danger w-100 mt-2">
+                                <i class="fa-solid fa-arrow-right me-1"></i> Gestionar Pedidos
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

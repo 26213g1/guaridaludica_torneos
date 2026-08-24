@@ -7,6 +7,7 @@
     <section class="container mt-4 mb-5">
         <h2 class="mb-4">⚙️ Panel de Mi Cuenta</h2>
 
+        <!-- FILA 1: Datos Personales y Agenda de Direcciones -->
         <div class="row">
             <!-- Columna Izquierda: Información Personal -->
             <div class="col-md-4 mb-4">
@@ -15,7 +16,6 @@
                         <h4 class="card-title text-primary mb-3">Mis Datos Personales</h4>
                         
                         <form th:action="@{/perfil/actualizar-datos}" th:object="${usuario}" method="post">
-                            <!-- Datos fijos solo de lectura -->
                             <div class="mb-3">
                                 <label class="form-label text-muted">Alias (No modificable)</label>
                                 <input type="text" th:field="*{alias}" class="form-control bg-light" readonly>
@@ -27,7 +27,6 @@
 
                             <hr>
 
-                            <!-- Datos editables -->
                             <div class="mb-3">
                                 <label class="form-label">Nombre y Apellidos</label>
                                 <input type="text" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo">
@@ -44,8 +43,8 @@
             </div>
 
             <!-- Columna Derecha: Agenda de Direcciones -->
-            <div class="col-md-8">
-                <div class="card shadow-sm mb-4">
+            <div class="col-md-8 mb-4">
+                <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">📍 Mi Agenda de Direcciones</h4>
                         
@@ -57,7 +56,7 @@
                         <div class="row" th:unless="${#lists.isEmpty(usuario.direcciones)}">
                             <div class="col-md-6 mb-3" th:each="dir : ${usuario.direcciones}">
                                 <div class="card border-secondary h-100">
-                                    <div class="card-body">
+                                    <div class="card-body d-flex flex-column">
                                         <h5 class="card-title text-secondary">
                                             <span th:text="${dir.alias}">Casa</span>
                                             <span th:if="${dir.esPrincipal}" class="badge bg-success fs-6 float-end">Principal</span>
@@ -66,11 +65,28 @@
                                         <p class="card-text mb-1" th:text="${dir.ciudad + ' (' + dir.codigoPostal + ')'}">Ciudad y CP</p>
                                         <p class="card-text text-muted" th:text="${dir.pais}">País</p>
                                         
-                                        <!-- Botón para eliminar dirección -->
-                                        <form th:action="@{/perfil/direcciones/eliminar}" method="post" class="mt-2">
-                                            <input type="hidden" name="id" th:value="${dir.id}" />
-                                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
-                                        </form>
+                                        <div class="mt-auto pt-3">
+                                            <div class="d-grid gap-2 d-md-flex">
+                                                <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#editarDireccionModal"
+                                                        th:data-id="${dir.id}"
+                                                        th:data-alias="${dir.alias}"
+                                                        th:data-calle="${dir.calle}"
+                                                        th:data-numero="${dir.numero}"
+                                                        th:data-ciudad="${dir.ciudad}"
+                                                        th:data-cp="${dir.codigoPostal}"
+                                                        th:data-pais="${dir.pais}"
+                                                        th:data-principal="${dir.esPrincipal}">
+                                                    Editar
+                                                </button>
+                                                
+                                                <form th:action="@{/perfil/direcciones/eliminar}" method="post" class="flex-fill m-0">
+                                                    <input type="hidden" name="id" th:value="${dir.id}" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -117,11 +133,162 @@
                             </div>
                             <button type="submit" class="btn btn-success w-100">Guardar Dirección en la Agenda</button>
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- FILA 2: Historial de Pedidos -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">📦 Historial de Pedidos</h4>
+
+                        <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-secondary text-center mb-0">
+                            Aún no has realizado ningún pedido en La Guarida Lúdica. ¡Anímate a explorar el catálogo de juegos de mesa!
+                        </div>
+
+                        <div th:unless="${#lists.isEmpty(pedidos)}" class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nº Pedido</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th>Dirección de Envío</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="pedido : ${pedidos}">
+                                        <td class="fw-bold" th:text="'#' + ${pedido.id}">#1</td>
+                                        <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+                                        <td class="fw-semibold" th:text="${pedido.total + ' €'}">45.00 €</td>
+                                        <td>
+                                            <span class="badge" 
+                                                  th:classappend="${pedido.estado.name() == 'PAGADO'} ? 'bg-success' : (${pedido.estado.name() == 'ENVIADO'} ? 'bg-info' : 'bg-warning text-dark')"
+                                                  th:text="${pedido.estado}">PENDIENTE_PAGO</span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted" th:text="${pedido.direccionCalle + ' ' + pedido.direccionNumero + ', ' + pedido.direccionCiudad + ' (' + pedido.direccionCP + ')'}">Calle Falsa 123</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <!-- Botón que abre el modal individual de este pedido -->
+                                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" th:data-bs-target="'#detallePedidoModal' + ${pedido.id}">
+                                                <i class="fa-solid fa-eye"></i> Ver Detalles
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- MODALES DE PEDIDOS (Uno por cada pedido para ver sus juegos comprados) -->
+        <div th:each="pedido : ${pedidos}">
+            <div class="modal fade" th:id="'detallePedidoModal' + ${pedido.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title">Detalles del Pedido <span th:text="'#' + ${pedido.id}">#1</span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-2"><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}"></span></p>
+                            <p class="mb-3"><strong>Estado actual:</strong> <span class="badge bg-secondary" th:text="${pedido.estado}"></span></p>
+                            
+                            <h6 class="text-primary mb-2">Juegos comprados:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Juego</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-end">Precio Unidad</th>
+                                            <th class="text-end">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="det : ${pedido.detalles}">
+                                            <td th:text="${det.producto.nombre}">Catan</td>
+                                            <td class="text-center" th:text="${det.cantidad}">1</td>
+                                            <td class="text-end" th:text="${det.precioUnitario + ' €'}">39.99 €</td>
+                                            <td class="text-end fw-bold" th:text="${det.precioUnitario * det.cantidad + ' €'}">39.99 €</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-end mt-3">
+                                <h5 class="text-dark">Total pagado: <span class="text-primary" th:text="${pedido.total + ' €'}">45.00 €</span></h5>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- MODAL DE EDICIÓN DE DIRECCIÓN -->
+        <div class="modal fade" id="editarDireccionModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form th:action="@{/perfil/direcciones/actualizar}" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarModalLabel">Editar Dirección</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="edit-id" name="id" />
+
+                            <div class="mb-3">
+                                <label for="edit-alias" class="form-label">Alias</label>
+                                <input type="text" class="form-control" id="edit-alias" name="alias" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-calle" class="form-label">Calle</label>
+                                <input type="text" class="form-control" id="edit-calle" name="calle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-numero" class="form-label">Número</label>
+                                <input type="text" class="form-control" id="edit-numero" name="numero" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-ciudad" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="edit-ciudad" name="ciudad" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-cp" class="form-label">Código Postal</label>
+                                <input type="text" class="form-control" id="edit-cp" name="codigoPostal" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-pais" class="form-label">País</label>
+                                <input type="text" class="form-control" id="edit-pais" name="pais" required>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="edit-principal" name="esPrincipal">
+                                <label class="form-check-label" for="edit-principal">Establecer como dirección principal</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Script externo de edición de direcciones -->
+        <script th:src="@{/js/editar-direccion.js}"></script>
     </section>
 </body>
 </html>
