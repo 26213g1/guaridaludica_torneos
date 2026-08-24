@@ -36,4 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
             tab.show();
         }
     }
+
+    // 3. Limpiar la pestaña activa si se hace clic en el botón/enlace de cerrar sesión
+    const logoutBtn = document.querySelector('form[action*="/logout"] button, a[href*="/logout"]');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            sessionStorage.removeItem('activeTab');
+        });
+    }
 });
