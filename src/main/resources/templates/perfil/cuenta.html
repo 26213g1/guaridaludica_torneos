@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{auth-layout :: layout(~{::section})}">
+<head>
+    <title>Mi Cuenta - La Guarida Lúdica</title>
+</head>
+<body>
+    <section class="container mt-4 mb-5">
+        <h2 class="mb-4">⚙️ Panel de Mi Cuenta</h2>
+
+        <div class="row">
+            <!-- Columna Izquierda: Información Personal -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">Mis Datos Personales</h4>
+                        
+                        <form th:action="@{/perfil/actualizar-datos}" th:object="${usuario}" method="post">
+                            <!-- Datos fijos solo de lectura -->
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Alias (No modificable)</label>
+                                <input type="text" th:field="*{alias}" class="form-control bg-light" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Correo Electrónico (No modificable)</label>
+                                <input type="email" th:field="*{email}" class="form-control bg-light" readonly>
+                            </div>
+
+                            <hr>
+
+                            <!-- Datos editables -->
+                            <div class="mb-3">
+                                <label class="form-label">Nombre y Apellidos</label>
+                                <input type="text" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono de contacto</label>
+                                <input type="text" th:field="*{telefono}" class="form-control" placeholder="+34 600000000">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Agenda de Direcciones -->
+            <div class="col-md-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">📍 Mi Agenda de Direcciones</h4>
+                        
+                        <!-- Listado de Direcciones Actuales -->
+                        <div th:if="${#lists.isEmpty(usuario.direcciones)}" class="alert alert-info">
+                            No tienes ninguna dirección guardada en tu agenda. ¡Añade una para agilizar tus compras!
+                        </div>
+
+                        <div class="row" th:unless="${#lists.isEmpty(usuario.direcciones)}">
+                            <div class="col-md-6 mb-3" th:each="dir : ${usuario.direcciones}">
+                                <div class="card border-secondary h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-secondary">
+                                            <span th:text="${dir.alias}">Casa</span>
+                                            <span th:if="${dir.esPrincipal}" class="badge bg-success fs-6 float-end">Principal</span>
+                                        </h5>
+                                        <p class="card-text mb-1" th:text="${dir.calle + ' ' + dir.numero}">Calle y número</p>
+                                        <p class="card-text mb-1" th:text="${dir.ciudad + ' (' + dir.codigoPostal + ')'}">Ciudad y CP</p>
+                                        <p class="card-text text-muted" th:text="${dir.pais}">País</p>
+                                        
+                                        <!-- Botón para eliminar dirección -->
+                                        <form th:action="@{/perfil/direcciones/eliminar}" method="post" class="mt-2">
+                                            <input type="hidden" name="id" th:value="${dir.id}" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Formulario para Añadir Nueva Dirección -->
+                        <h5 class="mt-4 mb-3">➕ Añadir Nueva Dirección</h5>
+                        <form th:action="@{/perfil/direcciones/guardar}" th:object="${nuevaDireccion}" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Alias (ej. Casa, Trabajo)</label>
+                                    <input type="text" th:field="*{alias}" class="form-control" required placeholder="Ej: Oficina">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">País</label>
+                                    <input type="text" th:field="*{pais}" class="form-control" required placeholder="España">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Calle</label>
+                                    <input type="text" th:field="*{calle}" class="form-control" required placeholder="Nombre de la calle">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Número / Piso</label>
+                                    <input type="text" th:field="*{numero}" class="form-control" required placeholder="12, 3º B">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Ciudad</label>
+                                    <input type="text" th:field="*{ciudad}" class="form-control" required placeholder="Madrid">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Código Postal</label>
+                                    <input type="text" th:field="*{codigoPostal}" class="form-control" required placeholder="28001">
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" th:field="*{esPrincipal}" class="form-check-input" id="esPrincipalCheck">
+                                <label class="form-check-label" for="esPrincipalCheck">Marcar como dirección principal</label>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Guardar Dirección en la Agenda</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

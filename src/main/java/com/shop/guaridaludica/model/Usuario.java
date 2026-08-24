@@ -35,6 +35,17 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Direccion> direcciones = new ArrayList<>();
 
+    @Column(name = "telefono", length = 20)
+    private String telefono;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public Long getId() {
         return id;
     }

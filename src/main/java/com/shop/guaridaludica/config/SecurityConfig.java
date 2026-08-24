@@ -8,9 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-//import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-
-import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +23,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/registro", "/producto/**", "/categoria/**", "/css/**", "/images/**", "/buscar", "/carrito/**").permitAll()
+                .requestMatchers("/perfil/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -56,7 +54,7 @@ public class SecurityConfig {
             if (isAdmin) {
                 response.sendRedirect("/admin");
             } else {
-                response.sendRedirect("/carrito"); // Directos al carrito para que vea su producto
+                response.sendRedirect("/"); // Directos al carrito para que vea su producto
             }
         };
     }

@@ -17,10 +17,12 @@
 
             <!-- Si SÍ está autenticado (Logueado) -->
             <div sec:authorize="isAuthenticated()" class="d-flex align-items-center me-3">
-                <span class="text-light me-3" th:if="${#authentication.principal != null}">
-                👤 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
-                </span>
-                <form th:action="@{/logout}" method="post" class="d-inline m-0">
+                <!-- Enlace a Mi Cuenta integrado como parte del saludo o enlace visible -->
+                <a th:href="@{/perfil}" class="text-light text-decoration-none me-3">
+                    👤 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
+                </a>
+                
+                <form th:action="@{/logout}" method="post" class="d-inline m-0 me-2">
                     <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
                 </form>
             </div>
