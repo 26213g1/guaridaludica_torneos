@@ -28,6 +28,7 @@
                                     <!-- CANTIDAD DENTRO DE SU PROPIA CELDA Y CON EL FORM ENVOLVIENDO EL INPUT -->
                                     <td>
                                         <form th:action="@{/carrito/actualizar}" method="post" style="display:inline;">
+                                            <!-- El token CSRF que exige Spring Security -->
                                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                             <input type="hidden" name="id" th:value="${item.productoId}">
                                             <input type="number" name="cantidad" th:value="${item.cantidad}" min="1" 

@@ -8,6 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+//import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -22,14 +25,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/registro", "/producto/**", "/categoria/**", "/css/**", "/images/**", "/buscar").permitAll()
+                .requestMatchers("/", "/registro", "/producto/**", "/categoria/**", "/css/**", "/images/**", "/buscar", "/carrito/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .successHandler(successHandler()) // <--- Usamos un manejador personalizado
+                .successHandler(successHandler())
                 .permitAll()
+            )
+            // AÑADE ESTO AQUÍ PARA QUE NO SE PIERDA EL CARRITO AL CAMBIAR DE SESIÓN
+            .sessionManagement(session -> session
+                .sessionFixation().migrateSession() 
             )
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
@@ -47,9 +54,9 @@ public class SecurityConfig {
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
 
             if (isAdmin) {
-                response.sendRedirect("/admin"); // Redirige al panel principal del admin
+                response.sendRedirect("/admin");
             } else {
-                response.sendRedirect("/"); // Redirige a la tienda para usuarios normales
+                response.sendRedirect("/carrito"); // Directos al carrito para que vea su producto
             }
         };
     }

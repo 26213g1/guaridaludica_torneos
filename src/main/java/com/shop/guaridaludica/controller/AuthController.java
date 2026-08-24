@@ -30,6 +30,10 @@ public class AuthController {
                                    BindingResult result, 
                                    Model model) {
         if (result.hasErrors()) {
+            /*// Esto te imprimirá en la consola de Eclipse/IntelliJ qué campo ha fallado y por qué
+            result.getFieldErrors().forEach(error -> 
+                System.out.println("CAMPO FALLIDO: " + error.getField() + " - MENSAJE: " + error.getDefaultMessage())
+            );*/
             return "registro";
         }
 

@@ -2,9 +2,13 @@ package com.shop.guaridaludica.carrito;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.shop.guaridaludica.repository.ProductoRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,6 +19,10 @@ import java.util.List;
 public class Carrito {
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private Carrito carrito;
+
     private List<CarritoItem> items = new ArrayList<>();
 
     public void agregarProducto(Long productoId) {
@@ -62,5 +70,20 @@ public class Carrito {
                 break;
             }
         }
+    }
+
+    @GetMapping
+    public String verCarrito(Model model, HttpSession session) {
+        // Comprobamos si hay un producto pendiente guardado tras el login/registro
+        Long productoPendienteId = (Long) session.getAttribute("agregarProductoAlIniciar");
+
+        if (productoPendienteId != null) {
+            carrito.agregarProducto(productoPendienteId);
+            session.removeAttribute("agregarProductoAlIniciar"); // Lo borramos para que no se repita
+        }
+
+        model.addAttribute("items", carrito.getItems());
+        model.addAttribute("total", carrito.getTotal());
+        return "carrito";
     }
 }

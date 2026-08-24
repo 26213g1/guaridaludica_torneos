@@ -32,9 +32,6 @@
                             <span th:if="${producto.stock > 0}" class="text-muted small">
                                 <i class="bi bi-box-seam me-1"></i><strong th:text="${producto.stock}">10</strong> uds.
                             </span>
-                            <span th:if="${producto.stock == 0}" class="text-danger small fw-bold">
-                                <i class="bi bi-x-circle me-1"></i> Agotado
-                            </span>
                             
                             <!-- Formulario para añadir al carrito -->
                             <form th:action="@{/carrito/agregar}" method="post" class="mt-2">
