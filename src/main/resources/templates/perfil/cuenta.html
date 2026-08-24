@@ -7,46 +7,84 @@
     <section class="container mt-4 mb-5">
         <h2 class="mb-4">⚙️ Panel de Mi Cuenta</h2>
 
-        <!-- FILA 1: Datos Personales y Agenda de Direcciones -->
-        <div class="row">
-            <!-- Columna Izquierda: Información Personal -->
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h4 class="card-title text-primary mb-3">Mis Datos Personales</h4>
+        <!-- Mensajes Flash de Notificación -->
+        <div th:if="${param.exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            ¡Los cambios se han guardado correctamente!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Ha ocurrido un error al procesar tu solicitud. Por favor, inténtalo de nuevo.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- SISTEMA DE PESTAÑAS (TABS) DE BOOTSTRAP -->
+        <ul class="nav nav-tabs mb-4" id="cuentaTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-semibold" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos-pane" type="button" role="tab" aria-controls="datos-pane" aria-selected="true">
+                    <i class="fa-solid fa-user-pen me-2"></i> Mis Datos Personales
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-semibold" id="direcciones-tab" data-bs-toggle="tab" data-bs-target="#direcciones-pane" type="button" role="tab" aria-controls="direcciones-pane" aria-selected="false">
+                    <i class="fa-solid fa-location-dot me-2"></i> Mis Direcciones
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-semibold" id="pedidos-tab" data-bs-toggle="tab" data-bs-target="#pedidos-pane" type="button" role="tab" aria-controls="pedidos-pane" aria-selected="false">
+                    <i class="fa-solid fa-box-archive me-2"></i> Historial de Pedidos
+                </button>
+            </li>
+        </ul>
+
+        <!-- CONTENIDO DE LAS PESTAÑAS -->
+        <div class="tab-content" id="cuentaTabsContent">
+
+            <!-- PESTAÑA 1: DATOS PERSONALES (Estructura uniforme a ancho completo pero con diseño limpio en dos columnas internas si se desea, o tarjeta estándar) -->
+            <div class="tab-pane fade show active" id="datos-pane" role="tabpanel" aria-labelledby="datos-tab" tabindex="0">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-primary mb-4">Actualizar Información Personal</h4>
                         
                         <form th:action="@{/perfil/actualizar-datos}" th:object="${usuario}" method="post">
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Alias (No modificable)</label>
-                                <input type="text" th:field="*{alias}" class="form-control bg-light" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Correo Electrónico (No modificable)</label>
-                                <input type="email" th:field="*{email}" class="form-control bg-light" readonly>
-                            </div>
-
-                            <hr>
-
-                            <div class="mb-3">
-                                <label class="form-label">Nombre y Apellidos</label>
-                                <input type="text" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Teléfono de contacto</label>
-                                <input type="text" th:field="*{telefono}" class="form-control" placeholder="+34 600000000">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Alias (No modificable)</label>
+                                    <input type="text" th:field="*{alias}" class="form-control bg-light" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Correo Electrónico (No modificable)</label>
+                                    <input type="email" th:field="*{email}" class="form-control bg-light" readonly>
+                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                            <hr class="my-3">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nombre y Apellidos</label>
+                                    <input type="text" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Teléfono de contacto</label>
+                                    <input type="text" th:field="*{telefono}" class="form-control" placeholder="+34 600000000">
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Agenda de Direcciones -->
-            <div class="col-md-8 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h4 class="card-title text-primary mb-3">📍 Mi Agenda de Direcciones</h4>
+            <!-- PESTAÑA 2: DIRECCIONES -->
+            <div class="tab-pane fade" id="direcciones-pane" role="tabpanel" aria-labelledby="direcciones-tab" tabindex="0">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="card-title text-primary m-0">📍 Mi Agenda de Direcciones</h4>
+                        </div>
                         
                         <!-- Listado de Direcciones Actuales -->
                         <div th:if="${#lists.isEmpty(usuario.direcciones)}" class="alert alert-info">
@@ -54,18 +92,18 @@
                         </div>
 
                         <div class="row" th:unless="${#lists.isEmpty(usuario.direcciones)}">
-                            <div class="col-md-6 mb-3" th:each="dir : ${usuario.direcciones}">
-                                <div class="card border-secondary h-100">
+                            <div class="col-md-6 col-lg-4 mb-3" th:each="dir : ${usuario.direcciones}">
+                                <div class="card border-secondary h-100" th:classappend="${dir.esPrincipal} ? 'border-success shadow-sm' : ''">
                                     <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title text-secondary">
+                                        <h5 class="card-title text-secondary d-flex justify-content-between align-items-center">
                                             <span th:text="${dir.alias}">Casa</span>
-                                            <span th:if="${dir.esPrincipal}" class="badge bg-success fs-6 float-end">Principal</span>
+                                            <span th:if="${dir.esPrincipal}" class="badge bg-success fs-6">Principal</span>
                                         </h5>
                                         <p class="card-text mb-1" th:text="${dir.calle + ' ' + dir.numero}">Calle y número</p>
                                         <p class="card-text mb-1" th:text="${dir.ciudad + ' (' + dir.codigoPostal + ')'}">Ciudad y CP</p>
-                                        <p class="card-text text-muted" th:text="${dir.pais}">País</p>
+                                        <p class="card-text text-muted mb-3" th:text="${dir.pais}">País</p>
                                         
-                                        <div class="mt-auto pt-3">
+                                        <div class="mt-auto pt-2">
                                             <div class="d-grid gap-2 d-md-flex">
                                                 <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" 
                                                         data-bs-toggle="modal" 
@@ -81,7 +119,7 @@
                                                     Editar
                                                 </button>
                                                 
-                                                <form th:action="@{/perfil/direcciones/eliminar}" method="post" class="flex-fill m-0">
+                                                <form th:action="@{/perfil/direcciones/eliminar}" method="post" class="flex-fill m-0" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta dirección?');">
                                                     <input type="hidden" name="id" th:value="${dir.id}" />
                                                     <button type="submit" class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
                                                 </form>
@@ -92,10 +130,10 @@
                             </div>
                         </div>
 
-                        <hr>
+                        <hr class="my-4">
 
                         <!-- Formulario para Añadir Nueva Dirección -->
-                        <h5 class="mt-4 mb-3">➕ Añadir Nueva Dirección</h5>
+                        <h5 class="mb-3">➕ Añadir Nueva Dirección</h5>
                         <form th:action="@{/perfil/direcciones/guardar}" th:object="${nuevaDireccion}" method="post">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -131,18 +169,16 @@
                                 <input type="checkbox" th:field="*{esPrincipal}" class="form-check-input" id="esPrincipalCheck">
                                 <label class="form-check-label" for="esPrincipalCheck">Marcar como dirección principal</label>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Guardar Dirección en la Agenda</button>
+                            <button type="submit" class="btn btn-success">Guardar Dirección en la Agenda</button>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- FILA 2: Historial de Pedidos -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
+            <!-- PESTAÑA 3: HISTORIAL DE PEDIDOS -->
+            <div class="tab-pane fade" id="pedidos-pane" role="tabpanel" aria-labelledby="pedidos-tab" tabindex="0">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
                         <h4 class="card-title text-primary mb-3">📦 Historial de Pedidos</h4>
 
                         <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-secondary text-center mb-0">
@@ -175,9 +211,8 @@
                                             <small class="text-muted" th:text="${pedido.direccionCalle + ' ' + pedido.direccionNumero + ', ' + pedido.direccionCiudad + ' (' + pedido.direccionCP + ')'}">Calle Falsa 123</small>
                                         </td>
                                         <td class="text-center">
-                                            <!-- Botón que abre el modal individual de este pedido -->
                                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" th:data-bs-target="'#detallePedidoModal' + ${pedido.id}">
-                                                <i class="fa-solid fa-eye"></i> Ver Detalles
+                                                Ver Detalles
                                             </button>
                                         </td>
                                     </tr>
@@ -187,10 +222,10 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
-
-        <!-- MODALES DE PEDIDOS (Uno por cada pedido para ver sus juegos comprados) -->
+        <!-- MODALES DE PEDIDOS -->
         <div th:each="pedido : ${pedidos}">
             <div class="modal fade" th:id="'detallePedidoModal' + ${pedido.id}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -235,7 +270,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- MODAL DE EDICIÓN DE DIRECCIÓN -->
         <div class="modal fade" id="editarDireccionModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">

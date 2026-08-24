@@ -74,7 +74,7 @@ public class PerfilController {
         usuario.addDireccion(direccion);
         usuarioRepository.save(usuario); // Gracias al CascadeType.ALL, guardará la dirección automáticamente
 
-        return "redirect:/perfil";
+        return "redirect:/perfil#direcciones";
     }
 
     // 3. Eliminar una dirección de la agenda

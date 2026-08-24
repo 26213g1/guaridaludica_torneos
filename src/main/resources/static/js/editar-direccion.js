@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    
+    // 1. Lógica para rellenar el modal de edición de direcciones
     const editarModal = document.getElementById('editarDireccionModal');
     if (editarModal) {
         editarModal.addEventListener('show.bs.modal', function (event) {
@@ -14,5 +16,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('edit-principal').checked = button.getAttribute('data-principal') === 'true';
             }
         });
+    }
+
+    // 2. Lógica para recordar la pestaña activa
+    const triggerTabList = document.querySelectorAll('#cuentaTabs button');
+    triggerTabList.forEach(button => {
+        button.addEventListener('click', event => {
+            // Guardamos el selector de la pestaña al hacer clic
+            sessionStorage.setItem('activeTab', event.target.getAttribute('data-bs-target'));
+        });
+    });
+
+    // Al recargar la página, recuperamos y activamos la última pestaña guardada
+    const activeTab = sessionStorage.getItem('activeTab');
+    if (activeTab) {
+        const tabTrigger = document.querySelector(`[data-bs-target="${activeTab}"]`);
+        if (tabTrigger) {
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+        }
     }
 });
