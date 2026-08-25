@@ -1,15 +1,11 @@
 spring:
   datasource:
-    # Usamos la Service URI completa que te da Aiven añadiendo el parámetro de SSL
-    url: jdbc:mysql://guarida-db-prod-jmmoraj-guaridaludica.h.aivencloud.com:17843/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC
-    username: avnadmin
-    password: AVNS_1YYFAWsPHCvLf_u4Nxo
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
