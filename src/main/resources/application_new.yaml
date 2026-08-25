@@ -1,0 +1,48 @@
+server:
+  # Render u otros PaaS suelen inyectar el puerto automáticamente en la variable PORT
+  port: ${PORT:8080}
+  servlet:
+    context-path: /guaridaludica
+  error:
+    include-stacktrace: never # En producción es mejor ocultar el stacktrace por seguridad
+
+spring:
+  application:
+    name: guaridaludica
+
+  datasource:
+    # Si existe la variable DATABASE_URL la usará; si no, usará tu MySQL local de siempre
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/guaridadb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:guaridaL01}
+    # Si te pasas a MariaDB en la nube, Spring detectará el driver automáticamente, 
+    # pero puedes dejarlo genérico o cambiarlo al driver de MariaDB si lo prefieres.
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: update # En producción 'update' o 'validate' van bien para no perder datos
+    show-sql: false # En producción es mejor apagarlo para no saturar los logs del servidor
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+tienda:
+  nombre: "🎲 La Guarida Lúdica"
+  moneda: "EUR"
+  simbolo-moneda: "€"
+  impuesto-porcentaje: "21"
+    
+contacto:
+  email: "soporte@tutienda.com"
+
+shop:
+  pagination:
+    public-size: 6
+    admin-size: 6
+
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO # Lo bajamos a INFO para producción para que los logs estén limpios
