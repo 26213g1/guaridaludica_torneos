@@ -39,6 +39,7 @@ public class ProductoAdminController {
             @RequestParam(required = false) String query,
             @RequestParam(required = false) Boolean sinCategoria,
             @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) Boolean sinStock,
             @RequestParam(required = false) BigDecimal minPrecio,
             @RequestParam(required = false) BigDecimal maxPrecio,
             @RequestParam(defaultValue = "0") int page, 
@@ -52,7 +53,7 @@ public class ProductoAdminController {
             categoriaObj = categoriaRepository.findById(categoriaId).orElse(null);
         }
 
-        Page<Producto> productosPage = productoService.getProductosPage(query, sinCategoria, minPrecio, maxPrecio, pageable,
+        Page<Producto> productosPage = productoService.getProductosPage(query, sinCategoria, sinStock, minPrecio, maxPrecio, pageable,
                 categoriaObj);
         
         // 3. Atributos para la paginación y la tabla
@@ -67,6 +68,7 @@ public class ProductoAdminController {
         model.addAttribute("query", query);
         model.addAttribute("sinCategoria", sinCategoria);
         model.addAttribute("categoriaId", categoriaId);
+        model.addAttribute("sinStock", sinStock);
         model.addAttribute("minPrecio", minPrecio);
         model.addAttribute("maxPrecio", maxPrecio);
 

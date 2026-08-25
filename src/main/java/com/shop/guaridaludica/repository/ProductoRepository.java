@@ -46,12 +46,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query("SELECT p FROM Producto p WHERE "
             + "(:query IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :query, '%'))) AND "
             + "(:sinCategoria IS NULL OR p.categorias IS EMPTY) AND "
+            + "(:sinStock IS NULL OR p.stock <= 0) AND "
             + "(:categoria IS NULL OR :categoria MEMBER OF p.categorias) AND "
             + "(:minPrecio IS NULL OR p.precio >= :minPrecio) AND " 
             + "(:maxPrecio IS NULL OR p.precio <= :maxPrecio)")
     Page<Producto> filtrarProductos(
             @Param("query") String query, 
             @Param("sinCategoria") Boolean sinCategoria,
+            @Param("sinStock") Boolean sinStock,
             @Param("categoria") Categoria categoria, 
             @Param("minPrecio") BigDecimal minPrecio,
             @Param("maxPrecio") BigDecimal maxPrecio, 

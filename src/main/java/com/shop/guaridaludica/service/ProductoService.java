@@ -26,12 +26,13 @@ public class ProductoService {
     @Autowired
     private UploadFileService uploadFileService;
 
-    public Page<Producto> getProductosPage(String query, Boolean sinCategoria, BigDecimal minPrecio,
+    public Page<Producto> getProductosPage(String query, Boolean sinCategoria, Boolean sinStock, BigDecimal minPrecio,
         BigDecimal maxPrecio, Pageable pageable, Categoria categoriaObj) {
         // 2. Llamada directa a nuestra @Query inteligente en el repositorio
         Page<Producto> productosPage = productoRepository.filtrarProductos(
                 (query != null && !query.trim().isEmpty()) ? query.trim() : null,
                 sinCategoria,
+                sinStock,
                 categoriaObj,
                 minPrecio,
                 maxPrecio,

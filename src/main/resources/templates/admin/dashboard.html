@@ -20,10 +20,12 @@
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0 border-top border-primary border-4">
                         <div class="card-body text-center p-4">
-                            <div class="display-5 text-primary mb-3">
+                            <a th:href="@{/admin/productos}" class="display-5 text-primary mb-3 d-inline-block text-decoration-none">
                                 <i class="fa-solid fa-dice"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Productos</h5>
+                            </a>
+                            <h5 class="card-title fw-bold">
+                                <a th:href="@{/admin/productos}" class="text-dark text-decoration-none">Productos</a>
+                            </h5>
                             <p class="card-text text-muted small my-3">
                                 Añade, edita, elimina juegos de mesa y gestiona sus imágenes principales y carrusel.
                             </p>
@@ -38,10 +40,12 @@
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0 border-top border-success border-4">
                         <div class="card-body text-center p-4">
-                            <div class="display-5 text-success mb-3">
+                            <a th:href="@{/admin/categorias}" class="display-5 text-success mb-3 d-inline-block text-decoration-none">
                                 <i class="fa-solid fa-folder-open"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Categorías</h5>
+                            </a>
+                            <h5 class="card-title fw-bold">
+                                <a th:href="@{/admin/categorias}" class="text-dark text-decoration-none">Categorías</a>
+                            </h5>
                             <p class="card-text text-muted small my-3">
                                 Crea, edita y organiza las categorías de clasificación para el catálogo de la tienda.
                             </p>
@@ -56,10 +60,12 @@
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0 border-top border-warning border-4">
                         <div class="card-body text-center p-4">
-                            <div class="display-5 text-warning mb-3">
+                            <a th:href="@{/admin/usuarios}" class="display-5 text-warning mb-3 d-inline-block text-decoration-none">
                                 <i class="fa-solid fa-users-gear"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Usuarios</h5>
+                            </a>
+                            <h5 class="card-title fw-bold">
+                                <a th:href="@{/admin/usuarios}" class="text-dark text-decoration-none">Usuarios</a>
+                            </h5>
                             <p class="card-text text-muted small my-3">
                                 Visualiza los usuarios registrados en la plataforma y administra sus roles de acceso.
                             </p>
@@ -74,10 +80,12 @@
                 <div class="col-md-3 mb-4">
                     <div class="card h-100 shadow-sm border-0 border-top border-danger border-4">
                         <div class="card-body text-center p-4">
-                            <div class="display-5 text-danger mb-3">
+                            <a th:href="@{/admin/pedidos}" class="display-5 text-danger mb-3 d-inline-block text-decoration-none">
                                 <i class="fa-solid fa-box"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Pedidos</h5>
+                            </a>
+                            <h5 class="card-title fw-bold">
+                                <a th:href="@{/admin/pedidos}" class="text-dark text-decoration-none">Pedidos</a>
+                            </h5>
                             <p class="card-text text-muted small my-3">
                                 Revisa y gestiona los pedidos realizados por los clientes.
                             </p>

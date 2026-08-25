@@ -5,6 +5,9 @@ import com.shop.guaridaludica.repository.PedidoRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
 import com.shop.guaridaludica.model.DetallePedido;
 import com.shop.guaridaludica.model.Producto;
+
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Controller
 @RequestMapping("/admin/pedidos")
@@ -32,14 +36,17 @@ public class PedidoAdminController {
     @GetMapping
     public String listarPedidosAdmin(@RequestParam(required = false) String query,
             @RequestParam(required = false) Pedido.EstadoPedido estado,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
             @RequestParam(defaultValue = "0") int page,
             Model model) {
 
         Pageable pageable = PageRequest.of(page, adminSize);
 
-        //List<Pedido> pedidos = pedidoRepository.findAll(); // O ordenados por fecha desc
-        // Llamamos al repositorio con los filtros
-        Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, pageable);
+        // Llamamos al repositorio con los filtros ampliados (incluyendo fechas)
+        // Nota: Asegúrate de actualizar también tu query/método en PedidoRepository para recibir fechaInicio y fechaFin si usas una consulta personalizada.
+        Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, fechaInicio, fechaFin, pageable);
+        //Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, pageable);
         
         model.addAttribute("pedidos", pedidosPage.getContent());
         model.addAttribute("currentPage", pedidosPage.getNumber());
@@ -50,6 +57,8 @@ public class PedidoAdminController {
         // Parámetros para mantener los filtros seleccionados en la vista HTML
         model.addAttribute("query", query);
         model.addAttribute("estadoSeleccionado", estado);
+        model.addAttribute("fechaInicio", fechaInicio);
+        model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("estadosDisponibles", Pedido.EstadoPedido.values()); // Para poblar el select de estados
         
         return "admin/pedidos/listar"; // Vista HTML en templates/admin/pedidos.html

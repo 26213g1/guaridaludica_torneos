@@ -42,7 +42,7 @@
                             <td>
                                 <!-- Si no tiene categorías, mostramos la advertencia -->
                                 <span th:if="${p.categorias == null or p.categorias.isEmpty()}"
-                                    class="badge bg-warning text-dark">
+                                    class="badge bg-danger text-dark">
                                     ⚠️ Sin categoría
                                 </span>
 
@@ -55,7 +55,13 @@
                                 </div>
                             </td>
                             <td th:text="${p.precio} + '' + ${appConfig.simboloMoneda}">39.95 €</td>
-                            <td th:text="${p.stock}">10</td>
+                            <!-- Columna de Stock con aviso visual si está agotado -->
+                            <td>
+                                <span th:if="${p.stock <= 0}" class="badge bg-danger">
+                                    Agotado
+                                </span>
+                                <span th:unless="${p.stock <= 0}" th:text="${p.stock}">10</span>
+                            </td>
                             <td>
                                 <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}"
                                     class="btn btn-warning btn-sm"><i class="fa-solid fa-pen"></i></a>

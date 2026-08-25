@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="barra-filtros-pedidos">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body py-3">
+                <form method="get" th:action="@{/admin/pedidos}" class="row g-2 align-items-center">
+                    
+                    <!-- Búsqueda por ID, Email o Nombre -->
+                    <div class="col-md-3">
+                        <input type="text" class="form-control form-control-sm" id="query" name="query" th:value="${query}" placeholder="ID, email o nombre...">
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-2">
+                        <select class="form-select form-select-sm" id="estado" name="estado">
+                            <option value="">-- Estados --</option>
+                            <option th:each="est : ${estadosDisponibles}" 
+                                    th:value="${est}" 
+                                    th:text="${est}" 
+                                    th:selected="${est == estadoSeleccionado}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Fecha Desde (Calendario) -->
+                    <div class="col-md-2">
+                        <input type="date" class="form-control form-control-sm" name="fechaInicio" th:value="${fechaInicio}" title="Fecha inicio">
+                    </div>
+
+                    <!-- Fecha Hasta (Calendario) -->
+                    <div class="col-md-2">
+                        <input type="date" class="form-control form-control-sm" name="fechaFin" th:value="${fechaFin}" title="Fecha fin">
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="col-md-3 d-flex gap-2 justify-content-end">
+                        <button type="submit" class="btn btn-primary btn-sm px-3">
+                            <i class="fa-solid fa-magnifying-glass me-1"></i> Filtrar
+                        </button>
+                        <a th:href="@{/admin/pedidos}" class="btn btn-outline-secondary btn-sm">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

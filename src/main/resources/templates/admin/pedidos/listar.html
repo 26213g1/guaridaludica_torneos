@@ -9,32 +9,8 @@
             <h2>📦 Gestión de Pedidos de la Tienda</h2>
         </div>
 
-        <!-- BARRA DE FILTROS -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <form method="get" th:action="@{/admin/pedidos}" class="row g-3 align-items-end">
-                    <div class="col-md-5">
-                        <label for="query" class="form-label">Buscar por ID, Email o Nombre</label>
-                        <input type="text" class="form-control" id="query" name="query" th:value="${query}" placeholder="Ej. 5, correo@ejemplo.com...">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="estado" class="form-label">Filtrar por Estado</label>
-                        <select class="form-select" id="estado" name="estado">
-                            <option value="">-- Todos los estados --</option>
-                            <option th:each="est : ${estadosDisponibles}" 
-                                    th:value="${est}" 
-                                    th:text="${est}" 
-                                    th:selected="${est == estadoSeleccionado}">
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary flex-fill">Filtrar</button>
-                        <a th:href="@{/admin/pedidos}" class="btn btn-outline-secondary">Limpiar</a>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <!-- BARRA DE FILTROS EXTRAÍDA A FRAGMENTO -->
+        <div th:replace="~{admin/fragments/filtros-pedidos :: barra-filtros-pedidos}"></div>
 
         <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info">
             No hay ningún pedido registrado en la plataforma o con los filtros seleccionados.
@@ -115,7 +91,8 @@
                                     <p class="mb-1"><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}"></span></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="mb-1"><strong>Estado actual:</strong> <span class="badge bg-secondary" th:text="${pedido.estado}"></span></p>
+                                    <p class="mb-1"><strong>Estado actual:</strong> <span class="badge" 
+                                        th:text="${pedido.estado}" th:classappend="${pedido.estado.name() == 'PAGADO'} ? 'bg-success' : (${pedido.estado.name() == 'ENVIADO'} ? 'bg-info' : (${pedido.estado.name() == 'CANCELADO'} ? 'bg-danger' : 'bg-warning text-dark'))"></span></p>            
                                     <p class="mb-1"><strong>Dirección de envío:</strong></p>
                                     <small class="text-muted" th:text="${pedido.direccionCalle + ' ' + pedido.direccionNumero + ', ' + pedido.direccionCiudad + ' (' + pedido.direccionCP + ')'}"></small>
                                 </div>
