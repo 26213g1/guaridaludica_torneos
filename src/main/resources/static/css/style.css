@@ -140,3 +140,36 @@ body {
     border-radius: 5px;
     text-decoration: none;
 }
+
+/* ========================================= */
+/* --- AJUSTES RESPONSIVE PARA EL CATÁLOGO --- */
+/* ========================================= */
+
+/* En móviles y tablets pequeñas, aseguramos que el contenido ocupe todo el ancho */
+@media (max-width: 991.98px) {
+    /* (Quitamos el .sidebar de aquí para que no oculte por error los elementos móviles) */
+    
+    .container .row > .col-lg-9, 
+    .container .row > [class*="col-"] {
+        width: 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* En ordenadores (pantallas grandes), aseguramos que la sidebar de escritorio se muestre */
+@media (min-width: 992px) {
+    aside.d-none.d-lg-block .sidebar {
+        display: block !important;
+    }
+}
+
+/* Contenedor específico para las categorías en móvil */
+#cajaCategoriasMovil {
+    display: none; /* Empieza oculto por defecto */
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075);
+}
