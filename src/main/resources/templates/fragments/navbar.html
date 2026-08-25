@@ -17,6 +17,12 @@
 
             <!-- Si SÍ está autenticado (Logueado) -->
             <div sec:authorize="isAuthenticated()" class="d-flex align-items-center me-3">
+
+                <!-- Enlace de Panel Admin (VISIBLE SOLO PARA ROLE_ADMIN) -->
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-warning btn-sm me-3">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Admin
+                </a>
+                
                 <!-- Enlace a Mi Cuenta integrado como parte del saludo o enlace visible -->
                 <a th:href="@{/perfil}" class="text-light text-decoration-none me-3">
                     👤 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
