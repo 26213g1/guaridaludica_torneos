@@ -21,3 +21,8 @@ shop:
   pagination:
     public-size: 6
     admin-size: 6
+
+cloudinary:
+  cloud-name: jze9fuy3
+  api-key: 821325958354588
+  api-secret: hNSUCt_bnUqvne4huON5uuRmNI8
