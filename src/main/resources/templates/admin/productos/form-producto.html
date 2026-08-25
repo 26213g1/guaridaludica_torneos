@@ -65,7 +65,7 @@
                                 <div class="row g-2">
                                     <div class="col-md-3 text-center" th:each="img : ${producto.imagenes}">
                                         <div class="card p-2 border">
-                                            <img th:src="${img.url}" class="img-fluid mb-2" style="height: 80px; object-fit: contain;" alt="Imagen producto">
+                                            <img th:src="@{${img.url}}" class="img-fluid mb-2" style="height: 80px; object-fit: contain;" alt="Imagen producto">
                                             <!-- Radio button para marcar la imagen principal -->
                                             <div class="form-check d-flex justify-content-center mb-1">
                                                 <input class="form-check-input" type="radio" name="imagenPrincipalId" th:value="${img.id}" th:checked="${img.esPrincipal}">

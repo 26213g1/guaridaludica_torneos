@@ -14,7 +14,7 @@
 
                     <div class="card-img-wrapper">
                         <a th:href="@{/producto/{id}(id=${producto.id})}">
-                            <img th:src="${producto.imagenPrincipalUrl}" class="card-img-top"
+                            <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top"
                                 th:alt="${producto.nombre}">
                         </a>
                     </div>

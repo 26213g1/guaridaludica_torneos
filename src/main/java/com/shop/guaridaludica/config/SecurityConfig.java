@@ -51,10 +51,11 @@ public class SecurityConfig {
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
 
+            String contextPath = request.getContextPath();
             if (isAdmin) {
-                response.sendRedirect("/admin");
+                response.sendRedirect(contextPath +"/admin");
             } else {
-                response.sendRedirect("/"); // Directos al carrito para que vea su producto
+                response.sendRedirect(contextPath + "/"); // Directos al carrito para que vea su producto
             }
         };
     }

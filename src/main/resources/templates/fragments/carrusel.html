@@ -5,7 +5,7 @@
              th:classappend="${iterStat.first} ? 'active'" 
              class="carousel-item">
             
-            <img th:src="${img.url}" class="d-block w-100" alt="Imagen del producto">
+            <img th:src="@{${img.url}}" class="d-block w-100" alt="Imagen del producto">
         </div>
     </div>
     
