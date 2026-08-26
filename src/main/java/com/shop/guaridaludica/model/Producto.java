@@ -142,4 +142,12 @@ public class Producto {
         }
         return this.fechaCreacion.plusDays(diasLimite).isAfter(LocalDateTime.now());
     }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 }

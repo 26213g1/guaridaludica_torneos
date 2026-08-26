@@ -7,6 +7,7 @@ import com.shop.guaridaludica.repository.ProductoRepository;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +115,10 @@ public class ProductoService {
                 if (!algunaEsPrincipal) {
                     producto.getImagenes().get(0).setEsPrincipal(true);
                 }
+            }
+
+            if (producto.getFechaCreacion() == null) {
+                producto.setFechaCreacion(LocalDateTime.now());
             }
 
             // 6. Guardamos el producto (la cascada y orphanRemoval hacen la magia)
