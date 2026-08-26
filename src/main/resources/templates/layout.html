@@ -37,6 +37,20 @@ th:fragment="layout(content)">
             <!-- 2. Contenido principal y menú desplegable para móviles -->
             <main class="col-12 col-lg-9">
                 
+                <!-- Barra de búsqueda general que se ve en todas las vistas del layout -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body p-2">
+                        <form th:action="@{/buscar}" method="get" class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" name="query" class="form-control border-start-0 ps-0" 
+                                   placeholder="Buscar juegos de mesa..." th:value="${query}">
+                            <button class="btn btn-dark" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Botón desplegable para móviles limpio -->
                 <div class="d-lg-none mb-3">
                     <button class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center" 
@@ -47,7 +61,7 @@ th:fragment="layout(content)">
                     </button>
                     
                     <!-- Contenedor que usa los estilos definidos en main.css -->
-                    <div id="cajaCategoriasMovil" class="mt-2">
+                    <div id="cajaCategoriasMovil" class="mt-2" style="display: none;">
                         <div class="d-flex flex-column gap-2">
                             <a th:each="cat : ${categorias}" th:href="@{/categoria/{id}(id=${cat.id})}" class="nav-link-cat text-dark text-decoration-none py-1 border-bottom"
                                 th:text="${cat.nombre}">Nombre Categoría</a>

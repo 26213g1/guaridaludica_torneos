@@ -4,3 +4,7 @@
 @import url('modules/carousels.css');
 @import url('modules/cards.css');
 @import url('modules/responsive.css');
+
+body {
+    background-color: #e7ebf0; /* Un gris suavecito y elegante */
+}

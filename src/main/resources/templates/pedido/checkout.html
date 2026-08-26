@@ -3,11 +3,19 @@
 <body>
     <main>
         <div class="container my-4">
-            <h2 class="mb-4">Finalizar Pedido</h2>
+            
+            <!-- Enlace de retorno arriba a la izquierda, siguiendo el estilo discreto -->
+            <div class="mb-3">
+                <a th:href="@{/carrito}" class="text-decoration-none text-muted fw-semibold small">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Volver al Carrito
+                </a>
+            </div>
+
+            <h2 class="mb-4 fw-bold">Finalizar Pedido</h2>
 
             <!-- Selector de direcciones -->
             <div class="mb-3">
-                <label>Tus direcciones guardadas:</label>
+                <label class="form-label text-muted small fw-semibold">Tus direcciones guardadas:</label>
                 <select class="form-select" id="selectorDireccion" onchange="autocompletar()">
                     <option value="">-- Nueva dirección --</option>
                     <option th:each="dir : ${direccionesGuardadas}" 
@@ -18,7 +26,7 @@
                         th:data-ciudad="${dir.ciudad}"
                         th:data-cp="${dir.codigoPostal}"
                         th:text="${dir.alias} + ' - ' + ${dir.calle} + ' ' + ${dir.numero}">
-                </option>
+                    </option>
                 </select>
             </div>
 
@@ -77,23 +85,20 @@
                                 </li>
                             </ul>
 
-                            <button type="submit" class="btn btn-success w-100 py-3 fw-bold">
+                            <!-- Botón principal de pago -->
+                            <button type="submit" class="btn btn-success w-100 py-3 fw-bold mb-2">
                                 <i class="bi bi-lock-fill"></i> Confirmar y Pagar
                             </button>
+
+                            <!-- Cancelar pedido integrado de forma visible y limpia justo debajo -->
+                            <a th:href="@{/}" class="btn btn-outline-danger w-100 btn-sm py-2">
+                                Cancelar pedido
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                <div class="d-flex justify-content-between mb-4">
-                    <a th:href="@{/carrito}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-left"></i> Volver al Carrito
-                    </a>
-                    <a th:href="@{/}" class="btn btn-outline-danger btn-sm">
-                        Cancelar pedido
-                    </a>
-                </div>
-
             </form>
+
             <!-- Enlace al archivo JS externo usando Thymeleaf -->
             <script th:src="@{/js/checkout.js}"></script>
         </div>

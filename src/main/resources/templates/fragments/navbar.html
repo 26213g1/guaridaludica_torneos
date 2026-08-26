@@ -3,14 +3,7 @@
         <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
             <img th:src="@{/images/logoGuarida02.svg}" alt="La Guarida Lúdica" style="height: 50px;" class="me-2">
         </a>
-        <!-- Formulario de Búsqueda en la Navbar -->
-        <form th:action="@{/buscar}" method="get" class="d-flex mx-auto" style="width: 40%;">
-            <input class="form-control me-2" type="search" name="query" placeholder="Buscar juegos de mesa..."
-                aria-label="Buscar" required>
-            <button class="btn btn-outline-light" type="submit">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
+
         <div class="d-flex ms-auto align-items-center">
             <!-- Si NO está autenticado (Anónimo) -->
             <div sec:authorize="isAnonymous()">

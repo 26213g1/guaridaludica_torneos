@@ -3,13 +3,12 @@
 
 <body>
     <main>
-        <h2 class="mb-4">Catálogo de Juegos Modernos</h2>
-
         <!-- Grid de productos (máximo 2 productos por fila en móvil, 3 en PC) -->
         <div class="row row-cols-2 row-cols-md-3 g-4">
             <!-- Aquí usamos th:each para iterar tus productos -->
             <div class="col" th:each="producto : ${productos}">
-                <div class="card h-100 shadow-sm card-producto">
+                <!-- Añadimos un padding un poco mayor (p-3) para ampliar visualmente la tarjeta -->
+                <div class="card h-100 shadow-sm card-producto p-2">
 
                     <!-- Cinta AGOTADO (Esquina superior izquierda) -->
                     <div class="ribbon-agotado" th:if="${producto.stock == 0}">
@@ -22,20 +21,20 @@
                     </div>
 
                     <!-- Imagen enlazada al detalle -->
-                    <div class="card-img-wrapper">
+                    <div class="card-img-wrapper p-2">
                         <a th:href="@{/producto/{id}(id=${producto.id})}">
-                            <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top"
+                            <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top rounded"
                                 th:alt="${producto.nombre}">
                         </a>
                     </div>
 
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body d-flex flex-column pt-3">
                         <!-- Título con más énfasis (fw-bold y un tamaño equilibrado) -->
                         <h5 class="card-title fw-bold text-dark mb-2" th:text="${producto.nombre}">Nombre</h5>
 
                         <!-- Zona de Precios: Precio actual + Precio anterior tachado (si existe) -->
-                        <div class="mb-2 d-flex align-items-center gap-2">
-                            <span class="fs-5 fw-bold text-success"
+                        <div class="mb-3 d-flex align-items-center gap-2">
+                            <span class="fs-4 fw-bold text-success"
                                 th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</span>
 
                             <!-- Precio anterior tachado dinámico -->
@@ -65,9 +64,9 @@
                         <div class="mt-auto pt-2">
                             <form th:action="@{/carrito/agregar}" method="post" class="m-0">
                                 <input type="hidden" name="id" th:value="${producto.id}" />
-                                <button type="submit" class="btn btn-outline-success btn-sm w-100 py-1"
+                                <button type="submit" class="btn btn-outline-success w-100 py-2"
                                     th:disabled="${producto.stock == 0}">
-                                    <i class="bi bi-cart-plus fa-lg"></i> <span class="ms-1">Añadir</span>
+                                    <i class="bi bi-cart-plus fa-lg"></i> <span class="ms-1 fw-semibold">Añadir</span>
                                 </button>
                             </form>
                         </div>
@@ -77,8 +76,8 @@
             </div>
         </div> <!-- Fin del row de productos -->
 
-        <!-- Reemplaza todo el bloque <nav> anterior por esta única línea -->
-        <div th:replace="~{fragments/paginacion :: pagination('/')}"></div>
+        <!-- Paginación -->
+        <div class="mt-4" th:replace="~{fragments/paginacion :: pagination('/')}"></div>
 
     </main>
 </body>
