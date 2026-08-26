@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.shop.guaridaludica.config.ConfiguracionApp;
 import com.shop.guaridaludica.model.Producto;
 import com.shop.guaridaludica.service.HomeService;
 import com.shop.guaridaludica.repository.CategoriaRepository;
@@ -22,6 +23,8 @@ public class HomeController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private HomeService homeService;
+    @Autowired
+    private ConfiguracionApp configuracionApp;
 
     // Inyectamos el valor desde el YAML
     @Value("${shop.pagination.public-size}")
@@ -70,6 +73,11 @@ public class HomeController {
     private void envioHtml(int page, Model model, Page<Producto> productosPage) {
         // Los enviamos a la vista HTML
         model.addAttribute("productos", productosPage.getContent()); // La lista de productos de esta página
+        // AQUÍ ESTÁ LA CLAVE: Añadimos los días configurados en el yaml al modelo
+        model.addAttribute("diasNuevo", configuracionApp.getDiasProductoNuevo());
+        // Y si usas datos generales de la app en la vista, también puedes pasar la config entera
+        model.addAttribute("appConfig", configuracionApp);
+        
         model.addAttribute("currentPage", page);                     // Página actual
         model.addAttribute("totalPages", productosPage.getTotalPages()); // Total de páginas
         model.addAttribute("hasPrevious", productosPage.hasPrevious());

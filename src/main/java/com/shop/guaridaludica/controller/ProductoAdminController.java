@@ -5,13 +5,18 @@ import com.shop.guaridaludica.model.Producto;
 import com.shop.guaridaludica.repository.CategoriaRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
 import com.shop.guaridaludica.service.ProductoService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -99,12 +104,27 @@ public class ProductoAdminController {
 
     // Guardar (Sirve tanto para INSERTAR como para ACTUALIZAR)
     @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute Producto producto,
+    public String guardarProducto(@Valid @ModelAttribute Producto producto,
+                                  BindingResult bindingResult,
                                   @RequestParam("files") MultipartFile[] files,
                                   @RequestParam(value = "imagenPrincipalId", required = false) Long imagenPrincipalId,
                                   @RequestParam(value = "indicePrincipalNuevo", required = false) Integer indicePrincipalNuevo,
-                                  @RequestParam(value = "idsImagenesAEliminar", required = false) List<Long> idsImagenesAEliminar) {
+                                  @RequestParam(value = "idsImagenesAEliminar", required = false) List<Long> idsImagenesAEliminar,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+                                    
+        // Si hay errores de validación, volvemos al formulario y NO guardamos
+        if (bindingResult.hasErrors()) {
+            // IMPORTANTE: Recargamos las categorías para que el <select> no se quede vacío en la vista
+            model.addAttribute("todasCategorias", categoriaRepository.findAll());
+            return "admin/productos/form-producto";
+        }
+
+        // Si todo va bien, guardamos mediante el servicio
         productoService.altaProducto(producto, files, imagenPrincipalId, indicePrincipalNuevo, idsImagenesAEliminar);
+
+        // Añadimos mensaje flash de éxito
+        redirectAttributes.addFlashAttribute("mensajeExito", "¡Juego guardado correctamente en La Guarida Lúdica!");
 
         return "redirect:/admin/productos";
     }

@@ -58,16 +58,42 @@
                 
             </div>
 
-            <!-- FILA INFERIOR: Descripción larga -->
             <div class="row mt-5">
                 <div class="col-12 border-top pt-4">
                     <h4 class="fw-bold mb-3">Descripción del juego</h4>
-                    <p class="text-muted" th:text="${producto.descripcion}" style="line-height: 1.7;">Descripción detallada del juego...</p>
+                    
+                    <!-- Contenedor del texto (si es muy largo, aplicamos una clase para limitar o estructurar) -->
+                    <div class="text-muted" style="line-height: 1.7;">
+                        
+                        <!-- Si la descripción es corta se muestra entera, si es larga podemos usar el collapse -->
+                        <div id="descripcionCorta" th:text="${#strings.length(producto.descripcion) > 300 ? #strings.substring(producto.descripcion, 0, 300) + '...' : producto.descripcion}">
+                            Descripción resumida...
+                        </div>
+
+                        <!-- El bloque completo oculto por defecto que se despliega -->
+                        <div class="collapse mt-2" id="descripcionCompleta">
+                            <p class="mb-0 text-muted" th:text="${producto.descripcion}" style="line-height: 1.7;"></p>
+                        </div>
+
+                        <!-- Botón desplegable (Solo aparece si el texto es lo suficientemente largo, o puedes dejarlo fijo) -->
+                        <button class="btn btn-link text-decoration-none p-0 mt-2 fw-bold" 
+                                type="button" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#descripcionCompleta" 
+                                aria-expanded="false" 
+                                aria-controls="descripcionCompleta" 
+                                id="btnLeerMas"
+                                th:if="${#strings.length(producto.descripcion) > 300}">
+                            Leer más...
+                        </button>
+                    </div>
+
                 </div>
             </div>
             
         </div>
     </div>
-
+    <!-- ENLAZAMOS EL FICHERO JS EXTERNO AQUÍ -->
+    <script th:src="@{/js/leerDescripcion.js}"></script>
 </body>
 </html>

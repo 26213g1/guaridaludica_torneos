@@ -13,6 +13,7 @@ tienda:
   moneda: "EUR"
   simbolo-moneda: "€"
   impuesto-porcentaje: "21"
+  dias-producto-nuevo: 7
 
 contacto:
   email: "soporte@tutienda.com"

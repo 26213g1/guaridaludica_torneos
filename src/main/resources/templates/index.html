@@ -9,8 +9,12 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Aquí usamos th:each para iterar tus productos -->
             <div class="col" th:each="producto : ${productos}">
-                <div class="card h-100 shadow-sm">
-
+                <div class="card h-100 shadow-sm card-producto">
+                    <!-- Etiqueta NUEVO condicional -->
+                    <!-- (Suponiendo que pasas 'diasNuevo' desde el controlador o un bean de config) -->
+                    <div class="ribbon-nuevo" th:if="${producto.esNuevo(diasNuevo)}">
+                        NUEVO
+                    </div>
 
                     <div class="card-img-wrapper">
                         <a th:href="@{/producto/{id}(id=${producto.id})}">
@@ -21,10 +25,13 @@
 
                     <div class="card-body">
                         <h5 class="card-title" th:text="${producto.nombre}">Nombre</h5>
-                        <p class="card-text text-muted" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</p>
-                        <p class="card-text small" th:text="${#strings.abbreviate(producto.descripcion, 70)}">Desc...</p>
-                        <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        
+                        <p class="card-text text-muted" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">
+                            Precio</p>
+                        <p class="card-text small" th:text="${#strings.abbreviate(producto.descripcion, 70)}">Desc...
+                        </p>
+                        <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn btn-primary btn-sm">Ver
+                            Detalles</a>
+
                         <div class="mt-2">
                             <span th:if="${producto.stock > 0}" class="badge bg-success">En Stock</span>
                             <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
@@ -32,17 +39,18 @@
                             <span th:if="${producto.stock > 0}" class="text-muted small">
                                 <i class="bi bi-box-seam me-1"></i><strong th:text="${producto.stock}">10</strong> uds.
                             </span>
-                            
+
                             <!-- Formulario para añadir al carrito -->
                             <form th:action="@{/carrito/agregar}" method="post" class="mt-2">
                                 <input type="hidden" name="id" th:value="${producto.id}" />
-                                <button type="submit" class="btn btn-outline-success btn-sm w-100" th:disabled="${producto.stock == 0}">
+                                <button type="submit" class="btn btn-outline-success btn-sm w-100"
+                                    th:disabled="${producto.stock == 0}">
                                     <i class="bi bi-cart-plus"></i> Añadir al carrito
                                 </button>
                             </form>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div> <!-- Fin del row de productos -->
 
