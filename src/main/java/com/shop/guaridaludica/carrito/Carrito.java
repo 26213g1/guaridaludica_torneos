@@ -20,8 +20,6 @@ public class Carrito {
     @Autowired
     private ProductoRepository productoRepository;
 
-    @Autowired
-    private Carrito carrito;
 
     private List<CarritoItem> items = new ArrayList<>();
 
@@ -74,16 +72,11 @@ public class Carrito {
 
     @GetMapping
     public String verCarrito(Model model, HttpSession session) {
-        // Comprobamos si hay un producto pendiente guardado tras el login/registro
-        Long productoPendienteId = (Long) session.getAttribute("agregarProductoAlIniciar");
+        // Limpiamos el atributo de sesión por si acaso, pero NO volvemos a sumar nada
+        session.removeAttribute("agregarProductoAlIniciar");
 
-        if (productoPendienteId != null) {
-            carrito.agregarProducto(productoPendienteId);
-            session.removeAttribute("agregarProductoAlIniciar"); // Lo borramos para que no se repita
-        }
-
-        model.addAttribute("items", carrito.getItems());
-        model.addAttribute("total", carrito.getTotal());
+        model.addAttribute("items", this.getItems());
+        model.addAttribute("total", this.getTotal());
         return "carrito";
     }
 }

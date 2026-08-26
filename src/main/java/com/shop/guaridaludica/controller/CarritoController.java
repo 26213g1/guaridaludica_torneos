@@ -29,18 +29,23 @@ public class CarritoController {
         
         // Si el usuario acaba de loguearse y traía la cookie con el producto pendiente
         if (productoIdStr != null) {
+            // 1. DESTRUIMOS LA COOKIE PRIMERO DE TODO para que ninguna otra petición paralela la vuelva a leer
+            Cookie cookie = new Cookie("productoPendienteId", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
+            // 2. Intentamos añadir el producto solo si el carrito NO lo tiene ya
             try {
                 Long productoId = Long.parseLong(productoIdStr);
-                carrito.agregarProducto(productoId);
+                boolean yaExiste = carrito.getItems().stream()
+                        .anyMatch(item -> item.getProductoId().equals(productoId));
+                if (!yaExiste) {
+                    carrito.agregarProducto(productoId);
+                }
             } catch (NumberFormatException e) {
                 // Por si acaso el valor no fuera un número válido
             }
-
-            // Destruimos la cookie para que no se vuelva a procesar en el futuro
-            Cookie cookie = new Cookie("productoPendienteId", null);
-            cookie.setMaxAge(0); // Caduca inmediatamente
-            cookie.setPath("/");
-            response.addCookie(cookie);
         }
 
         model.addAttribute("items", carrito.getItems());
