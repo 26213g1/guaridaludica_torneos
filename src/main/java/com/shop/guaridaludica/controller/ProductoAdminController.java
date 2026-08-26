@@ -112,12 +112,20 @@ public class ProductoAdminController {
                                   @RequestParam(value = "idsImagenesAEliminar", required = false) List<Long> idsImagenesAEliminar,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
-                                    
+                                  
         // Si hay errores de validación, volvemos al formulario y NO guardamos
         if (bindingResult.hasErrors()) {
             // IMPORTANTE: Recargamos las categorías para que el <select> no se quede vacío en la vista
             model.addAttribute("todasCategorias", categoriaRepository.findAll());
             return "admin/productos/form-producto";
+        }
+
+        // CONTROL DE FECHA DE CREACIÓN EN EDICIÓN:
+        // Si el producto tiene ID, significa que ya existe. Rescatamos su fecha original de la BD.
+        if (producto.getId() != null) {
+            productoRepository.findById(producto.getId()).ifPresent(productoExistente -> {
+                producto.setFechaCreacion(productoExistente.getFechaCreacion());
+            });
         }
 
         // Si todo va bien, guardamos mediante el servicio

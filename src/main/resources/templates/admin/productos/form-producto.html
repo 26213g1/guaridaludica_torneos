@@ -146,6 +146,9 @@
                                 <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Guardar Cambios</button>
                             </div>
+
+                            <!-- Campo oculto para conservar la fecha de creación al editar -->
+                            <input type="hidden" th:field="*{fechaCreacion}" />
                         </form>
                     </div>
                 </div>
