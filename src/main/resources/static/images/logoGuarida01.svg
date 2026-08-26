@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente sutil para darle un toque moderno y elegante -->
+    <linearGradient id="diceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffc107" />
+      <stop offset="100%" stop-color="#fd7e14" />
+    </linearGradient>
+  </defs>
+
+  <!-- ICONO: La Guarida (Arco/Cueva) + Dado D20 dentro -->
+  <g transform="translate(5, 5)">
+    <!-- Silueta de la Guarida (Cueva / Portal) -->
+    <path d="M10,45 C10,20 20,5 35,5 C50,5 60,20 60,45 Z" fill="#212529" opacity="0.1"/>
+    <path d="M12,45 C12,22 21,8 35,8 C49,8 58,22 58,45 Z" fill="none" stroke="#212529" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Dado D20 estilizado (Símbolo Lúdico) centrado en la guarida -->
+    <polygon points="35,12 48,22 43,40 27,40 22,22" fill="url(#diceGrad)" stroke="#212529" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Aristas internas del dado -->
+    <polyline points="35,12 35,28 48,22" fill="none" stroke="#212529" stroke-width="1.5"/>
+    <polyline points="35,28 43,40" fill="none" stroke="#212529" stroke-width="1.5"/>
+    <polyline points="35,28 27,40" fill="none" stroke="#212529" stroke-width="1.5"/>
+    <polyline points="35,28 22,22" fill="none" stroke="#212529" stroke-width="1.5"/>
+    
+    <!-- Pequeño punto brillante o número en el dado -->
+    <circle cx="35" cy="24" r="1.5" fill="#fff"/>
+  </g>
+
+  <!-- TEXTO DEL LOGOTIPO -->
+  <text x="75" y="27" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="800" fill="#212529">
+    LA GUARIDA
+  </text>
+  <text x="75" y="47" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#fd7e14" letter-spacing="2">
+    LÚDICA
+  </text>
+</svg>
