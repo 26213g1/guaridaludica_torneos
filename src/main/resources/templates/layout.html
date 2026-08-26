@@ -10,7 +10,7 @@ th:fragment="layout(content)">
     <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tu CSS personalizado -->
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <!-- Bootstrap Icons CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -46,7 +46,7 @@ th:fragment="layout(content)">
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     
-                    <!-- Contenedor que usa los estilos definidos en style.css -->
+                    <!-- Contenedor que usa los estilos definidos en main.css -->
                     <div id="cajaCategoriasMovil" class="mt-2">
                         <div class="d-flex flex-column gap-2">
                             <a th:each="cat : ${categorias}" th:href="@{/categoria/{id}(id=${cat.id})}" class="nav-link-cat text-dark text-decoration-none py-1 border-bottom"

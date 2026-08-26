@@ -1,0 +1,9 @@
+/* ===== VARIABLES Y ESTILOS GENERALES ===== */
+:root { 
+    --primary-color: #2d3436; 
+    --accent-color: #00b894; 
+}
+
+body { 
+    background-color: #f8f9fa; 
+}

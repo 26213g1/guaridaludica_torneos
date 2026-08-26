@@ -1,0 +1,77 @@
+/* ===== TARJETAS, FORMULARIOS Y CINTAS (RIBBONS) ===== */
+.card-img-wrapper {
+    height: 250px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.card-img-wrapper img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.card-login {
+    width: 100%;
+    max-width: 400px;
+}
+
+.registro-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.btn-registro {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.card-producto {
+    position: relative;
+    overflow: hidden;
+}
+
+.ribbon-nuevo {
+    position: absolute;
+    top: 15px;
+    right: -35px;
+    width: 120px;
+    background-color: #0dcaf0;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    padding: 5px 0;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.ribbon-agotado {
+    position: absolute;
+    top: 15px;
+    left: -35px;
+    width: 120px;
+    background-color: #dc3545;
+    color: white;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 4px 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
