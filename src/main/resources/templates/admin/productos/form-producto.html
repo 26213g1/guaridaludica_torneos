@@ -47,6 +47,28 @@
                                 </div>
                             </div>
 
+                            <!-- Fila nueva para Precio Anterior (Ofertas) y Duración de la Partida -->
+                            <div class="row">
+                                <!-- Campo Precio Anterior -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Precio Anterior (€) <span class="text-muted small">(Opcional)</span></label>
+                                    <input type="number" step="0.01" th:field="*{precioAnterior}" class="form-control" 
+                                        th:classappend="${#fields.hasErrors('precioAnterior')} ? 'is-invalid' : ''"
+                                        placeholder="Ej: 29.99">
+                                    <div class="form-text">Rellenar solo si el juego está rebajado.</div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('precioAnterior')}" th:errors="*{precioAnterior}"></div>
+                                </div>
+                                
+                                <!-- Campo Duración de la Partida -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Duración de la Partida</label>
+                                    <input type="text" th:field="*{duracionPartida}" class="form-control" 
+                                        th:classappend="${#fields.hasErrors('duracionPartida')} ? 'is-invalid' : ''"
+                                        placeholder="Ej: 45-60 min">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('duracionPartida')}" th:errors="*{duracionPartida}"></div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <!-- Campo Mínimo Jugadores -->
                                 <div class="col-md-6 mb-3">

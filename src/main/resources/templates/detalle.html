@@ -7,75 +7,121 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- FontAwesome para los iconos (¡Importante para la lupa!) -->
+    <!-- FontAwesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-light">
     <!-- Barra superior (Navbar) -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <div class="container mt-4">
-        <a th:href="@{/}" class="btn btn-secondary mb-4">← Volver al catálogo</a>
+    <div class="container mt-4 mb-5">
+        <a th:href="@{/}" class="btn btn-outline-secondary mb-4">
+            <i class="fas fa-arrow-left me-1"></i> Volver al catálogo
+        </a>
         
         <div class="bg-white p-4 rounded shadow-sm">
             
             <!-- FILA SUPERIOR: Carrusel y Datos principales -->
             <div class="row align-items-start">
                 
-                <div class="col-md-5">
+                <!-- Columna Izquierda: Carrusel de imágenes -->
+                <div class="col-md-5 mb-4 mb-md-0">
                     <div th:replace="~{fragments/carrusel :: carrusel}"></div>
                 </div>
                 
+                <!-- Columna Derecha: Información del producto y Compra -->
                 <div class="col-md-7">
-                    <h2 class="fw-bold" th:text="${producto.nombre}">Nombre del Juego</h2>
-                    <h3 class="text-primary fw-bold my-3" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">0.00 €</h3>
-                    
-                    <hr>
-                    
-                    <p class="mb-2"><strong>👥 Jugadores:</strong> <span th:text="${producto.minJugadores}"></span> a <span th:text="${producto.maxJugadores}"></span></p>
-                    
-                    <div class="mb-3">
-                        <span class="text-muted"><strong>Categorías: </strong></span>
+                    <!-- Categorías como etiquetas superiores -->
+                    <div class="mb-2">
                         <span th:each="cat : ${producto.categorias}" 
-                            class="badge bg-secondary me-1" 
+                            class="badge bg-secondary bg-opacity-75 me-1" 
                             th:text="${cat.nombre}">
                         </span>
                     </div>
-                    <p class="mb-4"><strong>📦 Stock disponible:</strong> <span th:text="${producto.stock}"></span> unidades</p>
+
+                    <h2 class="fw-bold text-dark" th:text="${producto.nombre}">Nombre del Juego</h2>
                     
-                    <form th:action="@{/carrito/agregar}" method="post">
+                    <!-- Precios (Soporte opcional para precio tachado si hay oferta) -->
+                    <div class="my-3 d-flex align-items-center">
+                        <h3 class="text-primary fw-bold mb-0 me-3" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">0.00 €</h3>
+                        <span class="text-decoration-line-through text-muted fs-5" 
+                              th:if="${producto.precioAnterior != null and producto.precioAnterior > producto.precio}" 
+                              th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">
+                        </span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Ficha rápida de características del juego de mesa -->
+                    <div class="row text-secondary mb-4 g-3">
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded border">
+                                <i class="fas fa-users text-primary me-2"></i><strong>Jugadores:</strong><br>
+                                <span class="text-dark" th:text="${producto.minJugadores == producto.maxJugadores} ? ${producto.minJugadores} : (${producto.minJugadores} + ' - ' + ${producto.maxJugadores})"></span>
+                            </div>
+                        </div>
+                        <div class="col-6" th:if="${producto.duracionPartida != null}">
+                            <div class="p-2 bg-light rounded border">
+                                <i class="fas fa-clock text-primary me-2"></i><strong>Duración:</strong><br>
+                                <span class="text-dark" th:text="${producto.duracionPartida}">45-60 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estado del Stock -->
+                    <div class="mb-4">
+                        <span class="fw-bold">Disponibilidad: </span>
+                        <span th:if="${producto.stock > 5}" class="badge bg-success">En Stock (<span th:text="${producto.stock}"></span> disponibles)</span>
+                        <span th:if="${producto.stock > 0 and producto.stock <= 5}" class="badge bg-warning text-dark">¡Últimas unidades! (<span th:text="${producto.stock}"></span>)</span>
+                        <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
+                    </div>
+                    
+                    <!-- Formulario de compra con selector de cantidad -->
+                    <form th:action="@{/carrito/agregar}" method="post" th:if="${producto.stock > 0}">
                         <input type="hidden" name="id" th:value="${producto.id}">
-                        <div class="input-group mb-3">
-                            <!-- Opcional: Selector de cantidad si quieres permitir elegir cuántos añadir -->
-                            <!--<input type="number" name="cantidad" value="1" min="1" max="${producto.stock}" class="form-control" style="max-width: 90px;" /> -->
-                            <button type="submit" class="btn btn-success btn-lg flex-grow-1">
-                                <i class="fas fa-cart-plus me-2"></i> Añadir al Carrito
-                            </button>
+                        
+                        <div class="row g-2 align-items-center">
+                            <!-- <div class="col-auto">
+                                <label for="cantidad" class="col-form-label fw-bold">Cantidad:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="cantidad" name="cantidad" value="1" min="1" th:max="${producto.stock}" class="form-control text-center" style="width: 80px;" />
+                            </div> -->
+                            <div class="col">
+                                <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
+                                    <i class="fas fa-cart-plus me-2"></i> Añadir al Carrito
+                                </button>
+                            </div>
                         </div>
                     </form>
+
+                    <!-- Mensaje si no hay stock -->
+                    <div class="alert alert-secondary mt-3 mb-0 text-center" th:if="${producto.stock == 0}">
+                        <i class="fas fa-exclamation-circle me-1"></i> Este juego temporalmente no está disponible.
+                    </div>
                     
                 </div>
                 
             </div>
 
+            <!-- FILA INFERIOR: Descripción detallada con sistema colapsable -->
             <div class="row mt-5">
                 <div class="col-12 border-top pt-4">
                     <h4 class="fw-bold mb-3">Descripción del juego</h4>
                     
-                    <!-- Contenedor del texto (si es muy largo, aplicamos una clase para limitar o estructurar) -->
-                    <div class="text-muted" style="line-height: 1.7;">
+                    <div class="text-secondary" style="line-height: 1.7;">
                         
-                        <!-- Si la descripción es corta se muestra entera, si es larga podemos usar el collapse -->
+                        <!-- Descripción resumida -->
                         <div id="descripcionCorta" th:text="${#strings.length(producto.descripcion) > 300 ? #strings.substring(producto.descripcion, 0, 300) + '...' : producto.descripcion}">
                             Descripción resumida...
                         </div>
 
-                        <!-- El bloque completo oculto por defecto que se despliega -->
+                        <!-- Bloque completo oculto -->
                         <div class="collapse mt-2" id="descripcionCompleta">
-                            <p class="mb-0 text-muted" th:text="${producto.descripcion}" style="line-height: 1.7;"></p>
+                            <p class="mb-0 text-secondary" th:text="${producto.descripcion}" style="line-height: 1.7;"></p>
                         </div>
 
-                        <!-- Botón desplegable (Solo aparece si el texto es lo suficientemente largo, o puedes dejarlo fijo) -->
+                        <!-- Botón desplegable -->
                         <button class="btn btn-link text-decoration-none p-0 mt-2 fw-bold" 
                                 type="button" 
                                 data-bs-toggle="collapse" 
@@ -93,7 +139,8 @@
             
         </div>
     </div>
-    <!-- ENLAZAMOS EL FICHERO JS EXTERNO AQUÍ -->
+
+    <!-- Fichero JS externo para gestionar el texto colapsable -->
     <script th:src="@{/js/leerDescripcion.js}"></script>
 </body>
 </html>

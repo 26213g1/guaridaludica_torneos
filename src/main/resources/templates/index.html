@@ -33,22 +33,30 @@
                         <!-- Título con más énfasis (fw-bold y un tamaño equilibrado) -->
                         <h5 class="card-title fw-bold text-dark mb-2" th:text="${producto.nombre}">Nombre</h5>
 
-                        <!-- Zona de Precios: Precio actual + Precio anterior tachado -->
+                        <!-- Zona de Precios: Precio actual + Precio anterior tachado (si existe) -->
                         <div class="mb-2 d-flex align-items-center gap-2">
                             <span class="fs-5 fw-bold text-success"
                                 th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</span>
-                            <span class="text-muted text-decoration-line-through small">85.00 €</span>
+
+                            <!-- Precio anterior tachado dinámico -->
+                            <span class="text-muted text-decoration-line-through small"
+                                th:if="${producto.precioAnterior != null}"
+                                th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">85.00 €</span>
                         </div>
 
                         <!-- Información extra del juego en negrita con iconos -->
                         <div class="mb-3 text-muted small d-flex gap-3">
-                            <span title="Duración de la partida">
-                                <i class="bi bi-clock me-1"></i> <strong class="text-dark">60-90 min</strong>
+                            <!-- Duración dinámica (solo se muestra si tiene valor) -->
+                            <span title="Duración de la partida" th:if="${producto.duracionPartida != null}">
+                                <i class="bi bi-clock me-1"></i> <strong class="text-dark"
+                                    th:text="${producto.duracionPartida}">60-90 min</strong>
                             </span>
+
                             <span title="Número de jugadores">
-                                <i class="bi bi-person me-1"></i> 
+                                <i class="bi bi-person me-1"></i>
                                 <strong class="text-dark">
-                                    <span th:text="${producto.minJugadores}">1</span>-<span th:text="${producto.maxJugadores}">4</span> jug.
+                                    <span th:text="${producto.minJugadores}">1</span>-<span
+                                        th:text="${producto.maxJugadores}">4</span> jug.
                                 </strong>
                             </span>
                         </div>

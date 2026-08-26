@@ -56,6 +56,14 @@ public class Producto {
     @Column(name = "max_jugadores")
     private Integer maxJugadores;
 
+    @Positive(message = "El precio debe ser mayor que cero")
+    @Column(name = "precio_anterior")
+    private BigDecimal precioAnterior;
+
+    @NotBlank(message = "La duración de la partida no puede estar vacía")
+    @Column(name = "duracion_partida")
+    private String duracionPartida;
+
     @ManyToMany
     @JoinTable(
         name = "producto_categoria",
@@ -149,5 +157,21 @@ public class Producto {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public BigDecimal getPrecioAnterior() {
+        return precioAnterior;
+    }
+
+    public void setPrecioAnterior(BigDecimal precioAnterior) {
+        this.precioAnterior = precioAnterior;
+    }
+
+    public String getDuracionPartida() {
+        return duracionPartida;
+    }
+
+    public void setDuracionPartida(String duracionPartida) {
+        this.duracionPartida = duracionPartida;
     }
 }
