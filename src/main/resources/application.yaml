@@ -14,6 +14,7 @@ tienda:
   simbolo-moneda: "€"
   impuesto-porcentaje: "21"
   dias-producto-nuevo: 7
+  cabecera-inicio: Catálogo de Juegos Modernos
 
 contacto:
   email: "soporte@tutienda.com"

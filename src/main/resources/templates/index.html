@@ -30,7 +30,9 @@
 
                     <div class="card-body d-flex flex-column pt-3">
                         <!-- Título con más énfasis (fw-bold y un tamaño equilibrado) -->
-                        <h5 class="card-title fw-bold text-dark mb-2" th:text="${producto.nombre}">Nombre</h5>
+                        <h5 class="card-title mb-2">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-titulo" th:text="${producto.nombre}">Nombre</a>
+                        </h5>
 
                         <!-- Zona de Precios: Precio actual + Precio anterior tachado (si existe) -->
                         <div class="mb-3 d-flex align-items-center gap-2">

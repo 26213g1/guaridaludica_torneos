@@ -15,7 +15,6 @@ th:fragment="layout(content)">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-
     <!-- Barra de navegación superior -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
@@ -36,7 +35,8 @@ th:fragment="layout(content)">
 
             <!-- 2. Contenido principal y menú desplegable para móviles -->
             <main class="col-12 col-lg-9">
-                
+                <h2 class="titulo-seccion-moderno-degradado" th:text="${appConfig.cabeceraInicio}">Cabecera Inicio</h2>
+
                 <!-- Barra de búsqueda general que se ve en todas las vistas del layout -->
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-body p-2">

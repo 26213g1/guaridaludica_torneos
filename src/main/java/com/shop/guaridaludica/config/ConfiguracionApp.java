@@ -12,6 +12,15 @@ public class ConfiguracionApp {
     private String simboloMoneda;
     private String impuestoPorcentaje;
     private int diasProductoNuevo = 7;
+    private String cabeceraInicio;
+
+    public String getCabeceraInicio() {
+        return cabeceraInicio;
+    }
+
+    public void setCabeceraInicio(String cabeceraInicio) {
+        this.cabeceraInicio = cabeceraInicio;
+    }
 
     // Getters y Setters
     public String getNombre() {
@@ -53,4 +62,5 @@ public class ConfiguracionApp {
     public void setDiasProductoNuevo(int diasProductoNuevo) {
         this.diasProductoNuevo = diasProductoNuevo;
     }
+
 }

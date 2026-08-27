@@ -30,3 +30,23 @@
     border-radius: 0.375rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075);
 }
+
+/* ===== ESTILOS DE TÍTULOS DE PRODUCTOS ===== */
+.producto-titulo {
+    color: #1e293b; /* Gris grafito elegante */
+    font-weight: 600;
+    transition: color 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.producto-titulo:hover {
+    color: #0dcaf0; /* El toque turquesa corporativo al pasar el ratón */
+}
+
+/* ===== TÍTULO DE DETALLE ===== */
+.titulo-detalle {
+    background: linear-gradient(135deg, #001e4e 0%, #475569 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
