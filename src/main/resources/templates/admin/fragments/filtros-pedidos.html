@@ -3,17 +3,17 @@
 <body>
     <div th:fragment="barra-filtros-pedidos">
         <div class="card shadow-sm mb-4">
-            <div class="card-body py-3">
-                <form method="get" th:action="@{/admin/pedidos}" class="row g-2 align-items-center">
+            <div class="card-body p-3">
+                <form method="get" th:action="@{/admin/pedidos}" class="row g-3 align-items-center">
                     
-                    <!-- Búsqueda por ID, Email o Nombre -->
+                    <!-- Búsqueda por ID, Email o Nombre -> span 3 -->
                     <div class="col-md-3">
-                        <input type="text" class="form-control form-control-sm" id="query" name="query" th:value="${query}" placeholder="ID, email o nombre...">
+                        <input type="text" class="form-control" id="query" name="query" th:value="${query}" placeholder="ID, email o nombre...">
                     </div>
 
-                    <!-- Estado -->
+                    <!-- Estado -> span 2 -->
                     <div class="col-md-2">
-                        <select class="form-select form-select-sm" id="estado" name="estado">
+                        <select class="form-select" id="estado" name="estado">
                             <option value="">-- Estados --</option>
                             <option th:each="est : ${estadosDisponibles}" 
                                     th:value="${est}" 
@@ -23,22 +23,26 @@
                         </select>
                     </div>
 
-                    <!-- Fecha Desde (Calendario) -->
+                    <!-- Fecha Desde -> span 2 -->
                     <div class="col-md-2">
-                        <input type="date" class="form-control form-control-sm" name="fechaInicio" th:value="${fechaInicio}" title="Fecha inicio">
+                        <input type="date" class="form-control" name="fechaInicio" th:value="${fechaInicio}" title="Fecha inicio">
                     </div>
 
-                    <!-- Fecha Hasta (Calendario) -->
+                    <!-- Fecha Hasta -> span 2 -->
                     <div class="col-md-2">
-                        <input type="date" class="form-control form-control-sm" name="fechaFin" th:value="${fechaFin}" title="Fecha fin">
+                        <input type="date" class="form-control" name="fechaFin" th:value="${fechaFin}" title="Fecha fin">
                     </div>
 
-                    <!-- Botones de Acción -->
-                    <div class="col-md-3 d-flex gap-2 justify-content-end">
-                        <button type="submit" class="btn btn-primary btn-sm px-3">
+                    <!-- Botones de Acción -> span 3 (Suma: 3 + 2 + 2 + 2 + 3 = 12 exactos) -->
+                    <div class="col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
                             <i class="fa-solid fa-magnifying-glass me-1"></i> Filtrar
                         </button>
-                        <a th:href="@{/admin/pedidos}" class="btn btn-outline-secondary btn-sm">Limpiar</a>
+                        
+                        <a th:href="@{/admin/pedidos}" class="btn btn-outline-secondary" 
+                           th:if="${(query != null and query != '') or (estadoSeleccionado != null and estadoSeleccionado != '') or (fechaInicio != null and fechaInicio != '') or (fechaFin != null and fechaFin != '')}">
+                           Limpiar
+                        </a>
                     </div>
                 </form>
             </div>

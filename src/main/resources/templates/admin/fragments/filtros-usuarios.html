@@ -1,28 +1,22 @@
 <div th:fragment="barra-filtros-usuarios">
-        <form method="get" th:action="@{/admin/usuarios}" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm align-items-center">
-            
-            <!-- Búsqueda por texto (Nombre o Email) -->
-            <div class="col-md-5">
-                <input type="text" name="keyword" class="form-control" 
-                       placeholder="Buscar por nombre o email..." autocomplete="crypto-search-random" th:value="${keyword}">
-            </div>
+    <form method="get" th:action="@{/admin/usuarios}" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm align-items-center">
+        
+        <!-- Búsqueda por texto (Nombre o Email) -> span 8 de 12 -->
+        <div class="col-md-8">
+            <input type="text" name="keyword" class="form-control" 
+                   placeholder="Buscar por nombre o email..." autocomplete="off" th:value="${keyword}">
+        </div>
 
-            <!-- Opcional: Filtro por Rol (si decides añadirlo en el controller) -->
-            <!-- <div class="col-md-3">
-                <select name="role" class="form-select">
-                    <option value="">Todos los roles</option>
-                    <option value="ROLE_ADMIN">Administradores</option>
-                    <option value="ROLE_USER">Usuarios</option>
-                </select>
-            </div> -->
+        <!-- Botones de acción -> span 4 de 12 (Suma 8 + 4 = 12 exactos) -->
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-grow-1">
+                <i class="fa-solid fa-magnifying-glass me-1"></i> Filtrar
+            </button>
 
-            <!-- Botones de acción -->
-            <div class="col-md-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">🔍 Filtrar</button>
-
-                <div class="col-auto" th:if="${keyword != ''}">
-                    <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary">Limpiar filtros</a>
-                </div>
-            </div>
-        </form>
-    </div>
+            <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary" 
+               th:if="${keyword != null and keyword != ''}">
+               Limpiar
+            </a>
+        </div>
+    </form>
+</div>

@@ -1,16 +1,15 @@
 <div th:fragment="barra-filtros-productos">
-    <!-- Formulario de Filtros y Búsqueda -->
-    <form th:action="@{/admin/productos}" method="get" class="mb-4 row g-2 align-items-center">
-
-        <!-- 1. Búsqueda por Nombre -->
-        <div class="col-auto">
+    <form method="get" th:action="@{/admin/productos}" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm align-items-center">
+        
+        <!-- 1. Búsqueda por Nombre (span 3) -->
+        <div class="col-md-3">
             <input type="text" name="query" th:value="${query}" placeholder="Buscar por nombre..."
-                class="form-control form-control-sm" />
+                class="form-control" />
         </div>
 
-        <!-- 2. Selector de Categoría -->
-        <div class="col-auto">
-            <select name="categoriaId" class="form-select form-select-sm">
+        <!-- 2. Selector de Categoría (span 2) -->
+        <div class="col-md-2">
+            <select name="categoriaId" class="form-select">
                 <option value="">Todas las categorías</option>
                 <option th:each="cat : ${todasCategorias}" th:value="${cat.id}" th:text="${cat.nombre}"
                     th:selected="${cat.id == categoriaId}">
@@ -18,18 +17,18 @@
             </select>
         </div>
 
-        <!-- 3. Rango de Precios -->
-        <div class="col-auto">
-            <input type="number" step="0.01" name="minPrecio" th:value="${minPrecio}" placeholder="Min €"
-                class="form-control form-control-sm" style="width: 90px;" />
-        </div>
-        <div class="col-auto">
-            <input type="number" step="0.01" name="maxPrecio" th:value="${maxPrecio}" placeholder="Max €"
-                class="form-control form-control-sm" style="width: 90px;" />
+        <!-- 3. Rango de Precios (span 2) -->
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="number" step="0.01" name="minPrecio" th:value="${minPrecio}" placeholder="Mín €"
+                    class="form-control" />
+                <input type="number" step="0.01" name="maxPrecio" th:value="${maxPrecio}" placeholder="Máx €"
+                    class="form-control" />
+            </div>
         </div>
 
-        <!-- 4. Checkbox Sin Categoría -->
-        <div class="col-auto">
+        <!-- 4. Checkboxes (span 2) -->
+        <div class="col-md-2 d-flex flex-column gap-1">
             <div class="form-check m-0">
                 <input class="form-check-input" type="checkbox" name="sinCategoria" id="sinCategoria" value="true"
                     th:checked="${sinCategoria}" />
@@ -37,10 +36,7 @@
                     Sin categoría
                 </label>
             </div>
-        </div>
 
-        <!-- 5. Checkbox Sin Stock (¡Ahora con su col-auto para que no rompa la línea!) -->
-        <div class="col-auto">
             <div class="form-check m-0">
                 <input class="form-check-input" type="checkbox" id="sinStock" name="sinStock" value="true"
                     th:checked="${sinStock}" />
@@ -50,16 +46,16 @@
             </div>
         </div>
 
-        <!-- Botones de Acción -->
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary btn-sm px-3">
+        <!-- 5. Botones de Acción (span 3) -> 3+2+2+2+3 = 12 exactos -->
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-grow-1">
                 <i class="fa-solid fa-magnifying-glass me-1"></i> Filtrar
             </button>
-        </div>
 
-        <!-- Botón para limpiar filtros -->
-        <div class="col-auto" th:if="${query != null or categoriaId != null or minPrecio != null or maxPrecio != null or sinCategoria != null or sinStock != null}">
-            <a th:href="@{/admin/productos}" class="btn btn-outline-secondary btn-sm">Limpiar</a>
+            <a th:href="@{/admin/productos}" class="btn btn-outline-secondary" 
+               th:if="${query != null and query != '' or categoriaId != null or minPrecio != null or maxPrecio != null or sinCategoria != null or sinStock != null}">
+               Limpiar
+            </a>
         </div>
     </form>
 </div>
