@@ -11,7 +11,7 @@ public class KeepAliveService {
     @Scheduled(fixedRate = 840000)
     public void mantenerDespierta() {
         try {
-            String url = "https://guaridaludica.onrender.com/guaridaludica/"; // Pon tu URL pública aquí
+            String url = "https://guaridaludica.onrender.com/"; // Pon tu URL pública aquí
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getForObject(url, String.class);
             System.out.println("Petición de mantenimiento enviada para mantener la app despierta.");
