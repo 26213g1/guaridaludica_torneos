@@ -4,6 +4,7 @@
 @import url('modules/carousels.css');
 @import url('modules/cards.css');
 @import url('modules/responsive.css');
+@import url('modules/footer.css');
 
 .titulo-seccion-moderno {
     font-size: 2rem;

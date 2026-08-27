@@ -2,7 +2,11 @@ package com.shop.guaridaludica.config;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.time.Year;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,12 +19,26 @@ public class GlobalControllerAdvice {
     @Autowired
     private ConfiguracionApp configuracionApp;
 
+    @Autowired(required = false)
+    @Qualifier("contactoConfiguracion")
+    private Object contactoConfiguracion;
+
     @Autowired
     private Carrito carrito;
     
     @ModelAttribute("appConfig")
     public ConfiguracionApp globalConfig() {
         return configuracionApp;
+    }
+
+    @ModelAttribute("anioActual")
+    public int poblarAnioActual() {
+        return Year.now().getValue();
+    }
+
+    @ModelAttribute("contactoConfiguracion")
+    public Object poblarContacto() {
+        return contactoConfiguracion;
     }
 
     @ModelAttribute

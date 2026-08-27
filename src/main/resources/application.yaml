@@ -17,7 +17,13 @@ tienda:
   cabecera-inicio: Catálogo de Juegos Modernos
 
 contacto:
-  email: "soporte@tutienda.com"
+  email: "soporte@guaridaludica.com"
+  telefono: "+34 910 000 000"
+  direccion: "Calle Óbolo, Carabanchel, Madrid"
+  redes:
+    instagram: "https://instagram.com"
+    twitter: "https://twitter.com"
+
 
 shop:
   pagination:
