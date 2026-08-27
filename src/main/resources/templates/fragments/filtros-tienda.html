@@ -16,12 +16,13 @@
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <label class="form-label small fw-semibold text-muted mb-0">Precio Máximo</label>
                             <span class="badge bg-dark text-white">
-                                <span id="valorPrecio" th:text="${(maxPrecio != null ? maxPrecio : 100) + ' ' + appConfig.simboloMoneda}">100 €</span>
+                                <span class="valorPrecio" th:text="${(maxPrecio != null ? maxPrecio : 100) + ' ' + appConfig.simboloMoneda}">100 €</span>
                             </span>
                         </div>
-                        <input type="range" class="form-range" min="0" max="400" step="5" name="maxPrecio" 
-                            id="rangoPrecio" th:value="${maxPrecio != null ? maxPrecio : 100}"
-                            th:attr="oninput=|document.getElementById('valorPrecio').innerText = this.value + ' ${appConfig.simboloMoneda}'|">
+                        <!-- Añadimos una clase identificativa 'rango-precio-input' para controlarlo con JS -->
+                        <input type="range" class="form-range rango-precio-input" min="0" max="400" step="5" name="maxPrecio" 
+                               th:value="${maxPrecio != null ? maxPrecio : 100}"
+                               data-simbolo="${appConfig.simboloMoneda}">
                     </div>
 
                     <!-- Jugadores -->
@@ -59,6 +60,9 @@
                 </form>
             </div>
         </div>
+
+        <!-- Enlazamos nuestro archivo JavaScript externo -->
+        <script th:src="@{/js/filtros.js}"></script>
     </div>
 </body>
 </html>
