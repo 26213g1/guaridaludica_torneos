@@ -6,7 +6,7 @@ spring:
 
 server:
   servlet:
-    context-path: /guaridaludica
+    context-path:
 
 tienda:
   nombre: "🎲 La Guarida Lúdica"
