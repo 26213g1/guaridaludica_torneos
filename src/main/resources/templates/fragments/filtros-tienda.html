@@ -9,7 +9,7 @@
                 <form method="get" th:action="@{/}" class="d-flex flex-column gap-3">
                     
                     <!-- Mantener la categoría actual si se está filtrando por ella -->
-                    <input type="hidden" name="categoriaId" th:if="${categoriaSeleccionada != null}" th:value="${categoriaSeleccionada.id}" />
+                    <input type="hidden" name="categoriaId" th:if="${categoriaSeleccionada != null}" th:value="${categoriaSeleccionada}" />
 
                     <!-- Precio Máximo con visor en tiempo real -->
                     <div>
@@ -22,7 +22,7 @@
                         <!-- Añadimos una clase identificativa 'rango-precio-input' para controlarlo con JS -->
                         <input type="range" class="form-range rango-precio-input" min="0" max="400" step="5" name="maxPrecio" 
                                th:value="${maxPrecio != null ? maxPrecio : 100}"
-                               data-simbolo="${appConfig.simboloMoneda}">
+                               th:data-simbolo="${appConfig.simboloMoneda}">
                     </div>
 
                     <!-- Jugadores -->

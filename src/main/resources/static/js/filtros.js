@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         rango.addEventListener('input', function() {
             const valor = this.value;
             // Leemos el símbolo guardado en el atributo data-simbolo del input
-            const simbolo = this.getAttribute('simboloMoneda') || '€';
+            const simbolo = this.getAttribute('data-simbolo') || '€';
             
             // Actualizamos todos los visores de precio en pantalla (tanto móvil como escritorio)
             document.querySelectorAll('.valorPrecio').forEach(el => {
