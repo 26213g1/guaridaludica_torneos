@@ -14,6 +14,7 @@ import com.shop.guaridaludica.model.Producto;
 import com.shop.guaridaludica.service.HomeService;
 import com.shop.guaridaludica.repository.CategoriaRepository;
 
+import java.math.BigDecimal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,17 +31,31 @@ public class HomeController {
     @Value("${shop.pagination.public-size}")
     private int publicSize;
 
-    @GetMapping("/")
-    public String inicio(@RequestParam(defaultValue = "0") int page, Model model) {
-        // Obtenemos todos los juegos de la base de datos
-        // Mostramos publicSize productos por página
+    // Modificamos el inicio para que acepte filtros opcionales por GET
+    @GetMapping({"/", "/tienda"})
+    public String inicio(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) BigDecimal maxPrecio,
+            @RequestParam(required = false) Integer jugadores,
+            @RequestParam(required = false) String rangoDuracion,
+            Model model) {
+        
         Pageable pageable = PageRequest.of(page, publicSize);
-        Page<Producto> productosPage = homeService.obtenerProductosPaginados(pageable);
+        
+        // Llamamos al servicio de filtrado público que creamos antes
+        Page<Producto> productosPage = homeService.filtrarProductosPublicos(categoriaId, maxPrecio, jugadores, rangoDuracion, pageable);
         
         envioHtml(page, model, productosPage);
 
+        // Pasamos los valores actuales al modelo para que los inputs recuerden la selección
+        model.addAttribute("categoriaSeleccionada", categoriaId);
+        model.addAttribute("maxPrecio", maxPrecio);
+        model.addAttribute("jugadores", jugadores);
+        model.addAttribute("rangoDuracion", rangoDuracion);
+        
         model.addAttribute("mensaje", "¡Bienvenido a tu tienda de juegos de mesa modernos!");
-        return "index"; // Esto buscará una vista llamada index.html
+        return "index";
     }
 
     @GetMapping("/categoria/{id}")
@@ -49,42 +64,30 @@ public class HomeController {
         Page<Producto> productosPage = homeService.obtenerProductosPaginadosPorCategoria(id, pageable);
         
         envioHtml(page, model, productosPage);
-
-        // ¡IMPORTANTE! Pasamos también las categorías para que el menú lateral izquierdo no falle
-        //model.addAttribute("categorias", categoriaRepository.findAll());
-        return "index"; // O tu vista de catálogo
+        model.addAttribute("categoriaSeleccionada", id); // Para marcar la categoría activa si procede
+        return "index";
     }
 
     @GetMapping("/buscar")
     public String buscarProductos(@RequestParam(defaultValue = "0") int page, @RequestParam("query") String query, Model model) {
         Pageable pageable = PageRequest.of(page, publicSize);
-        // 1. Buscamos los productos
         Page<Producto> productosEncontrados = homeService.obtenerProductosPaginadosBuscador(query, pageable);
 
         envioHtml(page, model, productosEncontrados);
-
         model.addAttribute("busqueda", query);
-
-        // ¡IMPORTANTE! Pasamos también las categorías para que el menú lateral izquierdo no falle
-        //model.addAttribute("categorias", categoriaRepository.findAll());
-        return "index"; // o la vista que utilices para el catálogo principal
+        return "index";
     }
 
     private void envioHtml(int page, Model model, Page<Producto> productosPage) {
-        // Los enviamos a la vista HTML
-        model.addAttribute("productos", productosPage.getContent()); // La lista de productos de esta página
-        // AQUÍ ESTÁ LA CLAVE: Añadimos los días configurados en el yaml al modelo
+        model.addAttribute("productos", productosPage.getContent());
         model.addAttribute("diasNuevo", configuracionApp.getDiasProductoNuevo());
-        // Y si usas datos generales de la app en la vista, también puedes pasar la config entera
         model.addAttribute("appConfig", configuracionApp);
         
-        model.addAttribute("currentPage", page);                     // Página actual
-        model.addAttribute("totalPages", productosPage.getTotalPages()); // Total de páginas
+        model.addAttribute("currentPage", page);                    
+        model.addAttribute("totalPages", productosPage.getTotalPages());
         model.addAttribute("hasPrevious", productosPage.hasPrevious());
         model.addAttribute("hasNext", productosPage.hasNext());
 
-        // ¡IMPORTANTE! Pasamos también las categorías para que el menú lateral izquierdo no falle
         model.addAttribute("categorias", categoriaRepository.findAll());
     }
-
 }

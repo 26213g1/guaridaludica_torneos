@@ -59,4 +59,21 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             @Param("maxPrecio") BigDecimal maxPrecio, 
             Pageable pageable
     );
+
+    // Consulta pública avanzada para la tienda (Filtra por categoría, precio máximo, jugadores y duración)
+    @Query("SELECT p FROM Producto p WHERE p.categorias IS NOT EMPTY AND " +
+           "(:categoria IS NULL OR :categoria MEMBER OF p.categorias) AND " +
+           "(:maxPrecio IS NULL OR p.precio <= :maxPrecio) AND " +
+           "(:jugadores IS NULL OR " +
+           "   (:jugadores = 1 AND p.minJugadores <= 1) OR " + // Si busca solitario, que el mínimo sea 1
+           "   (:jugadores > 1 AND p.minJugadores <= :jugadores AND (p.maxJugadores IS NULL OR p.maxJugadores >= :jugadores))" +
+           ") AND " +
+           "(:duracion IS NULL OR LOWER(p.duracionPartida) LIKE LOWER(CONCAT('%', :duracion, '%')))")
+    Page<Producto> filtrarProductosPublicos(
+        @Param("categoria") Categoria categoria,
+        @Param("maxPrecio") BigDecimal maxPrecio,
+        @Param("jugadores") Integer jugadores,
+        @Param("duracion") String duracion,
+        Pageable pageable
+    );
 }

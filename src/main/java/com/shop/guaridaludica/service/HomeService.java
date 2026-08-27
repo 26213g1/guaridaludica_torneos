@@ -5,6 +5,8 @@ import com.shop.guaridaludica.model.Producto;
 import com.shop.guaridaludica.repository.CategoriaRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,9 +40,16 @@ public class HomeService {
     }
 
     public Page<Producto> obtenerProductosPaginadosBuscador(String query, Pageable pageable) {
-        Page<Producto> productos = productoRepository.findByNombreContainingIgnoreCaseAndCategoriasIsNotEmptyList(query, pageable);
-
-        return productos;
+        return productoRepository.findByNombreContainingIgnoreCaseAndCategoriasIsNotEmptyList(query, pageable);
     }
 
+    // Nuevo método para manejar los filtros avanzados de la tienda pública
+    public Page<Producto> filtrarProductosPublicos(Long categoriaId, BigDecimal maxPrecio, Integer jugadores, String duracion, Pageable pageable) {
+        Categoria categoria = null;
+        if (categoriaId != null) {
+            categoria = categoriaRepository.findById(categoriaId).orElse(null);
+        }
+        
+        return productoRepository.filtrarProductosPublicos(categoria, maxPrecio, jugadores, duracion, pageable);
+    }
 }
