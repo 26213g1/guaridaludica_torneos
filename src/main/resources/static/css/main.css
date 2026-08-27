@@ -22,3 +22,17 @@
     -webkit-text-fill-color: transparent;
     margin-bottom: 1.5rem;
 }
+
+/* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+input[type="range"].rango-precio-input::-webkit-slider-runnable-track {
+    background-color: #bcc5cc !important; /* Cambia este color por el gris que prefieras */
+    height: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Para Firefox */
+input[type="range"].rango-precio-input::-moz-range-track {
+    background-color: #bcc5cc !important;
+    height: 0.5rem;
+    border-radius: 0.25rem;
+}

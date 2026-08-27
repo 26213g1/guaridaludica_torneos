@@ -24,9 +24,9 @@ th:fragment="layout(content)">
             
             <!-- 1. Menú lateral para pantallas grandes (Desktop): Categorías + Filtros avanzados -->
             <aside class="col-lg-3 mb-3 d-none d-lg-block">
-                <!-- Bloque de Categorías -->
+                <!-- Bloque de Categorías (Escritorio) -->
                 <div class="sidebar mb-4">
-                    <h5 class="fw-bold mb-3">Categorías</h5>
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-list me-2 text-primary"></i> Filtrar por Categorías</h5>
                     <div id="categorias" class="d-flex flex-column gap-2">
                         <div th:replace="~{fragments/categorias :: lista-categorias}"></div>
                     </div>

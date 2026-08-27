@@ -1,18 +1,35 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const rangos = document.querySelectorAll('.rango-precio-input');
+    const formFiltros = document.querySelector('form[th\\:action*="/"]'); // O selecciona el form por su clase/acción
     
-    if (rangos.length === 0) return;
+    // Si no lo encuentra por el atributo de thymeleaf, podemos seleccionarlo de forma más directa:
+    const form = document.querySelector('form.d-flex.flex-column.gap-3');
+    if (!form) return;
 
-    rangos.forEach(rango => {
-        rango.addEventListener('input', function() {
+    // 1. Automatizar los selects y elementos de tipo cambio (Jugadores, Duración, etc.)
+    const selects = form.querySelectorAll('select');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            form.submit(); // Envía el formulario automáticamente al cambiar la opción
+        });
+    });
+
+    // 2. Automatizar el slider de precio (con un pequeño retardo opcional para no saturar mientras se arrastra)
+    const rangoPrecio = form.querySelector('.rango-precio-input');
+    if (rangoPrecio) {
+        let timeoutId;
+        
+        // Primero, mantenemos vivo el visor de texto en tiempo real que ya teníamos
+        rangoPrecio.addEventListener('input', function() {
             const valor = this.value;
-            // Leemos el símbolo guardado en el atributo data-simbolo del input
             const simbolo = this.getAttribute('data-simbolo') || '€';
-            
-            // Actualizamos todos los visores de precio en pantalla (tanto móvil como escritorio)
             document.querySelectorAll('.valorPrecio').forEach(el => {
                 el.innerText = valor + ' ' + simbolo;
             });
         });
-    });
+
+        // Segundo, cuando el usuario suelta o termina de mover el slider, enviamos el formulario
+        rangoPrecio.addEventListener('change', function() {
+            form.submit();
+        });
+    }
 });
