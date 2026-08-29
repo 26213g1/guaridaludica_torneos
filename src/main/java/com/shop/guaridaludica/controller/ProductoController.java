@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.shop.guaridaludica.config.ConfiguracionApp;
 import com.shop.guaridaludica.model.Producto;
 import com.shop.guaridaludica.repository.ProductoRepository;
 
@@ -14,6 +15,8 @@ import org.springframework.ui.Model;
 public class ProductoController {
     @Autowired
     private ProductoRepository productoRepository;
+    @Autowired
+    private ConfiguracionApp configuracionApp;
 
     @GetMapping("/producto/{id}")
     public String verDetalleProducto(@PathVariable Long id, Model model) {
@@ -23,6 +26,8 @@ public class ProductoController {
         // Fuerza la carga de la colección de imágenes
         producto.getImagenes().size(); 
         model.addAttribute("producto", producto);
+        model.addAttribute("diasUltimasUnidades", configuracionApp.getMarcarUltimasUnidades());
+
         return "detalle";
     }
     return "redirect:/";

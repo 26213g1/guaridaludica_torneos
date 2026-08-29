@@ -12,6 +12,16 @@ public class ConfiguracionApp {
     private String simboloMoneda;
     private String impuestoPorcentaje;
     private int diasProductoNuevo = 7;
+    private int marcarUltimasUnidades = 5;
+    
+    public int getMarcarUltimasUnidades() {
+        return marcarUltimasUnidades;
+    }
+
+    public void setMarcarUltimasUnidades(int marcarUltimasUnidades) {
+        this.marcarUltimasUnidades = marcarUltimasUnidades;
+    }
+
     private String cabeceraInicio;
 
     public String getCabeceraInicio() {

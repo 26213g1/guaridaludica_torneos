@@ -58,13 +58,13 @@
                     <div class="row text-secondary mb-4 g-3">
                         <div class="col-6">
                             <div class="p-2 bg-light rounded border">
-                                <i class="fas fa-users text-primary me-2"></i><strong>Jugadores:</strong><br>
+                                <i class="fas fa-users text-primary me-2"></i><strong>Jugadores:</strong>
                                 <span class="text-dark" th:text="${producto.minJugadores == producto.maxJugadores} ? ${producto.minJugadores} : (${producto.minJugadores} + ' - ' + ${producto.maxJugadores})"></span>
                             </div>
                         </div>
                         <div class="col-6" th:if="${producto.duracionPartida != null}">
                             <div class="p-2 bg-light rounded border">
-                                <i class="fas fa-clock text-primary me-2"></i><strong>Duración:</strong><br>
+                                <i class="fas fa-clock text-primary me-2"></i><strong>Duración:</strong>
                                 <span class="text-dark" th:text="${producto.duracionPartida}">45-60 min</span>
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                     <!-- Estado del Stock -->
                     <div class="mb-4">
                         <span class="fw-bold">Disponibilidad: </span>
-                        <span th:if="${producto.stock > 5}" class="badge bg-success">En Stock (<span th:text="${producto.stock}"></span> disponibles)</span>
-                        <span th:if="${producto.stock > 0 and producto.stock <= 5}" class="badge bg-warning text-dark">¡Últimas unidades! (<span th:text="${producto.stock}"></span>)</span>
+                        <span th:if="${producto.stock > diasUltimasUnidades}" class="badge bg-success">En Stock (<span th:text="${producto.stock}"></span> disponibles)</span>
+                        <span th:if="${producto.stock > 0 and producto.stock <= diasUltimasUnidades}" class="badge bg-warning text-dark">¡Últimas unidades! (<span th:text="${producto.stock}"></span>)</span>
                         <span th:if="${producto.stock == 0}" class="badge bg-danger">Agotado</span>
                     </div>
                     
