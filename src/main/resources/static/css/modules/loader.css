@@ -1,0 +1,22 @@
+/* /css/loader.css */
+#global-loader {
+    display: none; /* Oculto por defecto */
+}
+
+/* Estado activo cuando JavaScript lo llama */
+#global-loader.active {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 99999 !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.loader-card {
+    min-width: 250px;
+}

@@ -9,8 +9,13 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!-- Bootstrap Icons CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Spinner de carga global para navegación -->
+    <div th:replace="~{fragments/loader :: globalLoader}"></div>
+    <!-- Ejemplo en tu layout de Thymeleaf -->
+    <script th:src="@{/js/loader.js}"></script>
 
     <!-- NAVBAR MAESTRO UNIFICADO (Llamando al fragmento) -->
     <header>
