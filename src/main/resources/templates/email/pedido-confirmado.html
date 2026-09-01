@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de Pedido</title>
+    <div th:insert="~{email/fragments/estilos :: email-styles}"></div>
+</head>
+<body>
+    <div class="container">
+        <h2 class="header">🎲 ¡Gracias por tu pedido en La Guarida Lúdica!</h2>
+        <div class="content">
+            <p>Hola, hemos recibido tu pago con éxito y ya estamos preparando tus juegos de mesa en el almacén.</p>
+            <p><strong>Número de pedido:</strong> <span th:text="${pedidoId}">123</span></p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Juego de Mesa</th>
+                        <th>Cant.</th>
+                        <th>Precio Ud.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detalle : ${detalles}">
+                        <td th:text="${detalle.producto.nombre}">Catan</td>
+                        <td th:text="${detalle.cantidad}">1</td>
+                        <td th:text="${detalle.precioUnitario + ' €'}">45.00 €</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="total">Total pagado: <span th:text="${total + ' €'}">45.00 €</span></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 La Guarida Lúdica - Carabanchel, Madrid</p>
+        </div>
+    </div>
+</body>
+</html>

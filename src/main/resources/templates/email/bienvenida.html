@@ -3,13 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Bienvenida</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-        .container { max-width: 600px; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header { text-align: center; color: #198754; margin-bottom: 20px; }
-        .content { font-size: 16px; color: #333333; line-height: 1.5; }
-        .footer { margin-top: 30px; font-size: 12px; text-align: center; color: #777777; }
-    </style>
+    <div th:insert="~{email/fragments/estilos :: email-styles}"></div>
 </head>
 <body>
     <div class="container">

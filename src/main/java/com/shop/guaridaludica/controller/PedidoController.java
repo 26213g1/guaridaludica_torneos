@@ -22,6 +22,7 @@ import com.shop.guaridaludica.repository.DireccionRepository;
 import com.shop.guaridaludica.repository.PedidoRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
 import com.shop.guaridaludica.repository.UsuarioRepository;
+import com.shop.guaridaludica.service.EmailService;
 import com.shop.guaridaludica.service.PedidoService;
 
 import org.springframework.security.core.Authentication;
@@ -50,6 +51,9 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/checkout")
     public String mostrarCheckout(Model model, Authentication authentication) {
@@ -150,7 +154,20 @@ public class PedidoController {
             pedido.setEstado(Pedido.EstadoPedido.PAGADO);
             pedidoRepository.save(pedido);
 
-            // 3. Vaciar el carrito de la sesión
+            // 3. ENVIAR EL CORREO DE CONFIRMACIÓN DE PEDIDO 📧
+            // Obtenemos el email del usuario y los detalles del pedido guardados en BD
+            String emailDestino = pedido.getUsuario().getEmail();
+
+
+            emailService.enviarCorreoConfirmacionPedido(
+                emailDestino, 
+                pedido.getId(), 
+                pedido.getDetalles(), 
+                pedido.getTotal()
+            );
+
+
+            // 4. Vaciar el carrito de la sesión
             carrito.vaciar();
 
             return "redirect:/pedido/exitoso?id=" + pedido.getId();

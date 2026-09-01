@@ -2,6 +2,10 @@ package com.shop.guaridaludica.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,6 +14,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import com.shop.guaridaludica.model.DetallePedido;
 
 @Service
 public class EmailService {
@@ -47,6 +53,30 @@ public class EmailService {
             mailSender.send(mensaje);
         } catch (MessagingException e) {
             // Manejar la excepción o loguearla
+            e.printStackTrace();
+        }
+    }
+
+    @Async
+    public void enviarCorreoConfirmacionPedido(String destinatario, Long pedidoId, List<DetallePedido> detalles, BigDecimal total) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setFrom(soporteEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("📦 ¡Pedido confirmado #" + pedidoId + " - La Guarida Lúdica!");
+
+            Context context = new Context();
+            context.setVariable("pedidoId", pedidoId);
+            context.setVariable("detalles", detalles);
+            context.setVariable("total", total);
+
+            String contenidoHtml = templateEngine.process("email/pedido-confirmado", context);
+            helper.setText(contenidoHtml, true);
+
+            mailSender.send(mensaje);
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
