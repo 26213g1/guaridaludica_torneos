@@ -8,7 +8,7 @@
             <!-- Aquí usamos th:each para iterar tus productos -->
             <div class="col" th:each="producto : ${productos}">
                 <!-- Añadimos un padding un poco mayor (p-3) para ampliar visualmente la tarjeta -->
-                <div class="card h-100 shadow-sm card-producto p-2">
+                <div class="card h-100 shadow-sm card-producto p-2 position-relative">
 
                     <!-- Cinta AGOTADO (Esquina superior izquierda) -->
                     <div class="ribbon-agotado" th:if="${producto.stock == 0}">
@@ -62,16 +62,40 @@
                             </span>
                         </div>
 
-                        <!-- Formulario compacto para añadir al carrito -->
+                        <!-- ZONA INFERIOR UNIFICADA: Añadir al carrito + Botón de Favoritos al lado -->
                         <div class="mt-auto pt-2">
-                            <form th:action="@{/carrito/agregar}" method="post" class="m-0">
-                                <input type="hidden" name="id" th:value="${producto.id}" />
-                                <button type="submit" class="btn btn-outline-success w-100 py-2"
-                                    th:disabled="${producto.stock == 0}">
-                                    <i class="bi bi-cart-plus fa-lg"></i> <span class="ms-1 fw-semibold">Añadir</span>
-                                </button>
-                            </form>
+                            <div class="d-flex gap-2 align-items-center">
+                                
+                                <!-- Formulario para añadir al carrito (ocupa el espacio principal) -->
+                                <form th:action="@{/carrito/agregar}" method="post" class="m-0 flex-grow-1">
+                                    <input type="hidden" name="id" th:value="${producto.id}" />
+                                    <button type="submit" class="btn btn-outline-success w-100 py-2"
+                                        th:disabled="${producto.stock == 0}">
+                                        <i class="bi bi-cart-plus fa-lg"></i> <span class="ms-1 fw-semibold">Añadir</span>
+                                    </button>
+                                </form>
+
+                                <!-- Formulario de Favoritos al lado -->
+                                <!-- SI EL USUARIO NO ESTÁ LOGUEADO: Botón desactivado con aviso -->
+                                <div th:unless="${usuario != null}" class="d-inline-block" title="Inicia sesión para añadir a favoritos y guardar tus juegos">
+                                    <button type="button" class="btn btn-outline-secondary py-2 px-3" disabled>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </button>
+                                </div>
+
+                                <!-- SI EL USUARIO SÍ ESTÁ LOGUEADO: Botón funcional de favoritos -->
+                                <form th:if="${usuario != null}" th:action="@{/favorito/toggle/{id}(id=${producto.id})}" method="post" class="m-0">
+                                    <button type="submit" class="btn btn-outline-danger py-2 px-3" title="Gestionar favoritos">
+                                        <!-- Corazón relleno si ya es favorito -->
+                                        <i th:if="${#sets.contains(usuario.favoritos, producto)}" class="fa-solid fa-heart"></i>
+                                        <!-- Corazón vacío si no lo es -->
+                                        <i th:unless="${#sets.contains(usuario.favoritos, producto)}" class="fa-regular fa-heart"></i>
+                                    </button>
+                                </form>
+
+                            </div>
                         </div>
+
                     </div>
 
                 </div>

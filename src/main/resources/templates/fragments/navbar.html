@@ -18,9 +18,14 @@
                     <i class="fa-solid fa-screwdriver-wrench"></i> Admin
                 </a>
                 
+                
                 <!-- Enlace a Mi Cuenta integrado como parte del saludo o enlace visible -->
-                <a th:href="@{/perfil}" class="text-light text-decoration-none me-3">
+                <!--<a th:href="@{/perfil}" class="text-light text-decoration-none me-3">
                     👤 Hola, <strong th:text="${#authentication.principal.username}">Alias</strong>
+                </a>-->
+                <!-- Enlace a Mi Cuenta con diseño de pastilla destacada para fondo oscuro -->
+                <a th:href="@{/perfil}" class="btn btn-outline-light btn-sm px-3 py-1 d-flex align-items-center gap-1 me-3 text-decoration-none">
+                    <span>👤 Hola,</span> <strong class="text-warning" th:text="${#authentication.principal.username}">Alias</strong>
                 </a>
                 
                 <form th:action="@{/logout}" method="post" class="d-inline m-0 me-2">

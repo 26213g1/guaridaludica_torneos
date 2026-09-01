@@ -3,7 +3,9 @@ package com.shop.guaridaludica.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.security.Principal;
 import java.time.Year;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,11 +15,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.util.WebUtils;
 
 import com.shop.guaridaludica.carrito.Carrito;
+import com.shop.guaridaludica.model.Usuario;
+import com.shop.guaridaludica.repository.UsuarioRepository;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
     @Autowired
     private ConfiguracionApp configuracionApp;
+    @Autowired
+    private UsuarioRepository  usuarioRepository;
 
     @Autowired(required = false)
     @Qualifier("contactoConfiguracion")
@@ -68,5 +74,15 @@ public class GlobalControllerAdvice {
                 .sum();
         
         model.addAttribute("cantidadCarrito", totalItems);
+    }
+
+    @ModelAttribute
+    public void addGlobalAttributes(Model model, Principal principal) {
+        if (principal != null) {
+            Optional<Usuario> usuario = usuarioRepository.findByAlias(principal.getName());
+            model.addAttribute("usuario", usuario.get());
+        } else {
+            model.addAttribute("usuario", null);
+        }
     }
 }

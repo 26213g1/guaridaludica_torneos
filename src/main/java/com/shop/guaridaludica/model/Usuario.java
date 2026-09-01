@@ -38,6 +38,23 @@ public class Usuario {
     @Column(name = "telefono", length = 20)
     private String telefono;
 
+    @ManyToMany
+    @JoinTable(
+        name = "usuario_favoritos",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "producto_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "producto_id"})
+    )
+    private Set<Producto> favoritos = new HashSet<>();
+
+    public Set<Producto> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(Set<Producto> favoritos) {
+        this.favoritos = favoritos;
+    }
+
     public String getTelefono() {
         return telefono;
     }

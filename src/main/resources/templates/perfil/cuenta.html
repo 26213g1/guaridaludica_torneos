@@ -34,12 +34,18 @@
                     <i class="fa-solid fa-box-archive me-2"></i> Historial de Pedidos
                 </button>
             </li>
+            <!-- NUEVA PESTAÑA: FAVORITOS -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-semibold" id="favoritos-tab" data-bs-toggle="tab" data-bs-target="#favoritos-pane" type="button" role="tab" aria-controls="favoritos-pane" aria-selected="false">
+                    <i class="fa-solid fa-heart me-2 text-danger"></i> Mis Favoritos (<span th:text="${usuario.favoritos.size()}">0</span>)
+                </button>
+            </li>
         </ul>
 
         <!-- CONTENIDO DE LAS PESTAÑAS -->
         <div class="tab-content" id="cuentaTabsContent">
 
-            <!-- PESTAÑA 1: DATOS PERSONALES (Estructura uniforme a ancho completo pero con diseño limpio en dos columnas internas si se desea, o tarjeta estándar) -->
+            <!-- PESTAÑA 1: DATOS PERSONALES -->
             <div class="tab-pane fade show active" id="datos-pane" role="tabpanel" aria-labelledby="datos-tab" tabindex="0">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
@@ -219,6 +225,60 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA 4: MIS JUEGOS FAVORITOS -->
+            <div class="tab-pane fade" id="favoritos-pane" role="tabpanel" aria-labelledby="favoritos-tab" tabindex="0">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-danger mb-4">
+                            <i class="fa-solid fa-heart me-2"></i> Mis Juegos Favoritos (<span th:text="${usuario.favoritos.size()}">0</span>)
+                        </h4>
+                        
+                        <!-- Mensaje si está vacío -->
+                        <div th:if="${#sets.isEmpty(usuario.favoritos)}" class="text-muted text-center py-4">
+                            <i class="fa-regular fa-heart fa-3x mb-3 text-secondary opacity-50"></i>
+                            <p class="mb-0">Aún no has guardado ningún juego en tu lista de favoritos.</p>
+                            <a th:href="@{/}" class="btn btn-outline-success btn-sm mt-3">Explorar catálogo</a>
+                        </div>
+
+                        <!-- Cuadrícula de favoritos si tiene juegos -->
+                        <div class="row row-cols-1 row-cols-md-3 g-3" th:unless="${#sets.isEmpty(usuario.favoritos)}">
+                            <div class="col" th:each="producto : ${usuario.favoritos}">
+                                <div class="card h-100 border shadow-sm">
+                                    
+                                    <!-- Imagen del juego enlazada al detalle -->
+                                    <a th:href="@{/producto/{id}(id=${producto.id})}">
+                                        <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top" th:alt="${producto.nombre}" style="height: 160px; object-fit: cover;">
+                                    </a>
+
+                                    <div class="card-body d-flex flex-column p-3">
+                                        <h6 class="card-title text-truncate">
+                                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="text-decoration-none text-dark fw-bold" th:text="${producto.nombre}">Nombre</a>
+                                        </h6>
+                                        
+                                        <p class="text-success fw-bold mb-3" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">0.00 €</p>
+
+                                        <!-- Botonera inferior: Ver detalle / Quitar de favoritos -->
+                                        <div class="mt-auto d-flex gap-2">
+                                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                                Ver juego
+                                            </a>
+                                            
+                                            <!-- Botón para eliminar (reutiliza el toggle de favoritos) -->
+                                            <form th:action="@{/favorito/toggle/{id}(id=${producto.id})}" method="post" class="m-0">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm px-2" title="Quitar de favoritos">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
