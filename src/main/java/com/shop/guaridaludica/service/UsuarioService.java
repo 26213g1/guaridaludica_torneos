@@ -26,7 +26,7 @@ public class UsuarioService {
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Asegúrate de tenerlo inyectado para encriptar
+    private PasswordEncoder passwordEncoder; // Asegúrate de tenerlo inyectado para encriptar contraseñas
 
     // Obtener lista de usuarios paginada, con o sin filtro de búsqueda
     public Page<Usuario> obtenerUsuariosPaginados(String keyword, Pageable pageable) {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.shop.guaridaludica.dto.RegistroUsuarioDto;
+import com.shop.guaridaludica.service.EmailService;
 import com.shop.guaridaludica.service.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -18,6 +19,9 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+     @Autowired
+    private EmailService emailService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
@@ -39,6 +43,9 @@ public class AuthController {
 
         try {
             usuarioService.registrarCliente(usuarioDto);
+
+            // Aquí podrías enviar un correo de bienvenida usando EmailService si lo deseas
+            emailService.enviarCorreoBienvenida(usuarioDto.getEmail(), usuarioDto.getAlias());
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "registro";

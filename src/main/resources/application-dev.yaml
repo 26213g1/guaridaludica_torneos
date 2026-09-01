@@ -9,6 +9,19 @@ spring:
     username: root
     password: guaridaL01
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: b76bb2001@smtp-brevo.com
+    password: xsmtpsib-33fd4572d7e1400c5f657dcf7a46b855e3265d38a0b261dffb0ece4c99756400-e2PSbUtj6weGyF2R
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+contacto:
+  email: "jmmoraj@gmail.com"
 
   jpa:
     hibernate:
