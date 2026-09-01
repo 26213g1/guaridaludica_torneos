@@ -83,6 +83,20 @@ public class Producto {
         }
     }
 
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoVideo> videos = new ArrayList<>();
+
+    // --- CAMPOS TRANSITORIOS PARA EL FORMULARIO (No van a la BBDD como columnas) ---
+    @Transient
+    private String videoUrl1;
+    @Transient
+    private String videoTitulo1;
+
+    @Transient
+    private String videoUrl2;
+    @Transient
+    private String videoTitulo2;
+
     // Constructores, Getters y Setters
     public Producto() {}
 
@@ -173,5 +187,59 @@ public class Producto {
 
     public void setDuracionPartida(String duracionPartida) {
         this.duracionPartida = duracionPartida;
+    }
+
+    public List<ProductoVideo> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<ProductoVideo> videos) {
+        this.videos = videos;
+    }
+
+    // Y muy importante: métodos auxiliares para rellenar los inputs del formulario al editar
+    public void prepararVideosParaFormulario() {
+        if (this.videos != null && !this.videos.isEmpty()) {
+            if (this.videos.size() > 0) {
+                this.videoUrl1 = this.videos.get(0).getYoutubeId();
+                this.videoTitulo1 = this.videos.get(0).getTitulo();
+            }
+            if (this.videos.size() > 1) {
+                this.videoUrl2 = this.videos.get(1).getYoutubeId();
+                this.videoTitulo2 = this.videos.get(1).getTitulo();
+            }
+        }
+    }
+
+    public String getVideoUrl1() {
+        return videoUrl1;
+    }
+
+    public void setVideoUrl1(String videoUrl1) {
+        this.videoUrl1 = videoUrl1;
+    }
+
+    public String getVideoTitulo1() {
+        return videoTitulo1;
+    }
+
+    public void setVideoTitulo1(String videoTitulo1) {
+        this.videoTitulo1 = videoTitulo1;
+    }
+
+    public String getVideoUrl2() {
+        return videoUrl2;
+    }
+
+    public void setVideoUrl2(String videoUrl2) {
+        this.videoUrl2 = videoUrl2;
+    }
+
+    public String getVideoTitulo2() {
+        return videoTitulo2;
+    }
+
+    public void setVideoTitulo2(String videoTitulo2) {
+        this.videoTitulo2 = videoTitulo2;
     }
 }

@@ -142,6 +142,32 @@
                                 <div id="preview-container" class="d-flex flex-wrap gap-2 mt-3"></div>
                             </div>
 
+                            <!-- Sección de Gestión de Vídeos -->
+                            <div class="card mb-4 shadow-sm border-0">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0 text-secondary">🎥 Vídeos y Reseñas de YouTube (Máximo 2)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Vídeo 1 -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Vídeo 1 (URL o ID de YouTube)</label>
+                                            <input type="text" class="form-control" th:field="*{videoUrl1}" placeholder="Ej: dQw4w9WgXcQ o https://youtu.be/...">
+                                            <label class="form-label mt-2 small text-muted">Título del Vídeo 1</label>
+                                            <input type="text" class="form-control form-control-sm" th:field="*{videoTitulo1}" placeholder="Ej: Reseña Oficial">
+                                        </div>
+                                        
+                                        <!-- Vídeo 2 -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Vídeo 2 (URL o ID de YouTube)</label>
+                                            <input type="text" class="form-control" th:field="*{videoUrl2}" placeholder="Ej: dQw4w9WgXcQ o https://youtu.be/...">
+                                            <label class="form-label mt-2 small text-muted">Título del Vídeo 2</label>
+                                            <input type="text" class="form-control form-control-sm" th:field="*{videoTitulo2}" placeholder="Ej: Cómo se juega en 5 minutos">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="d-flex justify-content-between">
                                 <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Guardar Cambios</button>

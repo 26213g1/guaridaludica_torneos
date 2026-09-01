@@ -121,11 +121,6 @@
                             </button>
                         </form>
                     </div>
-
-                    <!-- Mensaje si no hay stock -->
-                    <div class="alert alert-secondary mt-3 mb-0 text-center" th:if="${producto.stock == 0}">
-                        <i class="fas fa-exclamation-circle me-1"></i> Este juego temporalmente no está disponible.
-                    </div>
                     
                 </div>
                 
@@ -161,6 +156,29 @@
                         </button>
                     </div>
 
+                </div>
+            </div>
+
+            <!-- Sección de Vídeos / Reseñas en el detalle del producto -->
+            <div class="container my-5" th:if="${not #lists.isEmpty(producto.videos)}">
+                <h3 class="mb-4 text-secondary">🎥 Reseñas y Videotutoriales</h3>
+                
+                <div class="row">
+                    <!-- Iteramos con un límite o mostramos los que haya (máximo 2) -->
+                    <div class="col-md-6 mb-3" th:each="video : ${producto.videos}">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body p-2">
+                                <!-- Reproductor responsive de YouTube -->
+                                <div class="ratio ratio-16x9 rounded overflow-hidden">
+                                    <iframe th:src="@{'https://www.youtube.com/embed/' + ${video.youtubeId}}" 
+                                            th:title="${video.titulo}" 
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <p class="text-muted small mt-2 mb-0 text-center" th:text="${video.titulo}">Título del vídeo</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             

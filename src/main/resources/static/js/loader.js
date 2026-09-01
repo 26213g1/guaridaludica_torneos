@@ -32,10 +32,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-// Limpiar al volver atrás en el navegador
+// Limpiar y forzar ocultación al volver atrás o adelante en el navegador
 window.addEventListener('pageshow', function(event) {
     const loader = document.getElementById('global-loader');
     if (loader) {
         loader.style.display = 'none';
+        loader.style.cssText = "display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); z-index: 99999; justify-content: center; align-items: center;";
     }
 });
