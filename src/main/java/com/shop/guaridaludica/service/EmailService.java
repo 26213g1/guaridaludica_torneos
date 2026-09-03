@@ -16,6 +16,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.shop.guaridaludica.model.DetallePedido;
+import com.shop.guaridaludica.model.Pedido;
+import com.shop.guaridaludica.repository.PedidoRepository;
 
 @Service
 public class EmailService {
@@ -25,6 +27,9 @@ public class EmailService {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @Value("${spring.mail.username}")
     private String remiteEmail;
@@ -67,10 +72,16 @@ public class EmailService {
             helper.setTo(destinatario);
             helper.setSubject("📦 ¡Pedido confirmado #" + pedidoId + " - La Guarida Lúdica!");
 
+            // 1. Buscamos el pedido completo por su ID
+            Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+            // 2. Preparamos el contexto para Thymeleaf extrayendo los datos del pedido y del usuario
             Context context = new Context();
             context.setVariable("pedidoId", pedidoId);
             context.setVariable("detalles", detalles);
             context.setVariable("total", total);
+            context.setVariable("aliasUsuario", pedido.getUsuario().getAlias()); // O el método que uses para su alias/nombre
 
             String contenidoHtml = templateEngine.process("email/pedido-confirmado", context);
             helper.setText(contenidoHtml, true);
@@ -91,9 +102,14 @@ public class EmailService {
             helper.setTo(destinatario);
             helper.setSubject("🚚 ¡Tus juegos de mesa de La Guarida Lúdica van de camino! (Pedido #" + pedidoId + ")");
 
+             // 1. Buscamos el pedido completo por su ID
+            Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
             Context context = new Context();
             context.setVariable("pedidoId", pedidoId);
             context.setVariable("detalles", detalles);
+            context.setVariable("aliasUsuario", pedido.getUsuario().getAlias()); // O el método que uses para su alias/nombre
 
             String contenidoHtml = templateEngine.process("email/pedido-enviado", context);
             helper.setText(contenidoHtml, true);
