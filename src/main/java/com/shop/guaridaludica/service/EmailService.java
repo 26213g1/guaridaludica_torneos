@@ -80,4 +80,27 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    @Async
+    public void enviarCorreoEnvio(String destinatario, Long pedidoId, List<DetallePedido> detalles) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setFrom(soporteEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("🚚 ¡Tus juegos de mesa de La Guarida Lúdica van de camino! (Pedido #" + pedidoId + ")");
+
+            Context context = new Context();
+            context.setVariable("pedidoId", pedidoId);
+            context.setVariable("detalles", detalles);
+
+            String contenidoHtml = templateEngine.process("email/pedido-enviado", context);
+            helper.setText(contenidoHtml, true);
+
+            mailSender.send(mensaje);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

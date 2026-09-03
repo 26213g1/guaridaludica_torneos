@@ -3,6 +3,7 @@ package com.shop.guaridaludica.controller;
 import com.shop.guaridaludica.model.Pedido;
 import com.shop.guaridaludica.repository.PedidoRepository;
 import com.shop.guaridaludica.repository.ProductoRepository;
+import com.shop.guaridaludica.service.EmailService;
 import com.shop.guaridaludica.model.DetallePedido;
 import com.shop.guaridaludica.model.Producto;
 
@@ -27,6 +28,9 @@ public class PedidoAdminController {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     // Inyectamos el mismo tamaño de paginación de administración que usas en productos
     @Value("${shop.pagination.admin-size}")
@@ -70,6 +74,8 @@ public class PedidoAdminController {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
+        Pedido.EstadoPedido estadoAnterior = pedido.getEstado();
+
         // Si el admin decide cancelar un pedido que no estaba cancelado, devolvemos el stock
         if (nuevoEstado == Pedido.EstadoPedido.CANCELADO && pedido.getEstado() != Pedido.EstadoPedido.CANCELADO) {
             for (DetallePedido detalle : pedido.getDetalles()) {
@@ -77,6 +83,15 @@ public class PedidoAdminController {
                 producto.setStock(producto.getStock() + detalle.getCantidad());
                 productoRepository.save(producto);
             }
+        }
+
+        // 📧 Si el pedido pasa a estar ENVIADO (y antes no lo estaba), disparamos correo al cliente
+        if (nuevoEstado == Pedido.EstadoPedido.ENVIADO && estadoAnterior != Pedido.EstadoPedido.ENVIADO) {
+            String emailDestino = pedido.getUsuario().getEmail();
+            
+            // Opcional: Puedes crear un método en tu EmailService específico como enviarCorreoEnvio(emailDestino, pedido.getId())
+            // o reutilizar uno genérico de actualización de estado.
+            emailService.enviarCorreoEnvio(emailDestino, pedido.getId(), pedido.getDetalles());
         }
 
         pedido.setEstado(nuevoEstado);

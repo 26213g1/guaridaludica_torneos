@@ -1,6 +1,7 @@
 package com.shop.guaridaludica.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     // Para listar los pedidos del usuario en su panel, del más nuevo al más antiguo
     List<Pedido> findByUsuarioOrderByFechaPedidoDesc(Usuario usuario);
+
+    // 🕒 Para buscar pedidos pendientes anteriores a una fecha límite (ideal para la tarea de caducidad)
+    List<Pedido> findByEstadoAndFechaPedidoBefore(Pedido.EstadoPedido estado, LocalDateTime fechaLimite);
 
     // Consulta unificada para filtrar por estado, búsqueda de texto y rango de fechas
     @Query("SELECT p FROM Pedido p WHERE " +
