@@ -119,4 +119,28 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    @Async
+    public void enviarAvisoNuevoPedidoAdmin(Long pedidoId, String aliasCliente, BigDecimal total) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setFrom(soporteEmail);
+            helper.setTo(soporteEmail); // Te lo envías a ti mismo como administrador
+            helper.setSubject("🚨 ¡Nuevo pedido recibido #" + pedidoId + " - La Guarida Lúdica!");
+
+            Context context = new Context();
+            context.setVariable("pedidoId", pedidoId);
+            context.setVariable("nombreCliente", aliasCliente);
+            context.setVariable("total", total);
+
+            String contenidoHtml = templateEngine.process("email/admin-nuevo-pedido", context);
+            helper.setText(contenidoHtml, true);
+
+            mailSender.send(mensaje);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

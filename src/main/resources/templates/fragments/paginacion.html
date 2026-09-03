@@ -1,21 +1,43 @@
-<!-- Fragmento de paginación reutilizable -->
 <nav th:fragment="pagination(pageUrl)" th:if="${totalPages > 1}" aria-label="Navegación de páginas" class="my-5">
     <ul class="pagination justify-content-center">
         
+        <!-- Botón Primera Página -->
+        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=0)} + ${queryParams}" 
+               title="Primera página">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+        </li>
+
         <!-- Botón Anterior -->
         <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
-            <a class="page-link" th:href="@{__${pageUrl}__(page=${currentPage - 1})}" tabindex="-1">Anterior</a>
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${currentPage - 1})} + ${queryParams}" 
+               tabindex="-1">Anterior</a>
         </li>
 
         <!-- Números de página -->
         <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
             th:classappend="${i == currentPage} ? 'active'">
-            <a class="page-link" th:href="@{__${pageUrl}__(page=${i})}" th:text="${i + 1}">1</a>
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${i})} + ${queryParams}" 
+               th:text="${i + 1}">1</a>
         </li>
 
         <!-- Botón Siguiente -->
         <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-            <a class="page-link" th:href="@{__${pageUrl}__(page=${currentPage + 1})}">Siguiente</a>
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${currentPage + 1})} + ${queryParams}">Siguiente</a>
+        </li>
+
+        <!-- Botón Última Página -->
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${totalPages - 1})} + ${queryParams}" 
+               title="Última página">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
         </li>
         
     </ul>

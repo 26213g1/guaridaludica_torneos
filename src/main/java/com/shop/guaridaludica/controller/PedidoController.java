@@ -158,7 +158,6 @@ public class PedidoController {
             // Obtenemos el email del usuario y los detalles del pedido guardados en BD
             String emailDestino = pedido.getUsuario().getEmail();
 
-
             emailService.enviarCorreoConfirmacionPedido(
                 emailDestino, 
                 pedido.getId(), 
@@ -166,8 +165,14 @@ public class PedidoController {
                 pedido.getTotal()
             );
 
+            // 🔔 4. ENVIAR EL AVISO AL ADMINISTRADOR (NUEVO) 🚨
+            emailService.enviarAvisoNuevoPedidoAdmin(
+                pedido.getId(), 
+                pedido.getUsuario().getAlias(),
+                pedido.getTotal()
+            );
 
-            // 4. Vaciar el carrito de la sesión
+            // 5. Vaciar el carrito de la sesión
             carrito.vaciar();
 
             return "redirect:/pedido/exitoso?id=" + pedido.getId();

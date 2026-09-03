@@ -38,4 +38,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             @Param("fechaFin") LocalDate fechaFin,
             Pageable pageable
     );
+
+    // Método mágico de Spring Data JPA para contar por estado
+    long countByEstado(Pedido.EstadoPedido estado);
 }
