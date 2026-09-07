@@ -15,6 +15,8 @@ import com.shop.guaridaludica.service.HomeService;
 import com.shop.guaridaludica.repository.CategoriaRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,6 +32,9 @@ public class HomeController {
     // Inyectamos el valor desde el YAML
     @Value("${shop.pagination.public-size}")
     private int publicSize;
+
+    @Value("${tienda.dias-producto-nuevo}")
+    private int diasNuevo;
 
     // Modificamos el inicio para que acepte filtros opcionales por GET
     @GetMapping({"/", "/tienda"})
@@ -48,6 +53,9 @@ public class HomeController {
         
         envioHtml(page, model, productosPage);
 
+        List<Producto> productosNuevos = homeService.getProductosNuevos(pageable, diasNuevo);
+        model.addAttribute("productosNuevos", productosNuevos);
+
         // Pasamos los valores actuales al modelo para que los inputs recuerden la selección
         model.addAttribute("categoriaSeleccionada", categoriaId);
         model.addAttribute("maxPrecio", maxPrecio);
@@ -57,6 +65,8 @@ public class HomeController {
         model.addAttribute("mensaje", "¡Bienvenido a tu tienda de juegos de mesa modernos!");
         return "index";
     }
+
+    
 
     @GetMapping("/categoria/{id}")
     public String listarPorCategoria(@RequestParam(defaultValue = "0") int page, @PathVariable Long id, Model model) {

@@ -13,7 +13,25 @@ public class ConfiguracionApp {
     private String impuestoPorcentaje;
     private int diasProductoNuevo = 7;
     private int marcarUltimasUnidades = 5;
+    private boolean mostrarNovedadesHome;
+    private String textoImpuesto;
     
+    public String getTextoImpuesto() {
+        return textoImpuesto;
+    }
+
+    public void setTextoImpuesto(String textoImpuesto) {
+        this.textoImpuesto = textoImpuesto;
+    }
+
+    public boolean isMostrarNovedadesHome() {
+        return mostrarNovedadesHome;
+    }
+
+    public void setMostrarNovedadesHome(boolean mostrarNovedadesHome) {
+        this.mostrarNovedadesHome = mostrarNovedadesHome;
+    }
+
     public int getMarcarUltimasUnidades() {
         return marcarUltimasUnidades;
     }

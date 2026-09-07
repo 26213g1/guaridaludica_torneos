@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @Repository
@@ -76,4 +77,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
         @Param("duracion") String duracion,
         Pageable pageable
     );
+
+    @Query("SELECT p FROM Producto p ORDER BY p.id DESC")
+    List<Producto> productosNuevos(Pageable pageable);;
 }
