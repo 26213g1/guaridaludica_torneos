@@ -54,9 +54,9 @@ public class HomeService {
         return productoRepository.filtrarProductosPublicos(categoria, maxPrecio, jugadores, duracion, pageable);
     }
 
-    public List<Producto> getProductosNuevos(Pageable pageable, int diasNuevo) {
+    public List<Producto> getProductosNuevos(int diasNuevo) {
         // 1. Traemos un lote reciente de la base de datos (ej: los últimos 30)
-        List<Producto> ultimosProductos = productoRepository.productosNuevos(pageable);
+        List<Producto> ultimosProductos = productoRepository.productosNuevos();
         // Añadimos las novedades para el scroll lateral superior (ej: los 10 más recientes)
         // 2. Filtramos en memoria exclusivamente los que cumplan la condición de 'esNuevo(diasNuevo)'
         List<Producto> productosNuevos = ultimosProductos.stream()

@@ -133,14 +133,18 @@
                     
                     <div class="text-secondary" style="line-height: 1.7;">
                         
-                        <!-- Descripción resumida -->
-                        <div id="descripcionCorta" th:text="${#strings.length(producto.descripcion) > 300 ? #strings.substring(producto.descripcion, 0, 300) + '...' : producto.descripcion}">
+                        <!-- Descripción resumida (añadido white-space: pre-line) -->
+                        <div id="descripcionCorta" 
+                             style="white-space: pre-line;"
+                             th:text="${#strings.length(producto.descripcion) > 300 ? #strings.substring(producto.descripcion, 0, 300) + '...' : producto.descripcion}">
                             Descripción resumida...
                         </div>
 
-                        <!-- Bloque completo oculto -->
+                        <!-- Bloque completo oculto (añadido white-space: pre-line) -->
                         <div class="collapse mt-2" id="descripcionCompleta">
-                            <p class="mb-0 text-secondary" th:text="${producto.descripcion}" style="line-height: 1.7;"></p>
+                            <p class="mb-0 text-secondary" 
+                               style="line-height: 1.7; white-space: pre-line;" 
+                               th:text="${producto.descripcion}"></p>
                         </div>
 
                         <!-- Botón desplegable -->

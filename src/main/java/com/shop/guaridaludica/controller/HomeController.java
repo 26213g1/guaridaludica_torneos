@@ -53,7 +53,7 @@ public class HomeController {
         
         envioHtml(page, model, productosPage);
 
-        List<Producto> productosNuevos = homeService.getProductosNuevos(pageable, diasNuevo);
+        List<Producto> productosNuevos = homeService.getProductosNuevos(diasNuevo);
         model.addAttribute("productosNuevos", productosNuevos);
 
         // Pasamos los valores actuales al modelo para que los inputs recuerden la selección
