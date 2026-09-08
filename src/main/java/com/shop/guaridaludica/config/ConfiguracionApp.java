@@ -14,7 +14,16 @@ public class ConfiguracionApp {
     private int diasProductoNuevo = 7;
     private int marcarUltimasUnidades = 5;
     private boolean mostrarNovedadesHome;
+    private boolean mostrarDestacadosHome;
     private String textoImpuesto;
+    
+    public boolean isMostrarDestacadosHome() {
+        return mostrarDestacadosHome;
+    }
+
+    public void setMostrarDestacadosHome(boolean mostrarDestacadosHome) {
+        this.mostrarDestacadosHome = mostrarDestacadosHome;
+    }
     
     public String getTextoImpuesto() {
         return textoImpuesto;

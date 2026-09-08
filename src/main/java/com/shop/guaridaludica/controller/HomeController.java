@@ -53,8 +53,19 @@ public class HomeController {
         
         envioHtml(page, model, productosPage);
 
-        List<Producto> productosNuevos = homeService.getProductosNuevos(diasNuevo);
-        model.addAttribute("productosNuevos", productosNuevos);
+        if(configuracionApp.isMostrarNovedadesHome()){
+            List<Producto> productosNuevos = homeService.getProductosNuevos(diasNuevo);
+            model.addAttribute("productosNuevos", productosNuevos);
+        }
+        model.addAttribute("mostrarNovedadesHome", configuracionApp.isMostrarNovedadesHome());
+
+
+        if(configuracionApp.isMostrarDestacadosHome()){
+            List<Producto> productosDestacados = homeService.getProductosDestacados();
+            model.addAttribute("productosDestacados", productosDestacados);
+        }
+        model.addAttribute("mostrarDestacados", configuracionApp.isMostrarDestacadosHome());
+
 
         // Pasamos los valores actuales al modelo para que los inputs recuerden la selección
         model.addAttribute("categoriaSeleccionada", categoriaId);

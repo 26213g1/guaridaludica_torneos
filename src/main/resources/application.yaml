@@ -18,6 +18,7 @@ tienda:
   marcar-ultimas-unidades: 5
   cabecera-inicio: Catálogo de Juegos Modernos
   mostrar-novedades-home: true
+  mostrar-destacados-home: true
 
 contacto:
   email: "soporte@guaridaludica.com"

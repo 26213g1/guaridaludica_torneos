@@ -7,7 +7,7 @@
         <!-- Cabecera modificada para permitir colapsar el bloque -->
         <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="fw-bold text-dark m-0">
-                <i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>Novedades Destacadas
+                <i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>Novedades
             </h5>
             
             <!-- Botón desplegable / plegable -->
@@ -32,9 +32,11 @@
                         <div class="ribbon-agotado" th:if="${producto.stock == 0}">AGOTADO</div>
                         <div class="ribbon-nuevo" th:if="${producto.esNuevo(diasNuevo)}">NUEVO</div>
 
-                        <div class="card-img-wrapper p-2">
-                            <a th:href="@{/producto/{id}(id=${producto.id})}">
-                                <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top rounded" th:alt="${producto.nombre}">
+                        <div class="card-img-wrapper p-2 text-center" style="height: 150px;">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="d-block h-100">
+                                <img th:src="@{${producto.imagenPrincipalUrl}}" 
+                                    class="w-100 h-100 rounded object-fit-contain" 
+                                    th:alt="${producto.nombre}">
                             </a>
                         </div>
 
@@ -58,29 +60,6 @@
                                 </div>
                             </div>
 
-                            <!-- Bloque de duración y jugadores eliminado para ganar minimalismo -->
-
-                            <div class="mt-auto pt-2">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <form th:action="@{/carrito/agregar}" method="post" class="m-0 flex-grow-1">
-                                        <input type="hidden" name="id" th:value="${producto.id}" />
-                                        <button type="submit" class="btn btn-outline-success w-100 py-1.5 btn-sm" th:disabled="${producto.stock == 0}">
-                                            <i class="bi bi-cart-plus"></i> <span class="ms-1">Añadir</span>
-                                        </button>
-                                    </form>
-
-                                    <div th:unless="${usuario != null}" class="d-inline-block" title="Inicia sesión para favoritos">
-                                        <button type="button" class="btn btn-outline-secondary py-1.5 px-2 btn-sm" disabled><i class="fa-regular fa-heart"></i></button>
-                                    </div>
-
-                                    <form th:if="${usuario != null}" th:action="@{/favorito/toggle/{id}(id=${producto.id})}" method="post" class="m-0">
-                                        <button type="submit" class="btn btn-outline-danger py-1.5 px-2 btn-sm" title="Favorito">
-                                            <i th:if="${#sets.contains(usuario.favoritos, producto)}" class="fa-solid fa-heart"></i>
-                                            <i th:unless="${#sets.contains(usuario.favoritos, producto)}" class="fa-regular fa-heart"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -79,4 +79,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     @Query("SELECT p FROM Producto p ORDER BY p.id DESC")
     List<Producto> productosNuevos();
+
+    List<Producto> findByDestacadoTrue();
 }

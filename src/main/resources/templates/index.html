@@ -9,6 +9,12 @@
             <div th:replace="~{fragments/novedades-scroll :: scroll-novedades}"></div>
         </div>
 
+        <!-- SCROLL LATERAL DE DESTACADOS 
+             Controlado tanto por si hay productos como por la configuración de administración -->
+        <div th:if="${appConfig.mostrarDestacadosHome}">
+            <div th:replace="~{fragments/destacados-scroll :: scroll-destacados}"></div>
+        </div>
+
         <!-- TÍTULO DEL CATÁLOGO GENERAL -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold text-dark m-0">

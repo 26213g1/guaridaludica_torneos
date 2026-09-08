@@ -108,6 +108,12 @@
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
                             </div>
 
+                            <!-- Checkbox para marcar como destacado -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="destacado" th:field="*{destacado}">
+                                <label class="form-check-label fw-bold" for="destacado">Marcar como Producto Destacado</label>
+                            </div>
+
                             <!-- Sección para ver y gestionar imágenes existentes (Solo se muestra en Edición) -->
                             <div class="mb-4" th:if="${producto.id != null and !#lists.isEmpty(producto.imagenes)}">
                                 <label class="form-label fw-bold">Imágenes actuales (Selecciona cuál es la Principal)</label>

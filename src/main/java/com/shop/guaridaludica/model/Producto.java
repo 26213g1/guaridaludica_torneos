@@ -97,8 +97,19 @@ public class Producto {
     @Transient
     private String videoTitulo2;
 
-    // Constructores, Getters y Setters
+    @Column(name = "destacado")
+    private Boolean destacado = false;
+
+    // Getters y Setters
     public Producto() {}
+
+    public Boolean getDestacado() {
+        return destacado;
+    }
+
+    public void setDestacado(Boolean destacado) {
+        this.destacado = destacado;
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

@@ -66,4 +66,9 @@ public class HomeService {
         return productosNuevos;
     }
 
+    public List<Producto> getProductosDestacados() {
+        List<Producto> productosDestacados = productoRepository.findByDestacadoTrue();
+        return productosDestacados;
+    }
+
 }
