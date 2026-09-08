@@ -46,13 +46,20 @@
                     <h2 class="titulo-detalle" th:text="${producto.nombre}">Nombre del Juego</h2>
                     
                     <!-- Precios (Soporte opcional para precio tachado si hay oferta) -->
-                    <div class="my-3 d-flex align-items-center">
-                        <h3 class="text-primary fw-bold mb-0 me-3" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">0.00 €</h3>
-                        <span class="text-decoration-line-through text-muted fs-5" 
-                              th:if="${producto.precioAnterior != null and producto.precioAnterior > producto.precio}" 
-                              th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">
-                        </span>
-                    </div>
+                    <div class="mb-3 d-flex flex-column" style="min-height: 55px;">
+                            <!-- Precio anterior (si no existe, usamos 'invisible' para que ocupe su sitio y no desajuste) -->
+                            <div style="height: 20px;">
+                                <span class="text-muted text-decoration-line-through small" 
+                                    th:if="${producto.precioAnterior != null}" 
+                                    th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">85.00 €</span>
+                            </div>
+                            
+                            <!-- Precio actual + IVA en la misma línea (Opción compacta) o debajo -->
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fs-2 fw-bold text-success lh-1" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</span>
+                                <span class="text-muted" style="font-size: 0.7rem;" th:text="${appConfig.textoImpuesto}">IVA incluido</span>
+                            </div>
+                        </div>
                     
                     <hr>
                     
