@@ -23,12 +23,14 @@
         
         <div class="bg-white p-4 rounded shadow-sm">
             
-            <!-- FILA SUPERIOR: Carrusel y Datos principales -->
+            <!-- FILA SUPERIOR: Volvemos a alinear arriba (align-items-start) para evitar saltos locos -->
             <div class="row align-items-start">
                 
-                <!-- Columna Izquierda: Carrusel de imágenes -->
+                <!-- Columna Izquierda: Carrusel con contenedor controlado -->
                 <div class="col-md-5 mb-4 mb-md-0">
-                    <div th:replace="~{fragments/carrusel :: carrusel}"></div>
+                    <div class="carrusel-detalle-contenedor shadow-sm border" th:replace="~{fragments/carrusel :: carrusel}">
+                        <!-- Aquí se inyecta tu carrusel -->
+                    </div>
                 </div>
                 
                 <!-- Columna Derecha: Información del producto y Compra -->
