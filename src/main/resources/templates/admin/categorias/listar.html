@@ -25,7 +25,7 @@
                             <tr th:each="cat : ${categorias}">
                                 <td th:text="${cat.id}">1</td>
                                 <td class="fw-bold" th:text="${cat.nombre}">Nombre</td>
-                                <td th:text="${cat.descripcion}">Descripción...</td>
+                                <td th:text="${#strings.abbreviate(cat.descripcion, 60)}">Descripción...</td>
                                 <td class="text-end">
                                     <a th:href="@{/admin/categorias/editar/{id}(id=${cat.id})}" class="btn btn-sm btn-warning me-1">
                                         <i class="fa-solid fa-pen"></i>
