@@ -25,13 +25,14 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     // 🕒 Para buscar pedidos pendientes anteriores a una fecha límite (ideal para la tarea de caducidad)
     List<Pedido> findByEstadoAndFechaPedidoBefore(Pedido.EstadoPedido estado, LocalDateTime fechaLimite);
 
-    // Consulta unificada para filtrar por estado, búsqueda de texto, rango de fechas y control de cancelados
+    // Consulta unificada optimizada
     @Query("SELECT p FROM Pedido p WHERE " +
            "(:estado IS NULL OR p.estado = :estado) AND " +
-           "(:estado IS NOT NULL OR p.estado != 'CANCELADO') AND " +
-           "(:fechaInicio IS NULL OR CAST(p.fechaPedido AS LocalDate) >= :fechaInicio) AND " +
-           "(:fechaFin IS NULL OR CAST(p.fechaPedido AS LocalDate) <= :fechaFin) AND " +
-           "(:query IS NULL OR STR(p.id) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.usuario.email) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.usuario.nombre) LIKE LOWER(CONCAT('%', :query, '%')))")
+           "(:fechaInicio IS NULL OR p.fechaPedido >= :fechaInicio) AND " +
+           "(:fechaFin IS NULL OR p.fechaPedido <= :fechaFin) AND " +
+           "(:query IS NULL OR :query = '' OR STR(p.id) LIKE LOWER(CONCAT('%', :query, '%')) " +
+           "OR LOWER(p.usuario.email) LIKE LOWER(CONCAT('%', :query, '%')) " +
+           "OR LOWER(p.usuario.nombre) LIKE LOWER(CONCAT('%', :query, '%')))")
     Page<Pedido> filtrarPedidos(
             @Param("estado") Pedido.EstadoPedido estado,
             @Param("query") String query,

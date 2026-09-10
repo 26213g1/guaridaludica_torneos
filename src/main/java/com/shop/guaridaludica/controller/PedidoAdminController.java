@@ -52,7 +52,7 @@ public class PedidoAdminController {
         Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, fechaInicio, fechaFin, pageable);
         //Page<Pedido> pedidosPage = pedidoRepository.filtrarPedidos(estado, query, pageable);
         
-        model.addAttribute("pedidos", pedidosPage.getContent());
+        model.addAttribute("elementos", pedidosPage);
         model.addAttribute("currentPage", pedidosPage.getNumber());
         model.addAttribute("totalPages", pedidosPage.getTotalPages());
         model.addAttribute("hasPrevious", pedidosPage.hasPrevious());

@@ -63,7 +63,7 @@ public class ProductoAdminController {
                 categoriaObj);
         
         // 3. Atributos para la paginación y la tabla
-        model.addAttribute("productos", productosPage.getContent());
+        model.addAttribute("elementos", productosPage);
         model.addAttribute("currentPage", productosPage.getNumber());
         model.addAttribute("totalPages", productosPage.getTotalPages());
         model.addAttribute("hasPrevious", productosPage.hasPrevious());

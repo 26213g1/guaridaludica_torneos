@@ -12,11 +12,11 @@
         <!-- BARRA DE FILTROS EXTRAÍDA A FRAGMENTO -->
         <div th:replace="~{admin/fragments/filtros-pedidos :: barra-filtros-pedidos}"></div>
 
-        <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info">
+        <div th:if="${elementos.empty}" class="alert alert-info">
             No hay ningún pedido registrado en la plataforma o con los filtros seleccionados.
         </div>
 
-        <div th:unless="${#lists.isEmpty(pedidos)}" class="card shadow-sm">
+        <div th:unless="${elementos.empty}" class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle">
@@ -31,7 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="pedido : ${pedidos}">
+                            <tr th:each="pedido : ${elementos.content}">
                                 <td class="fw-bold" th:text="'#' + ${pedido.id}">#1</td>
                                 <td>
                                     <span th:text="${pedido.usuario.nombre != null ? pedido.usuario.nombre : pedido.usuario.alias}">Usuario</span><br>
@@ -69,13 +69,14 @@
                     </table>
                 </div>
 
-                <!-- PAGINACIÓN REUTILIZADA -->
-                <div class="mt-4" th:replace="~{fragments/paginacion :: pagination('/admin/pedidos')}"></div>
+                <!-- PAGINACIÓN -->
+                <div th:replace="~{fragments/paginacion-admin :: pagination-admin(@{/admin/pedidos})}"></div>
+
             </div>
         </div>
 
         <!-- MODALES DE DETALLE -->
-        <div th:each="pedido : ${pedidos}">
+        <div th:each="pedido : ${elementos.content}">
             <div class="modal fade" th:id="'adminDetalleModal' + ${pedido.id}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">

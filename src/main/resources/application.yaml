@@ -32,7 +32,7 @@ contacto:
 shop:
   pagination:
     public-size: 6
-    admin-size: 6
+    admin-size: 10
   order:
     pending-timeout-hours: 24 # Horas máximas antes de cancelar un pedido pendiente de pago
     cleanup-fixed-rate-ms: 3600000 # Frecuencia de ejecución en milisegundos (ej. 3600000 = 1 hora)

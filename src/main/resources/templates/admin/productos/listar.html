@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="p : ${productos}">
+                        <tr th:each="p : ${elementos.content}">
                             <td th:text="${p.id}">1</td>
                             <td>
                                 <img th:src="@{${p.imagenPrincipalUrl}}" alt="Miniatura"
@@ -76,7 +76,7 @@
                     </tbody>
                 </table>
                 <!-- RECOMENDADO: Meter el fragmento dentro del contenedor o justo debajo -->
-                <div th:replace="~{fragments/paginacion :: pagination('/admin/productos')}"></div>
+                <div th:replace="~{fragments/paginacion-admin :: pagination-admin(@{/admin/productos})}"></div>
             </div>
         </div>
 </body>

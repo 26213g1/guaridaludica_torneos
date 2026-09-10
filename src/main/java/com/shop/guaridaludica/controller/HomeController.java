@@ -40,7 +40,7 @@ public class HomeController {
     @GetMapping({"/", "/tienda"})
     public String inicio(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) Long categoria,
             @RequestParam(required = false) BigDecimal maxPrecio,
             @RequestParam(required = false) Integer jugadores,
             @RequestParam(required = false) String rangoDuracion,
@@ -49,7 +49,7 @@ public class HomeController {
         Pageable pageable = PageRequest.of(page, publicSize);
         
         // Llamamos al servicio de filtrado público que creamos antes
-        Page<Producto> productosPage = homeService.filtrarProductosPublicos(categoriaId, maxPrecio, jugadores, rangoDuracion, pageable);
+        Page<Producto> productosPage = homeService.filtrarProductosPublicos(categoria, maxPrecio, jugadores, rangoDuracion, pageable);
         
         envioHtml(page, model, productosPage);
 
@@ -68,7 +68,7 @@ public class HomeController {
 
 
         // Pasamos los valores actuales al modelo para que los inputs recuerden la selección
-        model.addAttribute("categoriaSeleccionada", categoriaId);
+        model.addAttribute("categoriaSeleccionada", categoria);
         model.addAttribute("maxPrecio", maxPrecio);
         model.addAttribute("jugadores", jugadores);
         model.addAttribute("rangoDuracion", rangoDuracion);

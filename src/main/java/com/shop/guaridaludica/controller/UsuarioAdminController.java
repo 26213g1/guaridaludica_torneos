@@ -37,7 +37,7 @@ public class UsuarioAdminController {
         Pageable pageable = PageRequest.of(page, adminSize);
         Page<Usuario> usuariosPage = usuarioService.obtenerUsuariosPaginados(keyword, pageable);
 
-        model.addAttribute("usuarios", usuariosPage);
+        model.addAttribute("elementos", usuariosPage);
         model.addAttribute("keyword", keyword);
                 
         // Pasamos el servicio al modelo para poder llamarlo desde la vista de Thymeleaf

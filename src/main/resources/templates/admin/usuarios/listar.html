@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="u : ${usuarios}">
+                        <tr th:each="u : ${elementos.content}">
                             <td th:text="${u.id}">1</td>
                             <td th:text="${u.alias}">DungeonMaster</td>
                             <td th:text="${u.nombre}">Nombre Apellido</td>
@@ -56,7 +56,7 @@
                 </table>
                 
                 <!-- Paginación reutilizada pasando la ruta correspondiente -->
-                <div th:replace="~{fragments/paginacion :: pagination('/admin/usuarios')}"></div>
+                <div th:replace="~{fragments/paginacion-admin :: pagination-admin(@{/admin/usuarios})}"></div>
             </div>
         </div>
     </main>
