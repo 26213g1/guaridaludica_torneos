@@ -27,17 +27,30 @@ public class Juego {
     private Integer maxJugadores;
     private String categoria;
 
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
 
     // Constructor vacío obligatorio para JPA
     // public Juego() {
     // }
 
     // Constructor con parámetros (opcional)
-    public Juego(String nombre, Integer minJugadores, Integer maxJugadores, String categoria) {
+    public Juego(String nombre, Integer minJugadores, Integer maxJugadores, String categoria, String imagenUrl) {
         this.nombre = nombre;
         this.minJugadores = minJugadores;
         this.maxJugadores = maxJugadores;
         this.categoria = categoria;
+        this.imagenUrl = imagenUrl;
+    }
+
+      public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    //getters y setters
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public Long getId() {
