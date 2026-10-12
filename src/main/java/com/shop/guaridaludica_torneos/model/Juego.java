@@ -32,8 +32,8 @@ public class Juego {
 
 
     // Constructor vacío obligatorio para JPA
-    // public Juego() {
-    // }
+    public Juego() {
+    }
 
     // Constructor con parámetros (opcional)
     public Juego(String nombre, Integer minJugadores, Integer maxJugadores, String categoria, String imagenUrl) {

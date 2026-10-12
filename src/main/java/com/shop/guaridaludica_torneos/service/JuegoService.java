@@ -25,7 +25,7 @@ public class JuegoService {
         this.cloudinaryService = cloudinaryService;
     }
 
-    public List<Juego> listarTodos() {
+    public List<Juego> listarJuegos() {
         return juegoRepository.findAll();
     }
 
