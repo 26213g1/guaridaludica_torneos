@@ -84,4 +84,12 @@ public class Juego {
         this.categoria = categoria;
     }
 
+    // toString() devuelve el texto con el que se imprime el objeto.
+    // Sin sobrescribirlo, println() mostraría algo ilegible como com.shop.guaridaludica_torneos.model.Juego.
+    @Override
+    public String toString() {
+        return "Juego{id=" + id + ", nombre='" + nombre + "', Mínimo Jugadores='" + minJugadores
+                + "', Máximo Jugadores=" + maxJugadores + ", Categoria='" + categoria + "'}";
+    }
+
 }

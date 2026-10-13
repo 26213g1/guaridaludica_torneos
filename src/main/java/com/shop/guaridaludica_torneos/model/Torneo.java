@@ -100,4 +100,16 @@ public class Torneo {
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+
+    // toString() devuelve el texto con el que se imprime el objeto.
+    // Sin sobrescribirlo, println() mostraría algo ilegible como com.shop.guaridaludica_torneos.model.Juego.
+    @Override
+    public String toString() {
+        return "Torneo{id=" + id + ", nombre='" + nombre + "', Descripcion='" + descripcion
+                + "', Fecha=" + fecha + ", Juego='" + juego
+                + "', Max Participantes=" + maxParticipantes + ", Estado='" + estado
+                + "', Duracion real minutos=" + duracionRealMinutos + ", Comentarios='" + comentarios+ "'}";
+
+
+    }
 }
