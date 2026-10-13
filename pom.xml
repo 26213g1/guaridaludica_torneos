@@ -82,6 +82,19 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.38.0</version>
 		</dependency>
+		<!-- Bootstrap v5.3.8 vía WebJar -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>5.3.8</version>
+		</dependency>
+
+		<!-- Iconos de Bootstrap v1.13.12 vía WebJar -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>bootstrap-icons</artifactId>
+			<version>1.13.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

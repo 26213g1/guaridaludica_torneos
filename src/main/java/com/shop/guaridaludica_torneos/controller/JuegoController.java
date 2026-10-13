@@ -26,7 +26,9 @@ public class JuegoController {
     @GetMapping
     public String listarJuegos(Model model) {
         model.addAttribute("juegos", juegoService.listarJuegos());
-        return "juegos/lista"; // Apunta a templates/juegos/lista.html
+        model.addAttribute("template", "juegos/lista"); // Nombre del fragmento de contenido específico
+        return "layout"; // Renderiza el layout general que incluye el sidebar y la navbar
+        //return "juegos/lista"; // Apunta a templates/juegos/lista.html
     }
 
     // Mostrar formulario para crear un nuevo juego
