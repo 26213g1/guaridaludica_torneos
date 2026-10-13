@@ -44,7 +44,7 @@ public class Juego {
         this.imagenUrl = imagenUrl;
     }
 
-      public String getImagenUrl() {
+    public String getImagenUrl() {
         return imagenUrl;
     }
 
