@@ -29,7 +29,7 @@ public class DataInitializer implements CommandLineRunner {
             Juego j3 = new Juego("7 Wonders", 2, 7, "Draft / Cartas", null);
             juegoRepository.save(j3);
 
-            System.out.println(">> ¡Datos de prueba de juegos insertados correctamente en Aiven!");
+            System.out.println(">> ¡Datos de prueba de juegos insertados correctamente en Postgres!");
         }
     }
 }

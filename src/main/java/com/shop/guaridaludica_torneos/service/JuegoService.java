@@ -3,7 +3,7 @@ package com.shop.guaridaludica_torneos.service;
 import com.shop.guaridaludica_torneos.model.Juego;
 import com.shop.guaridaludica_torneos.repository.JuegoRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
