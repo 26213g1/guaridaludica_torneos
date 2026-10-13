@@ -88,7 +88,6 @@
 			<artifactId>bootstrap</artifactId>
 			<version>5.3.8</version>
 		</dependency>
-
 		<!-- Iconos de Bootstrap v1.13.12 vía WebJar -->
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
