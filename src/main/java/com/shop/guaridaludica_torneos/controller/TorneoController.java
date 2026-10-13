@@ -29,7 +29,8 @@ public class TorneoController {
     @GetMapping
     public String listarTorneos(Model model) {
         model.addAttribute("torneos", torneoService.listarTorneos());
-        return "torneos/lista"; // Apunta a una plantilla templates/torneos/lista.html
+        model.addAttribute("template", "torneos/lista"); // <-- Le dice al layout qué vista incrustar
+        return "layout"; // <-- Nombre de tu archivo layout.html maestro
     }
 
     // Mostrar formulario para crear un nuevo torneo
@@ -37,7 +38,8 @@ public class TorneoController {
     public String mostrarFormularioCreacion(Model model) {
         model.addAttribute("torneo", new Torneo());
         model.addAttribute("juegos", juegoService.listarJuegos()); // Para el desplegable de selección de juegos
-        return "torneos/formulario"; // Apunta a templates/torneos/formulario.html
+        model.addAttribute("template", "torneos/formulario"); // <-- Lo mismo para el formulario
+        return "layout";
     }
 
     // Guardar el torneo (procesar formulario con imagen)

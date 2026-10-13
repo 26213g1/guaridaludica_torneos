@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.OffsetDateTime;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "torneos")
@@ -27,7 +28,7 @@ public class Torneo {
     @NotNull(message = "La fecha del torneo es obligatoria")
     @Future(message = "La fecha del torneo debe ser en el futuro")
     @Column(nullable = false)
-    private OffsetDateTime fecha;
+    private LocalDateTime fecha;
 
     @NotNull(message = "Debe asociarse un juego al torneo")
     @ManyToOne
@@ -56,7 +57,7 @@ public class Torneo {
     public Torneo() {
     }
 
-    public Torneo(String nombre, String descripcion, OffsetDateTime fecha, Juego juego, Integer maxParticipantes, String estado, Integer duracionRealMinutos, String comentarios, String imagenUrl) {
+    public Torneo(String nombre, String descripcion, LocalDateTime fecha, Juego juego, Integer maxParticipantes, String estado, Integer duracionRealMinutos, String comentarios, String imagenUrl) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -80,8 +81,8 @@ public class Torneo {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public OffsetDateTime getFecha() { return fecha; }
-    public void setFecha(OffsetDateTime fecha) { this.fecha = fecha; }
+    public LocalDateTime getFecha() { return fecha; }
+    public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
 
     public Juego getJuego() { return juego; }
     public void setJuego(Juego juego) { this.juego = juego; }
