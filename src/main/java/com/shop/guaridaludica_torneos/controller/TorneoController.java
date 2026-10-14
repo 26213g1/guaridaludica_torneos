@@ -55,11 +55,9 @@ public class TorneoController {
     // Mostrar formulario para crear un nuevo torneo
     @GetMapping("/nuevo")
     public String mostrarFormularioCreacion(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        if (isAdmin == null || !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Acceso denegado. Se requiere rol de administrador.");
-            return "redirect:/torneos";
-        }
+        // Comprobación limpia usando el método auxiliar
+        String redirect = verificarAdmin(session, redirectAttributes);
+        if (redirect != null) return redirect;
 
         model.addAttribute("torneo", new Torneo());
         model.addAttribute("juegos", juegoService.listarJuegos()); // Para el desplegable de selección de juegos
@@ -70,11 +68,9 @@ public class TorneoController {
     // Mostrar formulario para editar un torneo existente (Solo Admin)
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        if (isAdmin == null || !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Acceso denegado. Se requiere rol de administrador.");
-            return "redirect:/torneos";
-        }
+        // Comprobación limpia usando el método auxiliar
+        String redirect = verificarAdmin(session, redirectAttributes);
+        if (redirect != null) return redirect;
 
         try {
             Torneo torneo = torneoService.obtenerTorneoPorId(id)
@@ -97,13 +93,11 @@ public class TorneoController {
             @RequestParam(value = "fileImagen", required = false) MultipartFile imagen,
             Model model,
             HttpSession session,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) throws IOException {
 
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        if (isAdmin == null || !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Acceso denegado.");
-            return "redirect:/torneos";
-        }
+        // Comprobación limpia usando el método auxiliar
+        String redirect = verificarAdmin(session, redirectAttributes);
+        if (redirect != null) return redirect;
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("juegos", juegoService.listarJuegos());
@@ -112,20 +106,17 @@ public class TorneoController {
         }
 
         // Si se ha seleccionado un archivo nuevo para la imagen
-        try {
-            if (imagen != null && !imagen.isEmpty()) {
-                String urlImagen = cloudinaryService.uploadFile(imagen); // Tu lógica de subida a Cloudinary
-                torneo.setImagenUrl(urlImagen);
-            } else if (torneo.getId() != null) {
-                // Si estamos editando (tiene ID) pero NO se subió archivo, conservamos la imagen que ya tenía
-                Torneo torneoActual = torneoService.obtenerTorneoPorId(torneo.getId()).
-                        orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
-                torneo.setImagenUrl(torneoActual.getImagenUrl());
+        if (imagen != null && !imagen.isEmpty()) {
+            String urlImagen = cloudinaryService.uploadFile(imagen); // Tu lógica de subida a Cloudinary
+            torneo.setImagenUrl(urlImagen);
+        } else if (torneo.getId() != null) {
+            // Si estamos editando (tiene ID) pero NO se subió archivo, conservamos la imagen que ya tenía
+            Torneo torneoActual = torneoService.obtenerTorneoPorId(torneo.getId()).
+                    orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+            torneo.setImagenUrl(torneoActual.getImagenUrl());
 
-            }
-        } catch (IOException e) {
-        throw new RuntimeException("Error al procesar la imagen: " + e.getMessage(), e);
-    }
+        }
+
 
         try {
             boolean esNuevo = (torneo.getId() == null);
@@ -142,15 +133,22 @@ public class TorneoController {
     // Eliminar un torneo
     @GetMapping("/eliminar/{id}")
     public String eliminarTorneo(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        // Comprobación limpia usando el método auxiliar
+        String redirect = verificarAdmin(session, redirectAttributes);
+        if (redirect != null) return redirect;
+
+        torneoService.eliminarTorneo(id);
+        redirectAttributes.addFlashAttribute("mensaje", "Torneo eliminado correctamente.");
+        return "redirect:/torneos";
+    }
+
+    private String verificarAdmin(HttpSession session, RedirectAttributes redirectAttributes) {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) {
             redirectAttributes.addFlashAttribute("error", "Acceso denegado. Se requiere rol de administrador.");
             return "redirect:/torneos";
         }
-
-        torneoService.eliminarTorneo(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Torneo eliminado correctamente.");
-        return "redirect:/torneos";
+        return null; // Retorna null si todo está bien y es admin
     }
 
 }
