@@ -36,6 +36,17 @@
             </a>
         </div>
     </div>
+
+    <!-- Interruptor rápido de Admin / Cliente para desarrollo -->
+    <div class="ms-auto me-3 d-flex align-items-center">
+        <a th:href="@{/dev/toggle-admin}"
+           class="btn btn-sm fw-bold shadow-sm"
+           th:classappend="${isAdmin} ? 'btn-warning text-dark' : 'btn-outline-light'"
+           title="Haz clic para cambiar entre Admin y Cliente">
+            <i class="bi bi-shield-lock-fill me-1"></i>
+            Modo: <span th:text="${isAdmin} ? 'ADMIN' : 'CLIENTE'">ADMIN</span>
+        </a>
+    </div>
 </nav>
 
 <!-- 2. Contenedor Principal (Rejilla de 2 columnas: Sidebar + Contenido) -->
@@ -61,7 +72,7 @@
 
             <!-- Contenido específico de cada vista -->
             <div class="card shadow-sm border-0 p-4">
-                <div th:replace="${template}"></div>
+                <div th:replace="~{${template}}"></div>
             </div>
         </div>
 

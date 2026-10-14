@@ -7,7 +7,7 @@
                 <h3 class="fw-bold text-dark mb-1">Gestión de Torneos</h3>
                 <p class="text-muted mb-0">Listado de torneos programados en La Guarida Lúdica.</p>
             </div>
-            <a th:href="@{/torneos/nuevo}" class="btn btn-primary">
+            <a th:if="${isAdmin}" th:href="@{/torneos/nuevo}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i> Nuevo Torneo
             </a>
         </div>
@@ -17,7 +17,7 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-dark">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th th:if="${isAdmin}" class="ps-4">ID</th>
                         <th style="width: 80px;" class="text-center">Imagen</th>
                         <th>Nombre del Torneo</th>
                         <th>Juego Asociado</th>
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                     <tr th:if="${not #lists.isEmpty(torneos)}" th:each="torneo : ${torneos}">
-                        <td class="ps-4 fw-bold text-secondary" th:text="${torneo.id}">1</td>
+                        <td th:if="${isAdmin}"class="ps-4 fw-bold text-secondary" th:text="${torneo.id}">1</td>
                         
                         <td class="text-center">
                             <img th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" 
@@ -45,12 +45,24 @@
 
                         <td class="fw-semibold text-dark" th:text="${torneo.nombre}">Torneo</td>
                         <td th:text="${torneo.juego != null ? torneo.juego.nombre : 'Sin juego'}">Catan</td>
-                        <td th:text="${torneo.fecha}">2026-10-20</td>
+                        <td th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">2026-10-20</td>
+
                         <td class="text-center">
                             <span class="badge bg-success" th:text="${torneo.estado}">ABIERTO</span>
                         </td>
                         <td class="text-end pe-4">
-                            <!-- Botones de acción si procede -->
+                            <!-- Botones de acción -->
+                            <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-primary me-1" title="Ver detalle">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <!-- Botón de editar (solo admin) -->
+                            <a th:if="${isAdmin}" th:href="@{/torneos/editar/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-warning me-1" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <!-- Botón de eliminar (solo admin) -->
+                            <a th:if="${isAdmin}" th:href="@{/torneos/eliminar/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este torneo?');">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(torneos)}">

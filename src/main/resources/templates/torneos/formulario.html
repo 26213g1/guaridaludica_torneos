@@ -4,14 +4,17 @@
     <div th:fragment="content">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold text-dark mb-1">Crear Nuevo Torneo</h3>
+                <h3 class="fw-bold text-dark mb-1" th:text="${torneo.id == null} ? 'Crear Nuevo Torneo' : 'Editar Torneo'">Título</h3>
                 <p class="text-muted mb-0">Rellene los datos para dar de alta un nuevo evento en La Guarida Lúdica.</p>
             </div>
         </div>
 
         <!-- Formulario adaptado para integrarse en el layout maestro -->
         <form th:action="@{/torneos}" th:object="${torneo}" method="post" enctype="multipart/form-data">
-            
+
+            <!-- Campo oculto esencial para que funcione la edición -->
+            <input type="hidden" th:field="*{id}" />
+
             <!-- Nombre -->
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre del Torneo</label>
@@ -69,7 +72,18 @@
             <!-- Imagen -->
             <div class="mb-4">
                 <label for="fileImagen" class="form-label">Imagen del Torneo (Cloudinary)</label>
+
+                <!-- Si el torneo ya tiene imagen, mostramos una miniatura actual -->
+                <div th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" class="mb-2">
+                    <p class="text-muted small mb-1">Imagen actual:</p>
+                    <img th:src="${torneo.imagenUrl}" alt="Imagen del torneo" class="img-thumbnail" style="max-height: 120px;" />
+                    <!-- Campo oculto para conservar la URL actual si no se sube otra -->
+                    <input type="hidden" th:field="*{imagenUrl}" />
+                </div>
+
+                <!-- Input para subir una nueva (o reemplazar la existente) -->
                 <input type="file" id="fileImagen" name="fileImagen" class="form-control">
+                <div class="form-text">Deje este campo en blanco si desea conservar la imagen actual.</div>
             </div>
 
             <!-- Botones -->
