@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas que cualquiera puede ver
                         .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/**",
+                                "/jugadores", "/jugadores/**",
                                 "/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
 
                         // Rutas exclusivas para el rol ADMIN (gestión de juegos)

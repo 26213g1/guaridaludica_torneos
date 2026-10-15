@@ -68,7 +68,7 @@ public class DataInitializer implements CommandLineRunner {
             Jugador admin = new Jugador();
             admin.setNombre("Administrador");
             admin.setApodo("AdminGuarida");
-            admin.setEmail("admin@guaridaludica.com");
+            admin.setEmail("admin@guarida.com");
             // Ciframos obligatoriamente la contraseña con BCrypt
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setRol("ROLE_ADMIN");

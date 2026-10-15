@@ -1,0 +1,56 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0 text-center"><i class="bi bi-person-plus-fill text-warning"></i> Gestión de Acceso de Jugador</h4>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <div class="alert alert-info small mb-4">
+                        <i class="bi bi-info-circle-fill"></i> El sistema generará una contraseña temporal de forma automática. El jugador podrá cambiarla más adelante.
+                    </div>
+
+                    <!-- Formulario vinculado al objeto 'jugador' -->
+                    <form th:action="@{/jugadores}" th:object="${jugador}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+                        
+                        <!-- Campo: Nombre / Apodo -->
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label fw-bold"><i class="bi bi-person"></i> Nombre o Apodo</label>
+                            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" 
+                                   th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" 
+                                   placeholder="Introduce el apodo del jugador" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                                Error en el nombre
+                            </div>
+                        </div>
+
+                        <!-- Campo: Email -->
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-bold"><i class="bi bi-envelope"></i> Correo Electrónico</label>
+                            <input type="email" id="email" th:field="*{email}" class="form-control" 
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" 
+                                   placeholder="correo@example.com" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                Error en el email
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a th:href="@{/jugadores}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-check-lg"></i> Generar Acceso / Guardar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

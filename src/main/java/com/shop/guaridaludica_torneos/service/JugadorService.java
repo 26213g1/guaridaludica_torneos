@@ -2,9 +2,12 @@ package com.shop.guaridaludica_torneos.service;
 
 import com.shop.guaridaludica_torneos.model.Jugador;
 import com.shop.guaridaludica_torneos.repository.JugadorRepository;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,24 +37,74 @@ public class JugadorService {
         return jugadorRepository.findByEmail(email);
     }
 
-    // Guardar o registrar un jugador cifrando su contraseña obligatoriamente
-    public Jugador guardarJugador(Jugador jugador) {
-        // Si la contraseña viene en texto plano (por ejemplo, en un registro nuevo o cambio), la ciframos.
-        // O si ya está cifrada (empieza por $2a$), podríamos evitar volver a cifrarla,
-        // pero asegurarnos de que siempre pase por el encoder si es nueva.
-        if (jugador.getPassword() != null && !jugador.getPassword().startsWith("$2a$")) {
-            jugador.setPassword(passwordEncoder.encode(jugador.getPassword()));
-        }
-
-        // Si no se le ha asignado rol por defecto, le ponemos ROLE_USER
-        if (jugador.getRol() == null || jugador.getRol().isEmpty()) {
-            jugador.setRol("ROLE_USER");
-        }
-
-        return jugadorRepository.save(jugador);
+    // Obtener ranking público (Por ahora devuelve la lista general; puedes
+    // ordenarla por puntos/victorias más adelante)
+    public List<Jugador> obtenerRankingPublico() {
+        // Ejemplo si en el futuro añades puntuación: return
+        // jugadorRepository.findAllByOrderByPuntosDesc();
+        return jugadorRepository.findAll();
     }
 
     public void eliminarJugador(Long id) {
         jugadorRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void registrarJugadorPublico(Jugador jugador) {
+        // Validamos expresamente que el usuario haya escrito una contraseña
+        if (jugador.getPassword() == null || jugador.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña es obligatoria para el registro público.");
+        }
+        // Ciframos la contraseña que el usuario introdujo por su cuenta
+        jugador.setPassword(passwordEncoder.encode(jugador.getPassword()));
+        if (jugador.getRol() == null || jugador.getRol().isEmpty()) {
+            jugador.setRol("ROLE_USER");
+        }
+        jugadorRepository.save(jugador);
+    }
+
+    @Transactional
+    public String guardarOActualizarJugadorPorAdmin(Jugador jugadorForm) {
+        // 1. Buscamos si ya existe por email
+        Optional<Jugador> existente = jugadorRepository.findByEmail(jugadorForm.getEmail());
+
+        // 2. Generamos la clave temporal
+        String passwordTemporal = generarPasswordAleatoria();
+
+        Jugador jugadorASalvar;
+        if (existente.isPresent()) {
+            jugadorASalvar = existente.get();
+            jugadorASalvar.setNombre(jugadorForm.getNombre());
+            // Si el apodo estaba vacío, le asignamos el nombre por defecto
+            if (jugadorASalvar.getApodo() == null || jugadorASalvar.getApodo().isEmpty()) {
+                jugadorASalvar.setApodo(jugadorForm.getNombre());
+            }
+        } else {
+            jugadorASalvar = new Jugador();
+            jugadorASalvar.setEmail(jugadorForm.getEmail());
+            jugadorASalvar.setNombre(jugadorForm.getNombre());
+            // Asignamos el nombre como apodo inicial por defecto para el admin
+            jugadorASalvar.setApodo(jugadorForm.getNombre());
+            jugadorASalvar.setRol("ROLE_USER");
+        }
+
+        jugadorASalvar.setPassword(passwordEncoder.encode(passwordTemporal));
+        jugadorRepository.save(jugadorASalvar);
+
+        return passwordTemporal;
+    }
+
+    // Método auxiliar privado para generar claves aleatorias seguras
+    private String generarPasswordAleatoria() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(8); // Genera una clave de 8 caracteres
+
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(caracteres.length());
+            sb.append(caracteres.charAt(index));
+        }
+
+        return sb.toString();
     }
 }

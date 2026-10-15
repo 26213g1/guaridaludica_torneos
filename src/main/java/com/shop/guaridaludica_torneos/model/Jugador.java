@@ -22,7 +22,7 @@ public class Jugador {
     @Column(nullable = false)
     private String nombre;
 
-    @NotBlank(message = "El apodo no puede estar en blanco")
+    //@NotBlank(message = "El apodo no puede estar en blanco")
     @Size(max = 50, message = "El apodo no puede superar los 50 caracteres")
     @Column(nullable = false, unique = true)
     private String apodo;
@@ -33,7 +33,7 @@ public class Jugador {
     private String email;
 
     // NUEVO: Campo para la contraseña (cifrada con BCrypt)
-    @NotBlank(message = "La contraseña es obligatoria")
+    //@NotBlank(message = "La contraseña es obligatoria")
     @Column(nullable = false)
     private String password;
 

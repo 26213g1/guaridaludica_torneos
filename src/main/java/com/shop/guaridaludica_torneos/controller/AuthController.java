@@ -43,11 +43,12 @@ public class AuthController {
 
         try {
             // Guardamos el jugador (el servicio se encarga de cifrar la contraseña y poner el rol USER)
-            jugadorService.guardarJugador(jugador);
+            jugadorService.registrarJugadorPublico(jugador);
             redirectAttributes.addFlashAttribute("exito", "¡Te has registrado con éxito en La Guarida Lúdica! Ya puedes iniciar sesión.");
             return "redirect:/login";
         } catch (Exception e) {
-            model.addAttribute("error", "El email o el apodo ya están en uso.");
+            // Mostramos el mensaje exacto que viene del servicio o de la excepción
+            model.addAttribute("error", e.getMessage() != null ? e.getMessage() : "Ocurrió un error en el registro.");
             model.addAttribute("template", "auth/registro");
             return "layout";
         }

@@ -12,9 +12,6 @@
                 <h2 class="text-center mb-3 text-primary">Únete a La Guarida Lúdica</h2>
                 <p class="text-center text-muted mb-4">Crea tu cuenta de jugador para participar en torneos y la comunidad.</p>
 
-                <!-- Mensaje de error general si lo hubiera -->
-                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
                 <form th:action="@{/registro}" th:object="${jugador}" method="post">
 
                     <!-- Nombre real -->
@@ -27,7 +24,7 @@
                     <!-- Apodo / Nickname -->
                     <div class="mb-3">
                         <label for="apodo" class="form-label">Apodo / Nickname *</label>
-                        <input type="text" id="apodo" th:field="*{apodo}" class="form-control" placeholder="Tu alias en las mesas" />
+                        <input type="text" id="apodo" th:field="*{apodo}" class="form-control" placeholder="Tu alias en las mesas" required>
                         <div class="text-danger small" th:if="${#fields.hasErrors('apodo')}" th:errors="*{apodo}"></div>
                     </div>
 
