@@ -32,67 +32,55 @@ public class Jugador {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // NUEVO: Campo para la contraseña (cifrada con BCrypt)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Column(nullable = false)
+    private String password;
+
+    // NUEVO: Campo para el rol (ej: "ROLE_ADMIN", "ROLE_USER")
+    @Column(nullable = false)
+    private String rol = "ROLE_USER";
+
     @Column(name = "puntos_elo")
-    private Integer puntosElo = 1000; // Valor por defecto
+    private Integer puntosElo = 1000;
 
     // Constructores
     public Jugador() {}
 
-    public Jugador(String nombre, String apodo, String email, Integer puntosElo) {
+    public Jugador(String nombre, String apodo, String email, String password, String rol, Integer puntosElo) {
         this.nombre = nombre;
         this.apodo = apodo;
         this.email = email;
+        this.password = password;
+        this.rol = rol;
         this.puntosElo = puntosElo;
     }
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+    // --- GETTERS Y SETTERS ---
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getApodo() { return apodo; }
+    public void setApodo(String apodo) { this.apodo = apodo; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getApodo() {
-        return apodo;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setApodo(String apodo) {
-        this.apodo = apodo;
-    }
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getPuntosElo() {
-        return puntosElo;
-    }
-
-    public void setPuntosElo(Integer puntosElo) {
-        this.puntosElo = puntosElo;
-    }
+    public Integer getPuntosElo() { return puntosElo; }
+    public void setPuntosElo(Integer puntosElo) { this.puntosElo = puntosElo; }
 
     // toString() devuelve el texto con el que se imprime el objeto.
     // Sin sobrescribirlo, println() mostraría algo ilegible como com.shop.guaridaludica_torneos.model.Juego.
@@ -101,5 +89,4 @@ public class Jugador {
         return "Juego{id=" + id + ", nombre='" + nombre + "', Apodo='" + apodo
                 + "', Emails=" + email + ", Puntos Elo='" + puntosElo + "'}";
     }
-
 }

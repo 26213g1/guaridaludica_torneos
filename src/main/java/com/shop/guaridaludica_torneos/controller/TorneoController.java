@@ -60,11 +60,6 @@ public class TorneoController {
     // Mostrar formulario para crear un nuevo torneo
     @GetMapping("/nuevo")
     public String mostrarFormularioCreacion(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        // Comprobación limpia usando el método auxiliar
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null)
-            return redirect;
-
         model.addAttribute("torneo", new Torneo());
         model.addAttribute("juegos", juegoService.listarJuegos()); // Para el desplegable de selección de juegos
         model.addAttribute("template", "torneos/formulario"); // <-- Lo mismo para el formulario
@@ -75,11 +70,6 @@ public class TorneoController {
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable Long id, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
-        // Comprobación limpia usando el método auxiliar
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null)
-            return redirect;
-
         try {
             Torneo torneo = torneoService.obtenerTorneoPorId(id)
                     .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
@@ -104,10 +94,6 @@ public class TorneoController {
         RedirectAttributes redirectAttributes) {
 
         log.info("--> Intentando guardar un torneo. ID recibido: {}", torneo.getId());
-        // Comprobación limpia usando el método auxiliar
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null)
-            return redirect;
 
         if (bindingResult.hasErrors()) {
             log.warn("--> El formulario tiene errores de validación: {}", bindingResult.getAllErrors());
@@ -149,24 +135,8 @@ public class TorneoController {
     // Eliminar un torneo
     @GetMapping("/eliminar/{id}")
     public String eliminarTorneo(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        // Comprobación limpia usando el método auxiliar
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null)
-            return redirect;
-
         torneoService.eliminarTorneo(id);
         redirectAttributes.addFlashAttribute("mensaje", "Torneo eliminado correctamente.");
         return "redirect:/torneos";
     }
-
-    // Método auxiliar para verificar si es administrador
-    private String verificarAdmin(HttpSession session, RedirectAttributes redirectAttributes) {
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        if (isAdmin == null || !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Acceso denegado. Se requiere rol de administrador.");
-            return "redirect:/torneos";
-        }
-        return null; // Retorna null si todo está bien y es admin
-    }
-
 }

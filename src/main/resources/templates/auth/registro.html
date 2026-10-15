@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - La Guarida Lúdica</title>
+</head>
+<body>
+<div th:fragment="content" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h2 class="text-center mb-3 text-primary">Únete a La Guarida Lúdica</h2>
+                <p class="text-center text-muted mb-4">Crea tu cuenta de jugador para participar en torneos y la comunidad.</p>
+
+                <!-- Mensaje de error general si lo hubiera -->
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <form th:action="@{/registro}" th:object="${jugador}" method="post">
+
+                    <!-- Nombre real -->
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre completo *</label>
+                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Tu nombre" />
+                        <div class="text-danger small" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                    </div>
+
+                    <!-- Apodo / Nickname -->
+                    <div class="mb-3">
+                        <label for="apodo" class="form-label">Apodo / Nickname *</label>
+                        <input type="text" id="apodo" th:field="*{apodo}" class="form-control" placeholder="Tu alias en las mesas" />
+                        <div class="text-danger small" th:if="${#fields.hasErrors('apodo')}" th:errors="*{apodo}"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico *</label>
+                        <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="correo@ejemplo.com" />
+                        <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña *</label>
+                        <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Mínimo de seguridad" />
+                        <!-- Si añades validaciones de tamaño de contraseña en la entidad, aparecerán aquí -->
+                        <div class="text-danger small" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Registrarse</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p class="text-muted">¿Ya tienes cuenta? <a th:href="@{/login}" class="text-decoration-none">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

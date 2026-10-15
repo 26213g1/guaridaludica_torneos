@@ -50,9 +50,6 @@ public class JuegoController {
     // Mostrar formulario para crear un nuevo juego
     @GetMapping("/nuevo")
     public String mostrarFormularioCreacion(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null) return redirect;
-
         model.addAttribute("juego", new Juego());
         model.addAttribute("template", "juegos/formulario"); // <-- Usando el layout maestro
         return "layout";
@@ -61,8 +58,6 @@ public class JuegoController {
     // Mostrar formulario para editar un juego existente
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null) return redirect;
 
         Juego juego = juegoService.obtenerJuegoPorId(id)
                 .orElseThrow(() -> new RuntimeException("Juego no encontrado"));
@@ -81,9 +76,6 @@ public class JuegoController {
             Model model,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
-
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null) return redirect;
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("template", "juegos/formulario"); // Mantiene el layout si hay errores
@@ -105,9 +97,6 @@ public class JuegoController {
     // Eliminar un juego
     @GetMapping("/eliminar/{id}")
     public String eliminarJuego(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        String redirect = verificarAdmin(session, redirectAttributes);
-        if (redirect != null) return redirect;
-
         try {
             juegoService.eliminarJuego(id);
             redirectAttributes.addFlashAttribute("mensaje", "Juego eliminado correctamente.");
@@ -117,13 +106,5 @@ public class JuegoController {
         return "redirect:/juegos";
     }
 
-    // Método auxiliar para verificar si es administrador
-    private String verificarAdmin(HttpSession session, RedirectAttributes redirectAttributes) {
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        if (isAdmin == null || !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Acceso denegado. Se requiere rol de administrador.");
-            return "redirect:/juegos";
-        }
-        return null; // Retorna null si todo está bien y es admin
-    }
+
 }

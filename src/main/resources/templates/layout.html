@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,30 +25,44 @@
 </head>
 <body>
 
-<!-- 1. Barra de Navegación Superior -->
-<nav class="navbar navbar-expand-lg navbar-custom px-4 shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
-            <i class="bi bi-dice-5-fill text-warning"></i> LA GUARIDA LÚDICA <span class="badge bg-secondary fs-6">Torneos</span>
-        </a>
-        <!-- Espacio reservado para futuros botones de Login / Usuario -->
-        <div class="d-flex align-items-center gap-3">
-            <a href="#" class="btn btn-outline-light btn-sm px-3">
-                <i class="bi bi-person-fill"></i> Login
+    <!-- 1. Barra de Navegación Superior -->
+    <nav class="navbar navbar-expand-lg navbar-custom px-4 shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-dice-5-fill text-warning"></i> LA GUARIDA LÚDICA <span class="badge bg-secondary fs-6">Torneos</span>
             </a>
-        </div>
-    </div>
 
-    <!-- Interruptor rápido de Admin / Cliente para desarrollo -->
-    <div class="ms-auto me-3 d-flex align-items-center">
-        <a th:href="@{/dev/toggle-admin}"
-           class="btn btn-sm fw-bold shadow-sm"
-           th:classappend="${isAdmin} ? 'btn-warning text-dark' : 'btn-outline-light'"
-           title="Haz clic para cambiar entre Admin y Cliente">
-            <i class="bi bi-shield-lock-fill me-1"></i>
-            Modo: <span th:text="${isAdmin} ? 'ADMIN' : 'CLIENTE'">ADMIN</span>
-        </a>
-    </div>
+            <!-- Zona de Autenticación en el Navbar -->
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- CASO A: Si el usuario NO ha iniciado sesión -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn btn-outline-light btn-sm px-3 me-2">
+                        <i class="bi bi-person-fill"></i> Login
+                    </a>
+                    <a th:href="@{/registro}" class="btn btn-warning btn-sm px-3 text-dark fw-bold">
+                        Registro
+                    </a>
+                </div>
+
+                <!-- CASO B: Si el usuario SÍ ha iniciado sesión -->
+                <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-3">
+                    <span class="text-light small">
+                        <i class="bi bi-person-check-fill text-success"></i>
+                        Hola, <strong sec:authentication="name">Usuario</strong>
+                    </span>
+
+                    <!-- Botón de Logout (requiere método POST por seguridad en Spring Security) -->
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger btn-sm px-3">
+                            <i class="bi bi-box-arrow-right"></i> Salir
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </nav>
 </nav>
 
 <!-- 2. Contenedor Principal (Rejilla de 2 columnas: Sidebar + Contenido) -->

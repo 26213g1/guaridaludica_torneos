@@ -1,10 +1,13 @@
 package com.shop.guaridaludica_torneos.component;
 
 import com.shop.guaridaludica_torneos.model.Juego;
+import com.shop.guaridaludica_torneos.model.Jugador;
 import com.shop.guaridaludica_torneos.model.Torneo;
 import com.shop.guaridaludica_torneos.repository.JuegoRepository;
+import com.shop.guaridaludica_torneos.repository.JugadorRepository;
 import com.shop.guaridaludica_torneos.repository.TorneoRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -18,13 +21,18 @@ public class DataInitializer implements CommandLineRunner {
 
     private final JuegoRepository juegoRepository;
     private final TorneoRepository torneoRepository;
+    private final JugadorRepository jugadorRepository;
+    private final PasswordEncoder passwordEncoder;
     private final DataSource datasource;
 
 
     // Inyectamos ambos repositorios en el constructor
-    public DataInitializer(JuegoRepository juegoRepository, TorneoRepository torneoRepository, DataSource dataSource) {
+    public DataInitializer(JuegoRepository juegoRepository, TorneoRepository torneoRepository, DataSource dataSource, JugadorRepository jugadorRepository,
+                           PasswordEncoder passwordEncoder) {
         this.juegoRepository = juegoRepository;
         this.torneoRepository = torneoRepository;
+        this.jugadorRepository = jugadorRepository;
+        this.passwordEncoder = passwordEncoder;
         this.datasource = dataSource;
     }
 
@@ -55,7 +63,22 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("  Motivo: " + e.getMessage());
         }
 
+        // 0. NUEVO: Inicializar Usuario Administrador si la tabla de jugadores está vacía
+        if (jugadorRepository.count() == 0) {
+            Jugador admin = new Jugador();
+            admin.setNombre("Administrador");
+            admin.setApodo("AdminGuarida");
+            admin.setEmail("admin@guaridaludica.com");
+            // Ciframos obligatoriamente la contraseña con BCrypt
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setRol("ROLE_ADMIN");
+            admin.setPuntosElo(1200);
 
+            jugadorRepository.save(admin);
+            System.out.println(">> ¡Usuario Administrador creado con éxito en Postgres!");
+            System.out.println("   - Email: admin@guaridaludica.com");
+            System.out.println("   - Contraseña: admin123");
+        }
 
         // 1. Inicializar Juegos si la tabla está vacía
         if (juegoRepository.count() == 0) {

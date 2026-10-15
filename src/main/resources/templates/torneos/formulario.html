@@ -23,7 +23,7 @@
 
         <!-- Nombre -->
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre del Torneo</label>
+            <label for="nombre" class="form-label">Nombre del Torneo *</label>
             <input type="text" id="nombre" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
             <div class="invalid-feedback" th:errors="*{nombre}">Error en el nombre</div>
         </div>
@@ -36,7 +36,7 @@
 
         <!-- Juego asociado -->
         <div class="mb-3">
-            <label for="juego" class="form-label">Juego</label>
+            <label for="juego" class="form-label">Juego *</label>
             <select id="juego" th:field="*{juego}" class="form-select" th:classappend="${#fields.hasErrors('juego')} ? 'is-invalid'">
                 <option value="">-- Selecciona un juego --</option>
                 <option th:each="j : ${juegos}" th:value="${j.id}" th:text="${j.nombre}"></option>
@@ -46,14 +46,14 @@
 
         <!-- Fecha y Hora -->
         <div class="mb-3">
-            <label for="fecha" class="form-label">Fecha y Hora</label>
+            <label for="fecha" class="form-label">Fecha y Hora *</label>
             <input type="datetime-local" id="fecha" th:field="*{fecha}" class="form-control" th:classappend="${#fields.hasErrors('fecha')} ? 'is-invalid'">
             <div class="invalid-feedback" th:errors="*{fecha}">Fecha inválida</div>
         </div>
 
         <!-- Máximo Participantes -->
         <div class="mb-3">
-            <label for="maxParticipantes" class="form-label">Máximo de Participantes</label>
+            <label for="maxParticipantes" class="form-label">Máximo de Participantes *</label>
             <input type="number" id="maxParticipantes" th:field="*{maxParticipantes}" class="form-control" th:classappend="${#fields.hasErrors('maxParticipantes')} ? 'is-invalid'">
             <div class="invalid-feedback" th:errors="*{maxParticipantes}">Mínimo 2 participantes</div>
         </div>

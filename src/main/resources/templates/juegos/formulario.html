@@ -22,7 +22,7 @@
     <!-- Alerta de errores generales si los hubiera -->
     <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
-    <form th:action="@{/juegos}" th:object="${juego}" method="post" enctype="multipart/form-data" class="needs-validation">
+    <form th:action="@{/juegos}" th:object="${juego}" method="post" enctype="multipart/form-data" >
 
         <!-- Campos ocultos de control -->
         <input type="hidden" th:field="*{id}" />
@@ -31,7 +31,7 @@
         <!-- Nombre del juego -->
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del Juego *</label>
-            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" required />
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" />
             <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
         </div>
 
@@ -46,7 +46,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label for="minJugadores" class="form-label">Mín. Jugadores *</label>
-                <input type="number" id="minJugadores" th:field="*{minJugadores}" class="form-control" th:classappend="${#fields.hasErrors('minJugadores')} ? 'is-invalid'" min="1" required />
+                <input type="number" id="minJugadores" th:field="*{minJugadores}" class="form-control" th:classappend="${#fields.hasErrors('minJugadores')} ? 'is-invalid'" min="1" />
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('minJugadores')}" th:errors="*{minJugadores}"></div>
             </div>
 
