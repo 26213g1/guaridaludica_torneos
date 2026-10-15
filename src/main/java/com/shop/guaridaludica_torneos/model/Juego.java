@@ -21,75 +21,108 @@ public class Juego {
 
     @NotNull(message = "El número mínimo de jugadores es obligatorio")
     @Min(value = 1, message = "Debe haber al menos 1 jugador")
+    @Column(name = "min_jugadores")
     private Integer minJugadores;
 
     @Min(value = 1, message = "El número máximo de jugadores debe ser al menos 1")
+    @Column(name = "max_jugadores")
     private Integer maxJugadores;
+
+    @Column(name = "duracion_minutos")
+    private Integer duracionMinutos;
+
     private String categoria;
 
     @Column(name = "imagen_url")
     private String imagenUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
 
     // Constructor vacío obligatorio para JPA
     public Juego() {
     }
 
-    // Constructor con parámetros (opcional)
-    public Juego(String nombre, Integer minJugadores, Integer maxJugadores, String categoria, String imagenUrl) {
+    // Constructor con parámetros
+    public Juego(String nombre, Integer minJugadores, Integer maxJugadores, Integer duracionMinutos, String categoria, String imagenUrl, String descripcion) {
         this.nombre = nombre;
         this.minJugadores = minJugadores;
         this.maxJugadores = maxJugadores;
+        this.duracionMinutos = duracionMinutos;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
+        this.descripcion = descripcion;
+    }
+
+    // --- GETTERS Y SETTERS ---
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getMinJugadores() {
+        return minJugadores;
+    }
+
+    public void setMinJugadores(Integer minJugadores) {
+        this.minJugadores = minJugadores;
+    }
+
+    public Integer getMaxJugadores() {
+        return maxJugadores;
+    }
+
+    public void setMaxJugadores(Integer maxJugadores) {
+        this.maxJugadores = maxJugadores;
+    }
+
+    public Integer getDuracionMinutos() {
+        return duracionMinutos;
+    }
+
+    public void setDuracionMinutos(Integer duracionMinutos) {
+        this.duracionMinutos = duracionMinutos;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getImagenUrl() {
         return imagenUrl;
     }
 
-    //getters y setters
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public Integer getMinJugadores() {
-        return minJugadores;
-    }
-    public void setMinJugadores(Integer minJugadores) {
-        this.minJugadores = minJugadores;
-    }
-    public Integer getMaxJugadores() {
-        return maxJugadores;
-    }
-    public void setMaxJugadores(Integer maxJugadores) {
-        this.maxJugadores = maxJugadores;
-    }
-    public String getCategoria() {
-        return categoria;
-    }
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    // toString() devuelve el texto con el que se imprime el objeto.
-    // Sin sobrescribirlo, println() mostraría algo ilegible como com.shop.guaridaludica_torneos.model.Juego.
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
-        return "Juego{id=" + id + ", nombre='" + nombre + "', Mínimo Jugadores='" + minJugadores
-                + "', Máximo Jugadores=" + maxJugadores + ", Categoria='" + categoria + "'}";
+        return "Juego{id=" + id + ", nombre='" + nombre + "', minJugadores=" + minJugadores
+                + ", maxJugadores=" + maxJugadores + ", duracionMinutos=" + duracionMinutos + ", categoria='" + categoria + "'}";
     }
-
 }

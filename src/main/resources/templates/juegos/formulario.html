@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Juego</title>
+</head>
+<body>
+<div th:fragment="content" class="container mt-4">
+    <!-- Cabecera con Título, Subtítulo y Botón Volver alineados -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1" th:text="${juego.id == null} ? 'Crear Nuevo Juego' : 'Editar Juego'">Título</h3>
+            <p class="text-muted mb-0" th:text="${juego.id == null} ? 'Rellene los datos para dar de alta un nuevo juego en La Guarida Lúdica.' : 'Modifique los datos necesarios del juego.'">Rellene los datos...</p>
+        </div>
+        <div>
+            <a th:href="@{/juegos}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+    </div>
+
+    <!-- Alerta de errores generales si los hubiera -->
+    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+    <form th:action="@{/juegos}" th:object="${juego}" method="post" enctype="multipart/form-data" class="needs-validation">
+
+        <!-- Campos ocultos de control -->
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{imagenUrl}" />
+
+        <!-- Nombre del juego -->
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Juego *</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" required />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoría</label>
+            <input type="text" id="categoria" th:field="*{categoria}" class="form-control" placeholder="Ej: Estrategia, Cooperativo, Filler..." />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
+        </div>
+
+        <!-- Fila para Mín. Jugadores, Máx. Jugadores y Duración -->
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="minJugadores" class="form-label">Mín. Jugadores *</label>
+                <input type="number" id="minJugadores" th:field="*{minJugadores}" class="form-control" th:classappend="${#fields.hasErrors('minJugadores')} ? 'is-invalid'" min="1" required />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('minJugadores')}" th:errors="*{minJugadores}"></div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="maxJugadores" class="form-label">Máx. Jugadores</label>
+                <input type="number" id="maxJugadores" th:field="*{maxJugadores}" class="form-control" th:classappend="${#fields.hasErrors('maxJugadores')} ? 'is-invalid'" min="1" />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('maxJugadores')}" th:errors="*{maxJugadores}"></div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="duracionMinutos" class="form-label">Duración (minutos)</label>
+                <input type="number" id="duracionMinutos" th:field="*{duracionMinutos}" class="form-control" th:classappend="${#fields.hasErrors('duracionMinutos')} ? 'is-invalid'" step="5" min="5" />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('duracionMinutos')}" th:errors="*{duracionMinutos}"></div>
+            </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3" th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid'"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+        </div>
+
+        <!-- Imagen (Archivo) -->
+        <div class="mb-3">
+            <label for="fileImagen" class="form-label">Imagen del Juego</label>
+            <input type="file" id="fileImagen" name="fileImagen" class="form-control" accept="image/*" />
+            <div class="form-text">Sube una imagen representativa para el juego (opcional al editar).</div>
+
+            <!-- Vista previa si ya tiene una imagen cargada -->
+            <div class="mt-2" th:if="${juego.imagenUrl != null and !juego.imagenUrl.isEmpty()}">
+                <p class="text-muted mb-1">Imagen actual:</p>
+                <img th:src="${juego.imagenUrl}" alt="Imagen del juego" style="max-height: 100px;" class="img-thumbnail" />
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between">
+            <a th:href="@{/juegos}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary" th:text="${juego.id == null} ? 'Guardar Juego' : 'Actualizar Juego'">Guardar</button>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

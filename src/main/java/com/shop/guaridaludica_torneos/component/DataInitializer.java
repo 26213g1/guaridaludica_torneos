@@ -59,13 +59,13 @@ public class DataInitializer implements CommandLineRunner {
 
         // 1. Inicializar Juegos si la tabla está vacía
         if (juegoRepository.count() == 0) {
-            Juego j1 = new Juego("Catan", 3, 4, "Estrategia / Gestión", null);
+            Juego j1 = new Juego("Catan", 3, 4, 60, "Estrategia / Gestión", null, "Descripcion 1");
             juegoRepository.save(j1);
 
-            Juego j2 = new Juego("Carcassonne", 2, 5, "Loseta / Familiar", null);
+            Juego j2 = new Juego("Carcassonne", 2, 5, 65, "Loseta / Familiar", null, "Descripcion 2");
             juegoRepository.save(j2);
 
-            Juego j3 = new Juego("7 Wonders", 2, 7, "Draft / Cartas", null);
+            Juego j3 = new Juego("7 Wonders", 2, 7, 66, "Draft / Cartas", null, "Descripcion 3");
             juegoRepository.save(j3);
 
             System.out.println(">> ¡Datos de prueba de juegos insertados correctamente en Postgres!");

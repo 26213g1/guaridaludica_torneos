@@ -67,12 +67,16 @@
                                     <span th:text="${juego.minJugadores}">2</span> - <span th:text="${juego.maxJugadores}">4</span>
                                 </td>
 
-                                <!-- Acciones (solo Admin) -->
-                                <td class="text-end pe-4" th:if="${isAdmin}">
-                                    <a th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                                <!-- Botones de acción -->
+                                <td class="text-end pe-4">
+                                    <a th:href="@{/juegos/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-primary me-1" title="Ver detalle">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <!-- Acciones (solo Admin) -->
+                                    <a th:if="${isAdmin}" th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-warning me-1" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a th:href="@{/juegos/eliminar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                    <a th:if="${isAdmin}" th:href="@{/juegos/eliminar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-danger" title="Eliminar">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>

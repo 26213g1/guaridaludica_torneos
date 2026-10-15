@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${juego.nombre}">Detalle del Juego</title>
+</head>
+<body>
+<div th:fragment="content" class="container mt-4">
+
+    <!-- Cabecera con título y botón de volver -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 th:text="${juego.nombre}">Nombre del Juego</h2>
+        <a th:href="@{/juegos}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al Listado
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Columna de la Imagen -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img th:if="${juego.imagenUrl != null and !juego.imagenUrl.isEmpty()}"
+                     th:src="${juego.imagenUrl}"
+                     class="card-img-top img-fluid rounded"
+                     alt="Imagen del juego"
+                     style="max-height: 350px; object-fit: cover;" />
+
+                <!-- Imagen por defecto si no tiene ninguna -->
+                <div th:if="${juego.imagenUrl == null or juego.imagenUrl.isEmpty()}"
+                     class="card-img-top bg-light text-center py-5 text-muted rounded">
+                    <i class="bi bi-image fs-1"></i>
+                    <p class="mt-2">Sin imagen disponible</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de Información y Características -->
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4">
+                <h4 class="text-primary mb-3">Información General</h4>
+
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Categoría:</strong>
+                        <span th:text="${juego.categoria != null and !juego.categoria.isEmpty()} ? ${juego.categoria} : 'Sin categoría'">Estrategia</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Jugadores:</strong>
+                        <span th:text="${juego.minJugadores} + (${juego.maxJugadores != null ? ' - ' + juego.maxJugadores : ''}) + ' jugadores'">1 - 4 jugadores</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Duración estimada:</strong>
+                        <span th:text="${juego.duracionMinutos != null} ? ${juego.duracionMinutos} + ' minutos' : 'No especificada'">60 minutos</span>
+                    </li>
+                </ul>
+
+                <h5 class="mb-2">Descripción</h5>
+                <p class="text-muted" th:text="${juego.descripcion != null and !juego.descripcion.isEmpty()} ? ${juego.descripcion} : 'No hay una descripción detallada para este juego.'">
+                    Descripción detallada del juego...
+                </p>
+
+                <!-- Botones de administración (solo visibles si es admin, o gestionados desde el controlador) -->
+                <div class="d-flex gap-2 mt-4" th:if="${session.esAdmin != null and session.esAdmin}">
+                    <a th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-warning text-dark">
+                        <i class="bi bi-pencil"></i> Editar Juego
+                    </a>
+                    <a th:href="@{/juegos/eliminar/{id}(id=${juego.id})}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este juego?');">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

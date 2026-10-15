@@ -159,6 +159,7 @@ public class TorneoController {
         return "redirect:/torneos";
     }
 
+    // Método auxiliar para verificar si es administrador
     private String verificarAdmin(HttpSession session, RedirectAttributes redirectAttributes) {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) {
