@@ -1,0 +1,38 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <h3 class="mb-4"><i class="bi bi-pencil-square text-primary"></i> Editar Jugador</h3>
+
+    <form th:action="@{/admin/jugadores/editar/{id}(id=${jugador.id})}" th:object="${jugador}" method="post">
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre Completo:</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="apodo" class="form-label">Apodo (Nick único):</label>
+            <input type="text" id="apodo" th:field="*{apodo}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico:</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="rol" class="form-label">Rol en el Sistema:</label>
+            <select id="rol" th:field="*{rol}" class="form-select">
+                <option value="ROLE_USER">Usuario Normal (ROLE_USER)</option>
+                <option value="ROLE_ADMIN">Administrador (ROLE_ADMIN)</option>
+            </select>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Guardar Cambios
+            </button>
+            <a th:href="@{/jugadores}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

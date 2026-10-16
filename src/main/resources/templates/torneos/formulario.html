@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <!-- Cabecera con Título, Subtítulo y Botón Volver alineados -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1" th:text="${torneo.id == null} ? 'Crear Nuevo Torneo' : 'Editar Torneo'">Título</h3>
+            <p class="text-muted mb-0" th:text="${torneo.id == null} ? 'Rellene los datos para dar de alta un nuevo evento en La Guarida Lúdica.' : 'Modifique los datos necesarios del torneo.'">Rellene los datos...</p>
+        </div>
+        <div>
+            <a th:href="@{/torneos}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+    </div>
+
+    <!-- Formulario adaptado para integrarse en el layout maestro -->
+    <form th:action="@{/torneos}" th:object="${torneo}" method="post" enctype="multipart/form-data">
+
+        <!-- Campo oculto esencial para que funcione la edición -->
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Nombre -->
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Torneo *</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{nombre}">Error en el nombre</div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- Juego asociado -->
+        <div class="mb-3">
+            <label for="juego" class="form-label">Juego *</label>
+            <select id="juego" th:field="*{juego}" class="form-select" th:classappend="${#fields.hasErrors('juego')} ? 'is-invalid'">
+                <option value="">-- Selecciona un juego --</option>
+                <option th:each="j : ${juegos}" th:value="${j.id}" th:text="${j.nombre}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{juego}">Debe seleccionar un juego</div>
+        </div>
+
+        <!-- Fecha y Hora -->
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha y Hora *</label>
+            <input type="datetime-local" id="fecha" th:field="*{fecha}" class="form-control" th:classappend="${#fields.hasErrors('fecha')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{fecha}">Fecha inválida</div>
+        </div>
+
+        <!-- Máximo Participantes -->
+        <div class="mb-3">
+            <label for="maxParticipantes" class="form-label">Máximo de Participantes *</label>
+            <input type="number" id="maxParticipantes" th:field="*{maxParticipantes}" class="form-control" th:classappend="${#fields.hasErrors('maxParticipantes')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{maxParticipantes}">Mínimo 2 participantes</div>
+        </div>
+
+        <!-- Estado -->
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado Inicial</label>
+            <select id="estado" th:field="*{estado}" class="form-select">
+                <option value="ABIERTO">Abierto</option>
+                <option value="EN_CURSO">En Curso</option>
+                <option value="FINALIZADO">Finalizado</option>
+                <option value="CANCELADO">Cancelado</option>
+            </select>
+        </div>
+
+        <!-- Comentarios -->
+        <div class="mb-3">
+            <label for="comentarios" class="form-label">Comentarios / Reglas adicionales</label>
+            <textarea id="comentarios" th:field="*{comentarios}" class="form-control" rows="2"></textarea>
+        </div>
+
+        <!-- Imagen -->
+        <div class="mb-4">
+            <label for="fileImagen" class="form-label">Imagen del Torneo (Cloudinary)</label>
+
+            <!-- Si el torneo ya tiene imagen, mostramos una miniatura actual -->
+            <div th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" class="mb-2">
+                <p class="text-muted small mb-1">Imagen actual:</p>
+                <img th:src="${torneo.imagenUrl}" alt="Imagen del torneo" class="img-thumbnail" style="max-height: 120px;" />
+                <!-- Campo oculto para conservar la URL actual si no se sube otra -->
+                <input type="hidden" th:field="*{imagenUrl}" />
+            </div>
+
+            <!-- Input para subir una nueva (o reemplazar la existente) -->
+            <input type="file" id="fileImagen" name="fileImagen" class="form-control">
+            <div class="form-text">Deje este campo en blanco si desea conservar la imagen actual.</div>
+        </div>
+
+        <!-- Botones inferiores -->
+        <div class="d-flex justify-content-between">
+            <a th:href="@{/torneos}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Torneo</button>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

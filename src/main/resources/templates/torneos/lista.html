@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold text-dark mb-1">Gestión de Torneos</h3>
+                <p class="text-muted mb-0">Listado de torneos programados en La Guarida Lúdica.</p>
+            </div>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/torneos/nuevo}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo Torneo
+            </a>
+        </div>
+
+        <!-- Tabla limpia sin duplicar contenedores card -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th sec:authorize="hasRole('ADMIN')" class="ps-4">ID</th>
+                        <th style="width: 80px;" class="text-center">Imagen</th>
+                        <th>Nombre del Torneo</th>
+                        <th>Juego Asociado</th>
+                        <th>Fecha</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${not #lists.isEmpty(torneos)}" th:each="torneo : ${torneos}">
+                        <td sec:authorize="hasRole('ADMIN')" class="ps-4 fw-bold text-secondary" th:text="${torneo.id}">1</td>
+                        
+                        <td class="text-center">
+                            <img th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" 
+                                 th:src="${torneo.imagenUrl}" 
+                                 alt="Cartel" 
+                                 class="rounded shadow-sm" 
+                                 style="width: 45px; height: 45px; object-fit: cover;">
+                            <div th:unless="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" 
+                                 class="bg-light rounded d-flex align-items-center justify-content-center text-muted mx-auto border" 
+                                 style="width: 45px; height: 45px;">
+                                <i class="bi bi-trophy"></i>
+                            </div>
+                        </td>
+
+                        <td class="fw-semibold text-dark" th:text="${torneo.nombre}">Torneo</td>
+                        <td th:text="${torneo.juego != null ? torneo.juego.nombre : 'Sin juego'}">Catan</td>
+                        <td th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">2026-10-20</td>
+
+                        <td class="text-center">
+                            <span class="badge bg-success" th:text="${torneo.estado}">ABIERTO</span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <!-- Botones de acción -->
+                            <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-primary me-1" title="Ver detalle">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <!-- Botón de editar (solo admin) -->
+                            <a sec:authorize="hasRole('ADMIN')" th:href="@{/torneos/editar/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-warning me-1" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <!-- Botón de eliminar (solo admin) -->
+                            <a sec:authorize="hasRole('ADMIN')" th:href="@{/torneos/eliminar/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este torneo?');">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(torneos)}">
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="bi bi-trophy fs-2 d-block mb-2"></i>
+                            No hay torneos registrados todavía.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

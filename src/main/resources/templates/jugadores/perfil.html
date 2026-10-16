@@ -1,0 +1,24 @@
+<div xmlns:th="http://www.thymeleaf.org" class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-4">
+            <div class="display-1 text-primary mb-2">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <h3 class="fw-bold" th:text="${jugador.nombre}">Nombre de Jugador</h3>
+            <span class="badge bg-info text-dark fs-6" th:text="${jugador.rol}">ROLE_USER</span>
+        </div>
+
+        <hr class="my-4">
+
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <span class="fw-bold"><i class="bi bi-envelope me-2"></i> Correo Electrónico:</span>
+                <span th:text="${jugador.email}">correo@example.com</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <span class="fw-bold"><i class="bi bi-trophy me-2"></i> Torneos Inscritos:</span>
+                <span class="badge bg-success rounded-pill fs-6">0</span>
+            </li>
+        </ul>
+    </div>
+</div>

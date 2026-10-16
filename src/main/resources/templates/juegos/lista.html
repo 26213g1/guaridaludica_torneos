@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Catálogo de Juegos</h2>
+                <p class="text-muted mb-0">Explora la ludoteca disponible para los próximos torneos.</p>
+            </div>
+            <!-- Botón de administración (oculto por defecto para clientes) -->
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/juegos/nuevo}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo Juego
+            </a>
+        </div>
+
+        <!-- Tabla de Juegos -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4" sec:authorize="hasRole('ADMIN')">ID</th>
+                                <th style="width: 80px;" class="text-center">Imagen</th>
+                                <th>Nombre del Juego</th>
+                                <th>Categoría</th>
+                                <th class="text-center">Jugadores</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Si hay juegos en la base de datos -->
+                            <tr th:if="${not #lists.isEmpty(juegos)}" th:each="juego : ${juegos}">
+                                <!-- ID (solo Admin) -->
+                                <td class="ps-4 fw-bold text-secondary" sec:authorize="hasRole('ADMIN')" th:text="${juego.id}">1</td>
+                                
+                                <!-- Miniatura de Cloudinary -->
+                                <td class="text-center">
+                                    <img th:if="${juego.imagenUrl != null and !juego.imagenUrl.isEmpty()}" 
+                                         th:src="${juego.imagenUrl}" 
+                                         alt="Portada" 
+                                         class="rounded shadow-sm" 
+                                         style="width: 45px; height: 45px; object-fit: cover;">
+                                    
+                                    <!-- Imagen por defecto si no tiene URL asignada -->
+                                    <div th:unless="${juego.imagenUrl != null and !juego.imagenUrl.isEmpty()}" 
+                                         class="bg-light rounded d-flex align-items-center justify-content-center text-muted mx-auto border" 
+                                         style="width: 45px; height: 45px;">
+                                        <i class="bi bi-controller"></i>
+                                    </div>
+                                </td>
+
+                                <!-- Nombre -->
+                                <td class="fw-semibold text-dark" th:text="${juego.nombre}">Catan</td>
+                                
+                                <!-- Categoría con una insignia (Badge) de Bootstrap -->
+                                <td>
+                                    <span class="badge bg-light text-dark border fw-normal" 
+                                          th:text="${juego.categoria != null ? juego.categoria : 'Sin categoría'}">
+                                        Estrategia
+                                    </span>
+                                </td>
+                                
+                                <!-- Rango de Jugadores -->
+                                <td class="text-center text-muted">
+                                    <i class="bi bi-people-fill me-1"></i>
+                                    <span th:text="${juego.minJugadores}">2</span> - <span th:text="${juego.maxJugadores}">4</span>
+                                </td>
+
+                                <!-- Botones de acción -->
+                                <td class="text-end pe-4">
+                                    <a th:href="@{/juegos/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-primary me-1" title="Ver detalle">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <!-- Acciones (solo Admin) -->
+                                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-warning me-1" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/juegos/eliminar/{id}(id=${juego.id})}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- Si la base de datos está vacía -->
+                            <tr th:if="${#lists.isEmpty(juegos)}">
+                                <td th:colspan="${#authorization.expression('hasRole(''ADMIN'')')} ? 6 : 4" class="text-center py-4 text-muted">                                    <i class="bi bi-controller fs-2 d-block mb-2"></i>
+                                    No hay juegos registrados todavía en la base de datos.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

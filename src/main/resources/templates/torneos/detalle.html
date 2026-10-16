@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <div class="container py-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge bg-primary mb-2" th:text="${torneo.estado}">ABIERTO</span>
+                        <h2 class="fw-bold text-dark" th:text="${torneo.nombre}">Nombre del Torneo</h2>
+                    </div>
+
+                    <!-- Botones de acción según el rol -->
+                    <div>
+                        <a th:href="@{/torneos}" class="btn btn-outline-secondary btn-sm me-2">
+                            <i class="bi bi-arrow-left"></i> Volver al listado
+                        </a>
+                        <!-- Botón de editar solo visible para admin -->
+                        <a th:if="${isAdmin}" th:href="@{/torneos/editar/{id}(id=${torneo.id})}" class="btn btn-primary">
+                            <i class="bi bi-pencil-fill"></i> Editar Torneo
+                        </a>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row g-4">
+                    <!-- Columna Izquierda: Descripción, Reglas y Cartel -->
+                    <div class="col-md-8">
+                        <h5 class="fw-bold text-secondary">Descripción</h5>
+                        <p class="text-muted" th:text="${torneo.descripcion}">Descripción del torneo...</p>
+
+                        <h5 class="fw-bold text-secondary mt-4">Comentarios / Reglas adicionales</h5>
+                        <p class="text-muted" th:text="${torneo.comentarios}">Ninguno</p>
+
+                        <!-- Cartel del Torneo -->
+                        <div class="mt-4" th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}">
+                            <h5 class="fw-bold text-secondary mb-3">Cartel del Evento</h5>
+                            <div class="card shadow-sm p-2 bg-light text-center">
+                                <img th:src="${torneo.imagenUrl}"
+                                     alt="Cartel del Torneo"
+                                     class="img-fluid rounded"
+                                     style="max-height: 450px; object-fit: contain;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha: Detalles del Evento -->
+                    <div class="col-md-4">
+                        <div class="bg-light p-3 rounded shadow-sm">
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle me-1"></i> Detalles del Evento</h6>
+                            <p class="mb-2"><strong>Juego:</strong> <span th:text="${torneo.juego != null ? torneo.juego.nombre : 'Libre'}">Catan</span></p>
+                            <p class="mb-2"><strong>Fecha y Hora:</strong> <span th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">24/10/2026 17:00</span></p>
+                            <p class="mb-2"><strong>Máx. Participantes:</strong> <span th:text="${torneo.maxParticipantes}">8</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
