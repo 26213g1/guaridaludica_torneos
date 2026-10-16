@@ -49,8 +49,8 @@ La aplicación implementa **Spring Security** para garantizar un control robusto
 - Instancia de PostgreSQL (Local o Supabase).
 - Cuenta en Cloudinary (para las credenciales de subida de imágenes).
 
-2. **Configuración de propiedades (`application.properties`)**  
-   Configura tus credenciales de base de datos, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application.properties`:
+2. **Configuración de propiedades (`application-dev.properties`)**  
+   Configura tus credenciales de base de datos, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application-dev.properties`:
 
 ```properties
 # Configuración de Base de Datos (PostgreSQL / Supabase)

@@ -13,5 +13,5 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
-# Arranca directamente sin forzar un perfil específico
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Arranca forzando el perfil de producción
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
