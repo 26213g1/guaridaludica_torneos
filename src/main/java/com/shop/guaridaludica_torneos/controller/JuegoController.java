@@ -1,7 +1,6 @@
 package com.shop.guaridaludica_torneos.controller;
 
 import com.shop.guaridaludica_torneos.model.Juego;
-import com.shop.guaridaludica_torneos.model.Torneo;
 import com.shop.guaridaludica_torneos.service.JuegoService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
