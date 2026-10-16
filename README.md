@@ -1,5 +1,7 @@
 # 🎲 La Guarida Lúdica - Gestión de Torneos y Juegos de Mesa
 
+> **Nota sobre el proyecto:** Esta aplicación es un módulo independiente dedicado exclusivamente a la gestión de torneos, concebido como parte del ecosistema de la tienda principal que ya se encuentra en funcionamiento en [https://guaridaludica.onrender.com/](https://guaridaludica.onrender.com/). En un futuro, este sistema de torneos se integrará directamente como una sección nativa dentro de la propia tienda.
+
 Aplicación web desarrollada en **Java y Spring Boot** diseñada para la gestión integral de un establecimiento o comunidad de juegos de mesa. Permite administrar catálogos de juegos, torneos, aforos, material gráfico en la nube y un sistema completo de autenticación y control de accesos basado en roles.
 
 ---
@@ -34,21 +36,21 @@ La aplicación implementa **Spring Security** para garantizar un control robusto
 - **Roles:** Dos perfiles diferenciados (`ROLE_ADMIN` y `ROLE_USER`).
 - **Protección de Rutas:** Las acciones de gestión crítica (crear, editar o eliminar juegos y torneos) están restringidas exclusivamente a administradores mediante `SecurityFilterChain`.
 - **Credenciales por Defecto:** Al arrancar la aplicación por primera vez, el componente `DataInitializer` crea automáticamente una cuenta de administrador si la base de datos de jugadores está vacía:
-  - **Email:** `admin@guarida.com`
-  - **Contraseña:** `admin123`
+    - **Email:** `admin@guarida.com`
+    - **Contraseña:** `admin123`
 
 ---
 
 ## ⚙️ Configuración y Despliegue
 
-### 1. Requisitos previos
+1. ### Requisitos previos
 - Java 21 instalado.
 - Maven.
 - Instancia de PostgreSQL (Local o Supabase).
 - Cuenta en Cloudinary (para las credenciales de subida de imágenes).
 
-### 2. Configuración de propiedades (`application.properties`)
-Configura tus credenciales de base de datos, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application.properties`:
+2. **Configuración de propiedades (`application.properties`)**  
+   Configura tus credenciales de base de datos, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application.properties`:
 
 ```properties
 # Configuración de Base de Datos (PostgreSQL / Supabase)
