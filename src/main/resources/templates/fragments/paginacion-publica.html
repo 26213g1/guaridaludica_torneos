@@ -1,0 +1,41 @@
+<nav th:fragment="pagination-publica(pageUrl)" th:if="${totalPages > 1}" aria-label="Navegación pública" class="my-5">
+    <ul class="pagination justify-content-center">
+        
+        <!-- Botón Primera Página -->
+        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=0, categoria=${param.categoria}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+        </li>
+
+        <!-- Botón Anterior -->
+        <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${currentPage - 1}, categoria=${param.categoria}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}">Anterior</a>
+        </li>
+
+        <!-- Números de página -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+            th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${i}, categoria=${param.categoria}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}" 
+               th:text="${i + 1}">1</a>
+        </li>
+
+        <!-- Botón Siguiente -->
+        <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${currentPage + 1}, categoria=${param.categoria}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}">Siguiente</a>
+        </li>
+
+        <!-- Botón Última Página -->
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+            <a class="page-link" 
+               th:href="@{__${pageUrl}__(page=${totalPages - 1}, categoria=${param.categoria}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li>
+        
+    </ul>
+</nav>

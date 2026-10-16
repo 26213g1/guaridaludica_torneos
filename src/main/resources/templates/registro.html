@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{auth-layout :: layout(~{::section})}">
+<head>
+    <title>Registro - La Guarida Lúdica</title>
+</head>
+<body>
+    <section class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">✨ Registro de Usuario</h2>
+                        
+                        <form th:action="@{/registro}" th:object="${usuarioDto}" method="post">
+                            <!-- Mensaje de error general si el email ya existe (el que mandas desde el catch) -->
+                            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                            <div class="mb-3">
+                                <label for="alias" class="form-label">Alias</label>
+                                <input type="text" id="alias" th:field="*{alias}" class="form-control" th:classappend="${#fields.hasErrors('alias')} ? 'is-invalid'" required>
+                                <!-- Error específico del alias -->
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('alias')}" th:errors="*{alias}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" id="email" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" required>
+                                <!-- Error específico del email -->
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" id="password" th:field="*{password}" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'" required>
+                                <!-- Error específico de la contraseña (¡aquí saldrá el de los 6 caracteres!) -->
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

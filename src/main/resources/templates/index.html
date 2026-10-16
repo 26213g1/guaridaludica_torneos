@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::main})}">
+
+<body>
+    <main>
+        <!-- SCROLL LATERAL DE NOVEDADES 
+             Controlado tanto por si hay productos como por la configuración de administración -->
+        <div th:if="${appConfig.mostrarNovedadesHome}">
+            <div th:replace="~{fragments/novedades-scroll :: scroll-novedades}"></div>
+        </div>
+
+        <!-- SCROLL LATERAL DE DESTACADOS 
+             Controlado tanto por si hay productos como por la configuración de administración -->
+        <div th:if="${appConfig.mostrarDestacadosHome}">
+            <div th:replace="~{fragments/destacados-scroll :: scroll-destacados}"></div>
+        </div>
+
+        <!-- TÍTULO DEL CATÁLOGO GENERAL -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-dark m-0">
+                <i class="fa-solid fa-dice me-2 text-primary"></i>Catálogo General
+            </h5>
+        </div>
+
+        <!-- Grid de productos principal -->
+        <div class="row row-cols-2 row-cols-md-3 g-4">
+            <!-- Aquí usamos th:each para iterar tus productos -->
+            <div class="col d-flex" th:each="producto : ${productos}">
+                <div class="card h-100 shadow-sm card-producto p-2 position-relative w-100">
+
+                    <!-- Cinta AGOTADO -->
+                    <div class="ribbon-agotado" th:if="${producto.stock == 0}">AGOTADO</div>
+
+                    <!-- Cinta NUEVO -->
+                    <div class="ribbon-nuevo" th:if="${producto.esNuevo(diasNuevo)}">NUEVO</div>
+
+                    <!-- Imagen -->
+                    <div class="card-img-wrapper p-2">
+                        <a th:href="@{/producto/{id}(id=${producto.id})}">
+                            <img th:src="@{${producto.imagenPrincipalUrl}}" class="card-img-top rounded" th:alt="${producto.nombre}">
+                        </a>
+                    </div>
+
+                    <div class="card-body d-flex flex-column pt-3">
+                        <h5 class="card-title mb-2">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-titulo" th:text="${producto.nombre}">Nombre</a>
+                        </h5>
+
+                        <div class="mb-3 d-flex flex-column" style="min-height: 55px;">
+                            <!-- Precio anterior (si no existe, usamos 'invisible' para que ocupe su sitio y no desajuste) -->
+                            <div style="height: 20px;">
+                                <span class="text-muted text-decoration-line-through small" 
+                                    th:if="${producto.precioAnterior != null}" 
+                                    th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">85.00 €</span>
+                            </div>
+                            
+                            <!-- Precio actual + IVA en la misma línea (Opción compacta) o debajo -->
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fs-4 fw-bold text-success lh-1" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</span>
+                                <span class="text-muted" style="font-size: 0.7rem;" th:text="${appConfig.textoImpuesto}">IVA incluido</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 text-muted small d-flex gap-3">
+                            <span title="Duración de la partida" th:if="${producto.duracionPartida != null}">
+                                <i class="bi bi-clock me-1"></i> <strong class="text-dark" th:text="${producto.duracionPartida}">60-90 min</strong>
+                            </span>
+                            <span title="Número de jugadores">
+                                <i class="bi bi-person me-1"></i>
+                                <strong class="text-dark">
+                                    <span th:text="${producto.minJugadores}">1</span>-<span th:text="${producto.maxJugadores}">4</span> jug.
+                                </strong>
+                            </span>
+                        </div>
+
+                        <div class="mt-auto pt-2">
+                            <div class="d-flex gap-2 align-items-center">
+                                <form th:action="@{/carrito/agregar}" method="post" class="m-0 flex-grow-1">
+                                    <input type="hidden" name="id" th:value="${producto.id}" />
+                                    <button type="submit" class="btn btn-outline-success w-100 py-2" th:disabled="${producto.stock == 0}">
+                                        <i class="bi bi-cart-plus fa-lg"></i> <span class="ms-1 fw-semibold">Añadir</span>
+                                    </button>
+                                </form>
+
+                                <div th:unless="${usuario != null}" class="d-inline-block" title="Inicia sesión para favoritos">
+                                    <button type="button" class="btn btn-outline-secondary py-2 px-3" disabled><i class="fa-regular fa-heart"></i></button>
+                                </div>
+
+                                <form th:if="${usuario != null}" th:action="@{/favorito/toggle/{id}(id=${producto.id})}" method="post" class="m-0">
+                                    <button type="submit" class="btn btn-outline-danger py-2 px-3" title="Favorito">
+                                        <i th:if="${#sets.contains(usuario.favoritos, producto)}" class="fa-solid fa-heart"></i>
+                                        <i th:unless="${#sets.contains(usuario.favoritos, producto)}" class="fa-regular fa-heart"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="mt-4" th:replace="~{fragments/paginacion-publica :: pagination-publica(@{/})}"></div>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{auth-layout :: layout(~{::main})}">
+<body>
+    <main>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <!-- Usamos 'col-md-6 col-lg-4' y añadimos 'style="min-width: 320px;"' para evitar que se comprima -->
+                <div class="col-md-6 col-lg-4" style="min-width: 320px;">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+                            
+                            <!-- Mensaje de error si el login falla -->
+                            <div th:if="${param.error}" class="alert alert-danger">
+                                Email o contraseña incorrectos.
+                            </div>
+
+                            <form th:action="@{/login}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="username" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                            </form>
+
+                            <!-- NUEVO: Enlace para ir al registro -->
+                            <div class="text-center mt-3">
+                                <p class="text-muted mb-0">¿No tienes cuenta? <a th:href="@{/registro}" class="text-decoration-none">Regístrate aquí</a></p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

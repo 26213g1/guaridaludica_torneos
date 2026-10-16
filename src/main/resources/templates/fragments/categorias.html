@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Fragmento único para las categorías (tanto desktop como móvil) -->
+    <div th:fragment="lista-categorias">
+        <a th:each="cat : ${categorias}" 
+            th:href="@{/(categoria=${cat.id}, maxPrecio=${param.maxPrecio}, jugadores=${param.jugadores}, rangoDuracion=${param.rangoDuracion})}" 
+            class="nav-link-cat text-dark text-decoration-none py-1"
+            th:text="${cat.nombre}">Nombre Categoría</a>
+    </div>
+</body>
+</html>

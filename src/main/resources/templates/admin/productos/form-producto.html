@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/admin-layout :: layout(~{::main})}">
+<body>
+    <main>
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    
+                    <!-- 1. ALERTA DE ÉXITO (Mensaje Flash) -->
+                    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i><span th:text="${mensajeExito}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="card shadow-sm p-4">
+                        <!-- Título dinámico según si el ID es nulo o tiene valor -->
+                        <h3 class="mb-4 fw-bold" th:text="${producto.id == null} ? '🎲 Añadir Nuevo Producto' : '✏️ Editar Producto'">Gestión de Producto</h3>
+                        
+                        <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+                            
+                            <!-- Campo oculto crucial para que Spring sepa que estamos editando -->
+                            <input type="hidden" th:field="*{id}" />
+
+                            <!-- Campo Nombre -->
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del Juego</label>
+                                <input type="text" th:field="*{nombre}" class="form-control" 
+                                       th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                                <!-- Error específico -->
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Campo Precio -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Precio (€)</label>
+                                    <input type="number" step="0.01" th:field="*{precio}" class="form-control" 
+                                           th:classappend="${#fields.hasErrors('precio')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></div>
+                                </div>
+                                <!-- Campo Stock -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Stock disponible</label>
+                                    <input type="number" th:field="*{stock}" class="form-control" 
+                                           th:classappend="${#fields.hasErrors('stock')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></div>
+                                </div>
+                            </div>
+
+                            <!-- Fila nueva para Precio Anterior (Ofertas) y Duración de la Partida -->
+                            <div class="row">
+                                <!-- Campo Precio Anterior -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Precio Anterior (€) <span class="text-muted small">(Opcional)</span></label>
+                                    <input type="number" step="0.01" th:field="*{precioAnterior}" class="form-control" 
+                                        th:classappend="${#fields.hasErrors('precioAnterior')} ? 'is-invalid' : ''"
+                                        placeholder="Ej: 29.99">
+                                    <div class="form-text">Rellenar solo si el juego está rebajado.</div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('precioAnterior')}" th:errors="*{precioAnterior}"></div>
+                                </div>
+                                
+                                <!-- Campo Duración de la Partida -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Duración de la Partida</label>
+                                    <input type="text" th:field="*{duracionPartida}" class="form-control" 
+                                        th:classappend="${#fields.hasErrors('duracionPartida')} ? 'is-invalid' : ''"
+                                        placeholder="Ej: 45-60 min">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('duracionPartida')}" th:errors="*{duracionPartida}"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Campo Mínimo Jugadores -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Mínimo Jugadores</label>
+                                    <input type="number" th:field="*{minJugadores}" class="form-control" 
+                                           th:classappend="${#fields.hasErrors('minJugadores')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('minJugadores')}" th:errors="*{minJugadores}"></div>
+                                </div>
+                                <!-- Campo Máximo Jugadores -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Máximo Jugadores</label>
+                                    <input type="number" th:field="*{maxJugadores}" class="form-control" 
+                                           th:classappend="${#fields.hasErrors('maxJugadores')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('maxJugadores')}" th:errors="*{maxJugadores}"></div>
+                                </div>
+                            </div>
+
+                            <!-- Categorías -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Categorías (Puedes seleccionar varias)</label>
+                                <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                                    <div class="form-check" th:each="cat : ${todasCategorias}">
+                                        <input class="form-check-input" type="checkbox" 
+                                            th:field="*{categorias}" 
+                                            th:value="${cat.id}" 
+                                            th:id="'cat-' + ${cat.id}">
+                                        <label class="form-check-label" th:for="'cat-' + ${cat.id}" th:text="${cat.nombre}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea th:field="*{descripcion}" class="form-control" rows="4" 
+                                          th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''"></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+                            </div>
+
+                            <!-- Checkbox para marcar como destacado -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="destacado" th:field="*{destacado}">
+                                <label class="form-check-label fw-bold" for="destacado">Marcar como Producto Destacado</label>
+                            </div>
+
+                            <!-- Sección para ver y gestionar imágenes existentes (Solo se muestra en Edición) -->
+                            <div class="mb-4" th:if="${producto.id != null and !#lists.isEmpty(producto.imagenes)}">
+                                <label class="form-label fw-bold">Imágenes actuales (Selecciona cuál es la Principal)</label>
+                                <div class="row g-2">
+                                    <div class="col-md-3 text-center" th:each="img : ${producto.imagenes}">
+                                        <div class="card p-2 border">
+                                            <img th:src="@{${img.url}}" class="img-fluid mb-2" style="height: 80px; object-fit: contain;" alt="Imagen producto">
+                                            <!-- Radio button para marcar la imagen principal -->
+                                            <div class="form-check d-flex justify-content-center mb-1">
+                                                <input class="form-check-input" type="radio" name="imagenPrincipalId" th:value="${img.id}" th:checked="${img.esPrincipal}">
+                                                <label class="form-check-label ms-1 small">Principal</label>
+                                            </div>
+                                            <!-- Checkbox para marcar la imagen para eliminación -->
+                                            <div class="form-check d-flex justify-content-center">
+                                                <input class="form-check-input border-danger" type="checkbox" name="idsImagenesAEliminar" th:value="${img.id}" th:id="'del-' + ${img.id}">
+                                                <label class="form-check-label ms-1 small text-danger" th:for="'del-' + ${img.id}">Eliminar</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selector de múltiples imágenes -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold" th:text="${producto.id == null} ? 'Imágenes para el Carrusel' : 'Añadir más imágenes al Carrusel'">Imágenes</label>
+                                
+                                <input type="file" name="files" id="inputImagenes" class="form-control" multiple accept="image/*">
+                                
+                                <div class="form-text" th:text="${producto.id == null} ? 'La primera imagen seleccionada será la principal automáticamente.' : 'Si seleccionas nuevas imágenes, se añadirán a las que ya tenía el producto.'">Ayuda de archivos</div>
+
+                                <!-- CONTENEDOR PARA LAS MINIATURAS NUEVAS -->
+                                <div id="preview-container" class="d-flex flex-wrap gap-2 mt-3"></div>
+                            </div>
+
+                            <!-- Sección de Gestión de Vídeos -->
+                            <div class="card mb-4 shadow-sm border-0">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0 text-secondary">🎥 Vídeos y Reseñas de YouTube (Máximo 2)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Vídeo 1 -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Vídeo 1 (URL o ID de YouTube)</label>
+                                            <input type="text" class="form-control" th:field="*{videoUrl1}" placeholder="Ej: dQw4w9WgXcQ o https://youtu.be/...">
+                                            <label class="form-label mt-2 small text-muted">Título del Vídeo 1</label>
+                                            <input type="text" class="form-control form-control-sm" th:field="*{videoTitulo1}" placeholder="Ej: Reseña Oficial">
+                                        </div>
+                                        
+                                        <!-- Vídeo 2 -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Vídeo 2 (URL o ID de YouTube)</label>
+                                            <input type="text" class="form-control" th:field="*{videoUrl2}" placeholder="Ej: dQw4w9WgXcQ o https://youtu.be/...">
+                                            <label class="form-label mt-2 small text-muted">Título del Vídeo 2</label>
+                                            <input type="text" class="form-control form-control-sm" th:field="*{videoTitulo2}" placeholder="Ej: Cómo se juega en 5 minutos">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                            </div>
+
+                            <!-- Campo oculto para conservar la fecha de creación al editar -->
+                            <input type="hidden" th:field="*{fechaCreacion}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ENLAZAMOS EL FICHERO JS EXTERNO AQUÍ -->
+        <script th:src="@{/js/form-producto.js}"></script>
+    </main>
+</body>
+</html>

@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: guaridaludica
+
+server:
+  servlet:
+    context-path:
+
+tienda:
+  nombre: "🎲 La Guarida Lúdica"
+  moneda: "EUR"
+  simbolo-moneda: "€"
+  impuesto-porcentaje: "21"
+  texto-impuesto: "IVA incluido"
+  dias-producto-nuevo: 7
+  marcar-ultimas-unidades: 5
+  cabecera-inicio: Catálogo de Juegos Modernos
+  mostrar-novedades-home: true
+  mostrar-destacados-home: true
+
+contacto:
+  email: "soporte@guaridaludica.com"
+  telefono: "+34 910 000 000"
+  direccion: "Calle Óbolo, Carabanchel, Madrid"
+  redes:
+    instagram: "https://instagram.com"
+    twitter: "https://twitter.com"
+
+
+shop:
+  pagination:
+    public-size: 6
+    admin-size: 10
+  order:
+    pending-timeout-hours: 24 # Horas máximas antes de cancelar un pedido pendiente de pago
+    cleanup-fixed-rate-ms: 3600000 # Frecuencia de ejecución en milisegundos (ej. 3600000 = 1 hora)
+    
+cloudinary:
+  cloud-name: jze9fuy3
+  api-key: 821325958354588
+  api-secret: hNSUCt_bnUqvne4huON5uuRmNI8

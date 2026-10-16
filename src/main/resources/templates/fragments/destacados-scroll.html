@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Fragmento del scroll horizontal de destacados -->
+    <div th:fragment="scroll-destacados" class="mb-4" th:if="${productosDestacados != null and !productosDestacados.isEmpty()}">
+
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="fw-bold text-dark m-0">
+                <i class="fa-solid fa-star text-warning me-2"></i>Destacados
+            </h5>
+            
+            <!-- Botón desplegable independiente -->
+            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 py-1 px-2" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#collapseDestacados" 
+                    aria-expanded="true" 
+                    aria-controls="collapseDestacados"
+                    title="Mostrar / Ocultar destacados">
+                <span class="small">Ocultar</span>
+                <i class="bi bi-chevron-up"></i>
+            </button>
+        </div>
+        
+        <!-- Contenedor colapsable con su ID único -->
+        <div class="collapse show" id="collapseDestacados">
+            <div class="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2" style="scrollbar-width: thin;">
+                <div th:each="producto : ${productosDestacados}" style="flex: 0 0 220px; min-width: 220px;">
+                    <div class="card h-100 shadow-sm card-producto p-2 position-relative">
+                        <div class="ribbon-agotado" th:if="${producto.stock == 0}">AGOTADO</div>
+                        <div class="ribbon-nuevo" th:if="${producto.esNuevo(diasNuevo)}">NUEVO</div>
+
+                        <div class="card-img-wrapper p-2 text-center" style="height: 150px;">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="d-block h-100">
+                                <img th:src="@{${producto.imagenPrincipalUrl}}" 
+                                    class="w-100 h-100 rounded object-fit-contain" 
+                                    th:alt="${producto.nombre}">
+                            </a>
+                        </div>
+
+                        <div class="card-body d-flex flex-column pt-2">
+                            <h6 class="card-title mb-2 text-truncate">
+                                <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-titulo text-dark text-decoration-none" th:text="${producto.nombre}">Nombre</a>
+                            </h6>
+
+                            <div class="mb-2 d-flex flex-column" style="min-height: 50px;">
+                                <div style="height: 18px;">
+                                    <span class="text-muted text-decoration-line-through small" 
+                                        th:if="${producto.precioAnterior != null}" 
+                                        th:text="${producto.precioAnterior} + ' ' + ${appConfig.simboloMoneda}">85.00 €</span>
+                                </div>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="fs-5 fw-bold text-success lh-1" th:text="${producto.precio} + ' ' + ${appConfig.simboloMoneda}">Precio</span>
+                                    <span class="text-muted" style="font-size: 0.65rem;" th:text="${appConfig.textoImpuesto}">IVA incluido</span>
+                                </div>
+                            </div>
+
+                            <!--<div class="mt-auto pt-2">
+                                <div class="d-flex gap-2 align-items-center">
+                                    <form th:action="@{/carrito/agregar}" method="post" class="m-0 flex-grow-1">
+                                        <input type="hidden" name="id" th:value="${producto.id}" />
+                                        <button type="submit" class="btn btn-outline-success w-100 py-1.5 btn-sm" th:disabled="${producto.stock == 0}">
+                                            <i class="bi bi-cart-plus"></i> <span class="ms-1">Añadir</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 text-muted">
+    </div>
+</body>
+</html>

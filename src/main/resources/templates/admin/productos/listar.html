@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/admin-layout :: layout(~{::main})}">
+
+<body>
+    <main>
+        <div class="container my-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">📦 Gestión de Productos</h3>
+                <a th:href="@{/admin/productos/nuevo}" class="btn btn-success">
+                    <i class="fa-solid fa-plus me-1"></i> Nuevo Producto
+                </a>
+            </div>
+
+            <div th:replace="~{admin/fragments/filtros-productos :: barra-filtros-productos}"></div>
+
+            <div class="table-responsive bg-white p-3 rounded shadow-sm">
+                <table class="table table-hover table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Categorias</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Destacado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${elementos.content}">
+                            <td th:text="${p.id}">1</td>
+                            <td>
+                                <img th:src="@{${p.imagenPrincipalUrl}}" alt="Miniatura"
+                                    style="width: 50px; height: 50px; object-fit: contain;">
+                            </td>            
+                            <td th:text="${p.nombre}">Catan</td>
+                            <td th:text="${#strings.abbreviate(p.descripcion, 60)}">Descripción del producto</td>
+                            <!-- Columna para mostrar categorías o el aviso de sin categoría -->
+                            <td>
+                                <!-- Si no tiene categorías, mostramos la advertencia -->
+                                <span th:if="${p.categorias == null or p.categorias.isEmpty()}"
+                                    class="badge bg-danger text-dark">
+                                    ⚠️ Sin categoría
+                                </span>
+
+                                <!-- Si tiene categorías, listamos sus nombres -->
+                                <div th:if="${p.categorias != null and !p.categorias.isEmpty()}">
+                                    <span th:each="cat, iterStat : ${p.categorias}"
+                                        class="badge bg-secondary me-1"
+                                        th:text="${cat.nombre} + (!iterStat.last ? ', ' : '')">
+                                    </span>
+                                </div>
+                            </td>
+                            <td th:text="${p.precio} + '' + ${appConfig.simboloMoneda}">39.95 €</td>
+                            <!-- Columna de Stock con aviso visual si está agotado -->
+                            <td>
+                                <span th:if="${p.stock <= 0}" class="badge bg-danger">
+                                    Agotado
+                                </span>
+                                <span th:unless="${p.stock <= 0}" th:text="${p.stock}">10</span>
+                            </td>
+                            <!-- Columna de Destacado con un icono o texto -->
+                            <td>
+                                <span th:if="${producto?.destacado}" class="badge bg-warning text-dark"><i class="fa-solid fa-star"></i> Destacado</span>
+                                <span th:unless="${producto?.destacado}" class="text-muted">-</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}"
+                                    class="btn btn-warning btn-sm"><i class="fa-solid fa-pen"></i></a>
+                                <a th:href="@{/admin/productos/eliminar/{id}(id=${p.id})}" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro de eliminar este producto?');"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- RECOMENDADO: Meter el fragmento dentro del contenedor o justo debajo -->
+                <div th:replace="~{fragments/paginacion-admin :: pagination-admin(@{/admin/productos})}"></div>
+            </div>
+        </div>
+</body>
+
+</html>

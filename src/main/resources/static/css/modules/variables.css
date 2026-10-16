@@ -1,0 +1,23 @@
+/* ===== VARIABLES Y ESTILOS GENERALES ===== */
+:root { 
+    --primary-color: #2d3436; 
+    --accent-color: #00b894; 
+}
+
+/* Asegurar que el layout ocupa toda la pantalla en altura */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #e7ebf0; /* Un gris suavecito y elegante */
+}
+
+/* El contenido principal crece para empujar el footer hacia abajo */
+main, .flex-shrink-0 {
+    flex: 1 0 auto;
+}

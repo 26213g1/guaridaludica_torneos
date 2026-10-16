@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout-simple :: layout(~{::main})}">
+<body>
+    <main>
+        <div class="container my-4">
+            
+            <!-- Enlace de retorno arriba, discreto y elegante -->
+            <div class="mb-3">
+                <a th:href="@{/}" class="text-decoration-none text-muted fw-semibold small">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Seguir comprando
+                </a>
+            </div>
+
+            <h2 class="mb-4 fw-bold">Tu Carrito de Compras</h2>
+            
+            <!-- Si hay items -->
+            <div th:if="${not #lists.isEmpty(items)}" class="row">
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table align-middle bg-white shadow-sm rounded border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 ps-3">Juego</th>
+                                    <th class="py-3">Precio</th>
+                                    <th class="py-3">Cantidad</th>
+                                    <th class="py-3">Subtotal</th>
+                                    <th class="py-3 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${items}">
+                                    <td class="ps-3 fw-semibold text-dark" th:text="${item.nombre}">Juego</td>
+                                    <td th:text="${#numbers.formatDecimal(item.precio, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</td>
+                                    
+                                    <!-- Cantidad interactiva con formulario -->
+                                    <td>
+                                        <form th:action="@{/carrito/actualizar}" method="post" style="display:inline;">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                            <input type="hidden" name="id" th:value="${item.productoId}">
+                                            <input type="number" name="cantidad" th:value="${item.cantidad}" min="1" 
+                                                   class="form-control form-control-sm" style="width: 70px; display: inline-block;"
+                                                   onchange="this.form.submit()">
+                                        </form>
+                                    </td>
+                                    
+                                    <td class="fw-bold text-success" th:text="${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</td>
+                                    
+                                    <td class="text-center">
+                                        <!-- Botón para eliminar el item del carrito -->
+                                        <form th:action="@{/carrito/eliminar}" method="post" style="display:inline;">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                            <input type="hidden" name="id" th:value="${item.productoId}">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm border-0" title="Eliminar producto">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Columna de Resumen -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 p-3">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3 fw-bold">Resumen</h4>
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="text-muted">Total:</span>
+                                <span class="fs-4 fw-bold text-success" th:text="${#numbers.formatDecimal(total, 1, 2)} + ' ' + ${appConfig.simboloMoneda}">0 €</span>
+                            </div>
+                            <!-- Botón de acción principal (Verde) -->
+                            <a th:href="@{/pedido/checkout}" class="btn btn-success w-100 py-2 fw-semibold">
+                                Tramitar Pedido <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Si está vacío -->
+            <div th:if="${#lists.isEmpty(items)}" class="text-center py-5 border rounded bg-white shadow-sm">
+                <i class="bi bi-cart-x fs-1 text-muted"></i>
+                <p class="fs-4 text-muted mt-3">Tu carrito está vacío.</p>
+                <a th:href="@{/}" class="btn btn-outline-dark mt-2 btn-sm px-4">Volver al Catálogo</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
