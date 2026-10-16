@@ -42,7 +42,8 @@ public class JugadorService {
     public List<Jugador> obtenerRankingPublico() {
         // Ejemplo si en el futuro añades puntuación: return
         // jugadorRepository.findAllByOrderByPuntosDesc();
-        return jugadorRepository.findAll();
+        //jugadorRepository.findByRolNot("ROLE_ADMIN");
+        return jugadorRepository.findByRolNot("ROLE_ADMIN");
     }
 
     public void eliminarJugador(Long id) {
