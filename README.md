@@ -1,6 +1,6 @@
 # 🎲 La Guarida Lúdica - Gestión de Torneos y Juegos de Mesa
 
-> **Nota sobre el proyecto:** Esta aplicación es un módulo independiente dedicado exclusivamente a la gestión de torneos, concebido como parte del ecosistema de la tienda principal que ya se encuentra en funcionamiento en [https://guaridaludica.onrender.com/](https://guaridaludica.onrender.com/). En un futuro, este sistema de torneos se integrará directamente como una sección nativa dentro de la propia tienda.
+> **Nota sobre el proyecto:** Esta aplicación es un módulo independiente dedicado exclusivamente a la gestión de torneos, concebido como parte del ecosistema de la tienda principal que ya se encuentra en funcionamiento en [https://guaridaludica.onrender.com/](https://guaridaludica.onrender.com/). Actualmente, este sistema de torneos se encuentra **desplegado y operativo en Render** en [https://guaridaludica-torneos.onrender.com/](https://guaridaludica-torneos.onrender.com/) (próximamente integrado de forma nativa dentro de la propia tienda).
 
 Aplicación web desarrollada en **Java y Spring Boot** diseñada para la gestión integral de un establecimiento o comunidad de juegos de mesa. Permite administrar catálogos de juegos, torneos, aforos, material gráfico en la nube y un sistema completo de autenticación y control de accesos basado en roles.
 
@@ -13,7 +13,7 @@ Aplicación web desarrollada en **Java y Spring Boot** diseñada para la gestió
 - **Base de Datos:** PostgreSQL (compatible con entorno local y Supabase).
 - **Almacenamiento en la Nube:** Cloudinary (gestión de imágenes y carteles de juegos y torneos).
 - **Seguridad:** BCrypt Password Encoder para el cifrado de credenciales.
-- **Gestión de Dependencias y Construcción:** Maven.
+- **Gestión de Dependencias y Construcción:** Maven, Docker (OpenJDK Alpine / Eclipse Temurin).
 
 ---
 
@@ -43,17 +43,17 @@ La aplicación implementa **Spring Security** para garantizar un control robusto
 
 ## ⚙️ Configuración y Despliegue
 
-1. ### Requisitos previos
+### 1. Requisitos previos
 - Java 21 instalado.
 - Maven.
 - Instancia de PostgreSQL (Local o Supabase).
 - Cuenta en Cloudinary (para las credenciales de subida de imágenes).
 
-2. **Configuración de propiedades (`application-dev.properties`)**  
-   Configura tus credenciales de base de datos, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application-dev.properties`:
+### 2. Configuración de propiedades (`application-dev.properties` para entorno local)
+Configura tus credenciales de base de datos local, el comportamiento de Hibernate y Cloudinary en el archivo `src/main/resources/application-dev.properties`:
 
 ```properties
-# Configuración de Base de Datos (PostgreSQL / Supabase)
+# Configuración de Base de Datos Local (PostgreSQL)
 spring.datasource.url=jdbc:postgresql://localhost:5432/tu_base_de_datos
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_contraseña
