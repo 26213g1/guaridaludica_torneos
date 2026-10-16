@@ -108,4 +108,26 @@ public class JugadorService {
 
         return sb.toString();
     }
+
+    // Actualizar datos básicos y rol desde el panel de admin
+    public void actualizarJugadorAdmin(Long id, String nombre, String apodo, String email, String rol) {
+        Jugador jugador = jugadorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Jugador no encontrado"));
+
+        jugador.setNombre(nombre);
+        jugador.setApodo(apodo);
+        jugador.setEmail(email);
+        jugador.setRol(rol); // Ej: "ROLE_ADMIN" o "ROLE_USER"
+
+        jugadorRepository.save(jugador);
+    }
+
+    // Opcional: Resetear contraseña de emergencia por el admin
+    public void resetearPassword(Long id, String nuevaPassword) {
+        Jugador jugador = jugadorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Jugador no encontrado"));
+
+        jugador.setPassword(passwordEncoder.encode(nuevaPassword));
+        jugadorRepository.save(jugador);
+    }
 }

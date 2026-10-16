@@ -9,35 +9,44 @@
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Apodo / Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th class="text-end">Acciones</th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>Apodo / Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th class="text-end">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each="j : ${jugadores}">
-                    <td th:text="${j.id}">1</td>
-                    <td class="fw-bold" th:text="${j.nombre}">Nombre</td>
-                    <td th:text="${j.email}">correo@example.com</td>
-                    <td>
-                        <span class="badge" 
-                              th:classappend="${j.rol == 'ROLE_ADMIN'} ? 'bg-danger' : 'bg-secondary'" 
+            <tr th:each="j : ${jugadores}">
+                <td th:text="${j.id}">1</td>
+                <td class="fw-bold" th:text="${j.nombre}">Nombre</td>
+                <td th:text="${j.email}">correo@example.com</td>
+                <td>
+                        <span class="badge"
+                              th:classappend="${j.rol == 'ROLE_ADMIN'} ? 'bg-danger' : 'bg-secondary'"
                               th:text="${j.rol}">ROLE_USER</span>
-                    </td>
-                    <td class="text-end">
-                        <a th:href="@{/jugadores/eliminar/{id}(id=${j.id})}" 
-                           class="btn btn-sm btn-outline-danger"
-                           onclick="return confirm('¿Estás seguro de eliminar este jugador?');">
-                            <i class="bi bi-trash-fill"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(jugadores)}">
-                    <td colspan="5" class="text-center text-muted py-4">No hay jugadores registrados en el sistema.</td>
-                </tr>
+                </td>
+                <td class="text-end">
+                    <!-- Botón de Editar -->
+                    <a th:href="@{/admin/jugadores/editar/{id}(id=${j.id})}"
+                       class="btn btn-sm btn-outline-primary me-1"
+                       title="Editar">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+
+                    <!-- Botón de Eliminar -->
+                    <a th:href="@{/jugadores/eliminar/{id}(id=${j.id})}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('¿Estás seguro de eliminar este jugador?');"
+                       title="Eliminar">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(jugadores)}">
+                <td colspan="5" class="text-center text-muted py-4">No hay jugadores registrados en el sistema.</td>
+            </tr>
             </tbody>
         </table>
     </div>
