@@ -14,43 +14,38 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        // 1. Rutas públicas que cualquiera puede ver (sin login)
-                        .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/**",
-                                "/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.authorizeHttpRequests(auth -> auth
+                                // 1. PRIMERO: Las restricciones de Administrador (más específicas)
+                                .requestMatchers("/juegos/nuevo", "/juegos/guardar", "/juegos/editar/**",
+                                                "/juegos/eliminar/**")
+                                .hasRole("ADMIN").requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/jugadores/nuevo", "/jugadores/guardar", "/jugadores/eliminar/**")
+                                .hasRole("ADMIN")
 
-                        // 2. Rutas exclusivas para el rol ADMIN (Gestión de juegos y jugadores)
-                        .requestMatchers("/juegos/nuevo", "/juegos/guardar", "/juegos/editar/**", "/juegos/eliminar/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/jugadores/nuevo", "/jugadores/guardar", "/jugadores/eliminar/**").hasRole("ADMIN")
+                                // 2. SEGUNDO: Las rutas públicas (incluyendo el listado general de jugadores)
+                                .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/**", "/jugadores",
+                                                "/jugadores/**", "/login", "/registro", "/css/**", "/js/**",
+                                                "/images/**")
+                                .permitAll()
 
-                        // 3. Cualquier otra petición requiere al menos estar autenticado
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/juegos?logout")
-                        .permitAll()
-                );
+                                // 3. ÚLTIMO: Cualquier otra cosa requiere estar autenticado
+                                .anyRequest().authenticated())
+                                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
+                                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/logout")
+                                                .permitAll());
 
-        return http.securityContext(context -> context.requireExplicitSave(false)).build();
-    }
+                return http.securityContext(context -> context.requireExplicitSave(false)).build();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+                return authConfig.getAuthenticationManager();
+        }
 }
