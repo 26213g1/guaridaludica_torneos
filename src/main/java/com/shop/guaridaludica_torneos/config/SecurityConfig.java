@@ -23,19 +23,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas públicas que cualquiera puede ver
+                        // 1. Rutas públicas que cualquiera puede ver (sin login)
                         .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/**",
-                                "/jugadores", "/jugadores/**",
                                 "/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
 
-                        // Rutas exclusivas para el rol ADMIN (gestión de juegos)
+                        // 2. Rutas exclusivas para el rol ADMIN (Gestión de juegos y jugadores)
                         .requestMatchers("/juegos/nuevo", "/juegos/guardar", "/juegos/editar/**", "/juegos/eliminar/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/jugadores/nuevo", "/jugadores/guardar", "/jugadores/eliminar/**").hasRole("ADMIN")
 
-                        // Cualquier otra petición requiere estar autenticado
+                        // 3. Cualquier otra petición requiere al menos estar autenticado
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // <--- Aquí le decimos qué URL usar para mostrar nuestra plantilla
+                        .loginPage("/login")
                         .defaultSuccessUrl("/juegos", true)
                         .permitAll()
                 )
