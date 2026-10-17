@@ -32,7 +32,7 @@ public class SecurityConfig {
                                 // 2. SEGUNDO: Las rutas públicas (incluyendo el listado general de jugadores)
                                 .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/**", "/jugadores",
                                                 "/jugadores/**", "/login", "/registro", "/css/**", "/js/**",
-                                                "/images/**")
+                                                "/images/**", "/api/health")
                                 .permitAll()
 
                                 // 3. ÚLTIMO: Cualquier otra cosa requiere estar autenticado
