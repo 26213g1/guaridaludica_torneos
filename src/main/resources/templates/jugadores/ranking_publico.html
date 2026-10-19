@@ -8,6 +8,17 @@
         </div>
     </div>
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🏆 Ranking de Jugadores</h2>
+        
+        <!-- Si está logueado, le mostramos un acceso directo a su perfil -->
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/jugadores/perfil}" class="btn btn-outline-primary">
+                <i class="bi bi-person-gear"></i> Mi Perfil y Datos
+            </a>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped align-middle">
             <thead class="table-dark">

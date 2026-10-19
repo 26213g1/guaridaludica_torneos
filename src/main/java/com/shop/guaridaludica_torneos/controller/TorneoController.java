@@ -3,6 +3,7 @@ package com.shop.guaridaludica_torneos.controller;
 import com.shop.guaridaludica_torneos.model.Torneo;
 import com.shop.guaridaludica_torneos.service.CloudinaryService;
 import com.shop.guaridaludica_torneos.service.JuegoService;
+import com.shop.guaridaludica_torneos.service.ParticipacionService;
 import com.shop.guaridaludica_torneos.service.TorneoService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -14,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,29 +30,49 @@ public class TorneoController {
     private final TorneoService torneoService;
     private final JuegoService juegoService;
     private final CloudinaryService cloudinaryService;
+    private final ParticipacionService participacionService;
 
     public TorneoController(TorneoService torneoService, JuegoService juegoService,
-            CloudinaryService cloudinaryService) {
+            CloudinaryService cloudinaryService, ParticipacionService participacionService) {
         this.torneoService = torneoService;
         this.juegoService = juegoService;
         this.cloudinaryService = cloudinaryService;
+        this.participacionService = participacionService;
     }
 
     // Listar todos los torneos (Vista HTML)
     @GetMapping
     public String listarTorneos(Model model) {
-        model.addAttribute("torneos", torneoService.listarTorneos());
+        List<Torneo> torneos = torneoService.listarTorneos();
+        
+        // Creamos un mapa rápido para asociar el ID del torneo con sus plazas libres
+        Map<Long, Integer> plazasDisponiblesMap = new HashMap<>();
+        for (Torneo t : torneos) {
+            int inscritos = participacionService.listarPorTorneo(t.getId()).size();
+            int libres = t.getMaxParticipantes() - inscritos;
+            plazasDisponiblesMap.put(t.getId(), libres > 0 ? libres : 0);
+        }
+
+        model.addAttribute("torneos", torneos);
+        model.addAttribute("plazasMap", plazasDisponiblesMap);
         model.addAttribute("template", "torneos/lista"); // <-- Le dice al layout qué vista incrustar
         return "layout"; // <-- Nombre de tu archivo layout.html maestro
     }
 
-    // Ver detalle de un torneo (Público)
+    // Ver detalle de un torneo (Público) con cálculo de plazas libres
     @GetMapping("/{id}")
     public String verDetalleTorneo(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Torneo torneo = torneoService.obtenerTorneoPorId(id)
                     .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+
+            // 4. Calcular inscritos y plazas disponibles
+            int numInscritos = participacionService.listarPorTorneo(id).size();
+            int plazasDisponibles = torneo.getMaxParticipantes() - numInscritos;
+
             model.addAttribute("torneo", torneo);
+            model.addAttribute("numInscritos", numInscritos);
+            model.addAttribute("plazasDisponibles", plazasDisponibles > 0 ? plazasDisponibles : 0);
             model.addAttribute("template", "torneos/detalle");
             return "layout";
         } catch (Exception e) {
@@ -56,6 +80,23 @@ public class TorneoController {
             return "redirect:/torneos";
         }
     }
+
+    // Ver detalle de un torneo (Público)
+    // @GetMapping("/{id}")
+    // public String verDetalleTorneo(@PathVariable Long id, Model model,
+    // RedirectAttributes redirectAttributes) {
+    // try {
+    // Torneo torneo = torneoService.obtenerTorneoPorId(id)
+    // .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+    // model.addAttribute("torneo", torneo);
+    // model.addAttribute("template", "torneos/detalle");
+    // return "layout";
+    // } catch (Exception e) {
+    // redirectAttributes.addFlashAttribute("error", "El torneo seleccionado no
+    // existe.");
+    // return "redirect:/torneos";
+    // }
+    // }
 
     // Mostrar formulario para crear un nuevo torneo
     @GetMapping("/nuevo")
@@ -86,12 +127,12 @@ public class TorneoController {
     // Guardar el torneo (procesar formulario con imagen)
     @PostMapping
     public String guardarTorneo(
-        @Valid @ModelAttribute Torneo torneo, 
-        BindingResult bindingResult,
-        @RequestParam(value = "fileImagen", required = false) MultipartFile imagen, 
-        Model model,
-        HttpSession session, 
-        RedirectAttributes redirectAttributes) {
+            @Valid @ModelAttribute Torneo torneo,
+            BindingResult bindingResult,
+            @RequestParam(value = "fileImagen", required = false) MultipartFile imagen,
+            Model model,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         log.info("--> Intentando guardar un torneo. ID recibido: {}", torneo.getId());
 
@@ -121,7 +162,8 @@ public class TorneoController {
             String mensaje = esNuevo ? "¡Torneo creado con éxito!" : "¡Torneo actualizado con éxito!";
             redirectAttributes.addFlashAttribute("mensaje", mensaje);
         } catch (IOException e) {
-            //redirectAttributes.addFlashAttribute("error", "Error al subir la imagen: " + e.getMessage());
+            // redirectAttributes.addFlashAttribute("error", "Error al subir la imagen: " +
+            // e.getMessage());
             log.error("--> ERROR CRÍTICO al subir la imagen o guardar: {}", e.getMessage(), e);
             model.addAttribute("error", "Error al subir la imagen: " + e.getMessage());
             model.addAttribute("juegos", juegoService.listarJuegos());

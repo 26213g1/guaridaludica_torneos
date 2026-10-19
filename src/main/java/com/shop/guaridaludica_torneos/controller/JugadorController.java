@@ -1,8 +1,14 @@
 package com.shop.guaridaludica_torneos.controller;
 
 import com.shop.guaridaludica_torneos.model.Jugador;
+import com.shop.guaridaludica_torneos.model.Participacion;
 import com.shop.guaridaludica_torneos.service.JugadorService;
+import com.shop.guaridaludica_torneos.service.ParticipacionService;
+
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class JugadorController {
 
     private final JugadorService jugadorService;
+    private final ParticipacionService participacionService;
 
-    public JugadorController(JugadorService jugadorService) {
+    public JugadorController(JugadorService jugadorService, ParticipacionService participacionService) {
         this.jugadorService = jugadorService;
+        this.participacionService = participacionService;
     }
 
     // Ruta inteligente central: Adapta la vista según el rol o estado de
@@ -34,22 +42,40 @@ public class JugadorController {
             return "layout"; // O el nombre de tu plantilla maestra general
         }
 
-        // CASO B: Usuario logueado (ROLE_USER) -> Su perfil personal
+       // CASO B (Opcional): Si hay un usuario logueado normal, pasamos sus datos por si 
+        // queremos saludarle en la cabecera del ranking o mostrarle un acceso directo.
         if (authentication != null && authentication.isAuthenticated()
                 && !authentication.getName().equals("anonymousUser")) {
-
             String emailActual = authentication.getName();
-            Jugador jugadorLogado = jugadorService.obtenerJugadorPorEmail(emailActual)
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-            model.addAttribute("jugador", jugadorLogado);
-            model.addAttribute("template", "jugadores/perfil");
-            return "layout";
+            jugadorService.obtenerJugadorPorEmail(emailActual).ifPresent(jugadorLogado -> {
+                model.addAttribute("jugador", jugadorLogado);
+            });
         }
 
-        // CASO C: Visitante anónimo -> Ranking público
+        // CASO C: Tanto anónimos como usuarios logueados (ROLE_USER) ven el ranking público y el Top 3
         model.addAttribute("ranking", jugadorService.obtenerRankingPublico());
         model.addAttribute("template", "jugadores/ranking_publico");
+        return "layout";
+    }
+
+    // Ruta exclusiva para que el usuario logueado vea y edite sus propios datos
+    @GetMapping("/perfil")
+    public String verMiPerfil(Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated() 
+                || authentication.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        String emailActual = authentication.getName();
+        Jugador jugadorLogado = jugadorService.obtenerJugadorPorEmail(emailActual)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtenemos la lista de participaciones del jugador logueado
+        List<Participacion> participaciones = participacionService.listarPorJugador(jugadorLogado.getId());
+
+        model.addAttribute("jugadorlogado", jugadorLogado);
+        model.addAttribute("participaciones", participaciones); // 👈 La pasamos a la vista
+        model.addAttribute("template", "jugadores/perfil"); // Vista con el formulario de edición personal
         return "layout";
     }
 

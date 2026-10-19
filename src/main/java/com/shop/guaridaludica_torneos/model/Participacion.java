@@ -1,7 +1,8 @@
 package com.shop.guaridaludica_torneos.model;
 
 import jakarta.persistence.*;
-import java.time.OffsetDateTime;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "participaciones")
@@ -11,13 +12,15 @@ public class Participacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    // Relación con Torneo
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "torneo_id", nullable = false)
     private Torneo torneo;
 
+    // Relación con Jugador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;
@@ -30,6 +33,9 @@ public class Participacion {
 
     @Column(name = "posicion")
     private Integer posicion;
+
+    @Column(name = "estado_inscripcion")
+    private String estadoInscripcion = "INSCRITO"; // Ej: INSCRITO, CONFIRMADO, CANCELADO
 
     // Constructores
     public Participacion() {}
@@ -48,11 +54,11 @@ public class Participacion {
         this.id = id;
     }
 
-    public OffsetDateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -96,6 +102,14 @@ public class Participacion {
         this.posicion = posicion;
     }
 
+    public String getEstadoInscripcion() {
+        return estadoInscripcion;
+    }
+
+    public void setEstadoInscripcion(String estadoInscripcion) {
+        this.estadoInscripcion = estadoInscripcion;
+    }
+
     @Override
     public String toString() {
         return "Participacion{" +
@@ -106,6 +120,7 @@ public class Participacion {
                 ", puntuacion=" + puntuacion +
                 ", esGanador=" + esGanador +
                 ", posicion=" + posicion +
+                ", estadoInscripcion='" + estadoInscripcion + '\'' +
                 '}';
     }
 }

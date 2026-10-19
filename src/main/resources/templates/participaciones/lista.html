@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">Listado de Participaciones</h3>
+                    <p class="text-muted mb-0">
+                        <span th:if="${esAdmin}">Vista de Administrador: Todas las participaciones del sistema.</span>
+                        <span th:unless="${esAdmin}">Tus inscripciones y resultados en los torneos.</span>
+                    </p>
+                </div>
+                <a th:href="@{/torneos}" class="btn btn-outline-secondary">
+                    <i class="bi bi-trophy me-1"></i> Ver Torneos Disponibles
+                </a>
+            </div>
+
+            <!-- Alerta si no hay participaciones -->
+            <div th:if="${#lists.isEmpty(participaciones)}" class="alert alert-info text-center py-4">
+                <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
+                No hay participaciones registradas actualmente.
+            </div>
+
+            <!-- Tabla de participaciones -->
+            <div class="table-responsive" th:unless="${#lists.isEmpty(participaciones)}">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4">Torneo</th>
+                            <th th:if="${esAdmin}">Jugador</th>
+                            <th class="text-center">Puntuación</th>
+                            <th class="text-center">Posición</th>
+                            <th class="text-center">Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${participaciones}">
+                            <td class="ps-4 fw-semibold text-dark" th:text="${p.torneo != null ? p.torneo.nombre : 'Torneo desconocido'}">Torneo</td>
+                            <td th:if="${esAdmin}" th:text="${p.jugador != null ? p.jugador.apodo : 'Jugador desconocido'}">Jugador</td>
+                            <td class="text-center" th:text="${p.puntuacion != null ? p.puntuacion : 'Pendiente'}">Puntuación</td>
+                            <td class="text-center">
+                                <span th:text="${p.posicion != null ? p.posicion : '-'}">-</span>
+                            </td>
+                            <td class="text-center">
+                                <span th:if="${p.esGanador}" class="badge bg-success">🏆 Ganador</span>
+                                <span th:unless="${p.esGanador}" class="text-muted">-</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

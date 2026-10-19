@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <body>
@@ -24,6 +23,7 @@
                         <th>Nombre del Torneo</th>
                         <th>Juego Asociado</th>
                         <th>Fecha</th>
+                        <th class="text-center">Plazas / Aforo</th> <!-- 👈 NUEVA COLUMNA -->
                         <th class="text-center">Estado</th>
                         <th class="text-end pe-4">Acciones</th>
                     </tr>
@@ -34,13 +34,13 @@
                         
                         <td class="text-center">
                             <img th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" 
-                                 th:src="${torneo.imagenUrl}" 
-                                 alt="Cartel" 
-                                 class="rounded shadow-sm" 
-                                 style="width: 45px; height: 45px; object-fit: cover;">
+                                   th:src="${torneo.imagenUrl}" 
+                                   alt="Cartel" 
+                                   class="rounded shadow-sm" 
+                                   style="width: 45px; height: 45px; object-fit: cover;">
                             <div th:unless="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}" 
-                                 class="bg-light rounded d-flex align-items-center justify-content-center text-muted mx-auto border" 
-                                 style="width: 45px; height: 45px;">
+                                   class="bg-light rounded d-flex align-items-center justify-content-center text-muted mx-auto border" 
+                                   style="width: 45px; height: 45px;">
                                 <i class="bi bi-trophy"></i>
                             </div>
                         </td>
@@ -49,9 +49,19 @@
                         <td th:text="${torneo.juego != null ? torneo.juego.nombre : 'Sin juego'}">Catan</td>
                         <td th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">2026-10-20</td>
 
+                        <!-- 👈 PINTAR PLAZAS LIBRES VS MÁXIMAS -->
                         <td class="text-center">
-                            <span class="badge bg-success" th:text="${torneo.estado}">ABIERTO</span>
+                            <span class="badge" 
+                                  th:classappend="${plazasMap[torneo.id] > 0} ? 'bg-success' : 'bg-danger'"
+                                  th:text="${plazasMap[torneo.id] > 0 ? plazasMap[torneo.id] + ' libres / ' + torneo.maxParticipantes : 'Completo'}">
+                                5 libres / 10
+                            </span>
                         </td>
+
+                        <td class="text-center">
+                            <span class="badge bg-secondary" th:text="${torneo.estado}">ABIERTO</span>
+                        </td>
+                        
                         <td class="text-end pe-4">
                             <!-- Botones de acción -->
                             <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-sm btn-outline-primary me-1" title="Ver detalle">
@@ -68,7 +78,7 @@
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(torneos)}">
-                        <td colspan="7" class="text-center py-4 text-muted">
+                        <td colspan="8" class="text-center py-4 text-muted">
                             <i class="bi bi-trophy fs-2 d-block mb-2"></i>
                             No hay torneos registrados todavía.
                         </td>

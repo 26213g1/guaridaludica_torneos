@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div th:fragment="content">
     <div class="container py-4">
@@ -46,13 +46,38 @@
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Detalles del Evento -->
+                    <!-- Columna Derecha: Detalles del Evento, Plazas y Acciones -->
                     <div class="col-md-4">
                         <div class="bg-light p-3 rounded shadow-sm">
                             <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle me-1"></i> Detalles del Evento</h6>
                             <p class="mb-2"><strong>Juego:</strong> <span th:text="${torneo.juego != null ? torneo.juego.nombre : 'Libre'}">Catan</span></p>
                             <p class="mb-2"><strong>Fecha y Hora:</strong> <span th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">24/10/2026 17:00</span></p>
                             <p class="mb-2"><strong>Máx. Participantes:</strong> <span th:text="${torneo.maxParticipantes}">8</span></p>
+                            <p class="mb-3"><strong>Inscritos actuales:</strong> <span th:text="${numInscritos}">0</span></p>
+
+                            <!-- Indicador visual de plazas libres -->
+                            <div class="alert p-2 text-center mb-3" th:classappend="${plazasDisponibles > 0} ? 'alert-success' : 'alert-danger'">
+                                <small class="fw-bold" th:if="${plazasDisponibles > 0}">
+                                    <i class="bi bi-people-fill"></i> ¡Quedan <span th:text="${plazasDisponibles}"></span> plazas libres!
+                                </small>
+                                <small class="fw-bold" th:unless="${plazasDisponibles > 0}">
+                                    <i class="bi bi-exclamation-triangle-fill"></i> Torneo Completo
+                                </small>
+                            </div>
+
+                            <!-- Botón de Inscripción (Para usuarios públicos/autenticados) -->
+                            <div class="d-grid mb-2" th:if="${torneo.estado == 'ABIERTO' and plazasDisponibles > 0}">
+                                <a th:href="@{/participaciones/inscribir/{id}(id=${torneo.id})}" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i> Inscribirme
+                                </a>
+                            </div>
+
+                            <!-- Botón de Gestión para Administradores -->
+                            <div class="d-grid" sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a th:href="@{/participaciones/torneo/{id}(id=${torneo.id})}" class="btn btn-warning text-dark">
+                                    <i class="bi bi-gear me-1"></i> Gestionar Puntuaciones
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

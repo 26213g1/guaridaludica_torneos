@@ -40,10 +40,8 @@ public class JugadorService {
     // Obtener ranking público (Por ahora devuelve la lista general; puedes
     // ordenarla por puntos/victorias más adelante)
     public List<Jugador> obtenerRankingPublico() {
-        // Ejemplo si en el futuro añades puntuación: return
-        // jugadorRepository.findAllByOrderByPuntosDesc();
-        //jugadorRepository.findByRolNot("ROLE_ADMIN");
-        return jugadorRepository.findByRolNot("ROLE_ADMIN");
+        // Excluye los administradores y los ordena por su ELO de forma descendente
+        return jugadorRepository.findByRolNotOrderByPuntosEloDesc("ROLE_ADMIN");
     }
 
     public void eliminarJugador(Long id) {

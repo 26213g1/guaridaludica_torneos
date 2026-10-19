@@ -23,7 +23,7 @@
                      th:src="${juego.imagenUrl}"
                      class="card-img-top img-fluid rounded"
                      alt="Imagen del juego"
-                     style="max-height: 350px; object-fit: cover;" />
+                     style="max-height: 350px; object-fit: contain; width: 100%;" />
 
                 <!-- Imagen por defecto si no tiene ninguna -->
                 <div th:if="${juego.imagenUrl == null or juego.imagenUrl.isEmpty()}"
