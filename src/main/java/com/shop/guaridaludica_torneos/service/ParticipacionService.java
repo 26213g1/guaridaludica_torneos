@@ -61,12 +61,17 @@ public class ParticipacionService {
         Torneo torneo = torneoRepository.findById(torneoId)
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
+        // VALIDACIÓN NUEVA: Si el torneo ya no está ABIERTO, no se permite la inscripción
+        if (!"ABIERTO".equalsIgnoreCase(torneo.getEstado())) {
+            throw new IllegalStateException("No te puedes inscribir. El torneo ya ha comenzado o ha finalizado.");
+        }
+
         Jugador jugador = jugadorRepository.findById(jugadorId)
                 .orElseThrow(() -> new RuntimeException("Jugador no encontrado"));
 
         boolean yaInscrito = participacionRepository.findByTorneoIdAndJugadorId(torneoId, jugadorId).isPresent();
         if (yaInscrito) {
-            throw new IllegalStateException("El jugador ya está inscrito en este torneo.");
+            throw new IllegalStateException("El jugador " + jugador.getApodo() + "ya está inscrito en este torneo.");
         }
 
         long inscritosActuales = participacionRepository.countByTorneoId(torneoId);

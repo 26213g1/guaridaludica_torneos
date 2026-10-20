@@ -6,11 +6,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "torneos")
 public class Torneo {
 
@@ -55,10 +61,6 @@ public class Torneo {
     @Column(name = "imagen_url")
     private String imagenUrl;
 
-    // Constructor vacío obligatorio para JPA
-    public Torneo() {
-    }
-
     public Torneo(String nombre, String descripcion, LocalDateTime fecha, Juego juego, Integer maxParticipantes, String estado, Integer duracionRealMinutos, String comentarios, String imagenUrl) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -72,37 +74,6 @@ public class Torneo {
         this.comentarios = comentarios;
         this.imagenUrl = imagenUrl;
     }
-
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-
-    public LocalDateTime getFecha() { return fecha; }
-    public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
-
-    public Juego getJuego() { return juego; }
-    public void setJuego(Juego juego) { this.juego = juego; }
-
-    public Integer getMaxParticipantes() { return maxParticipantes; }
-    public void setMaxParticipantes(Integer maxParticipantes) { this.maxParticipantes = maxParticipantes; }
-
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-
-    public Integer getDuracionRealMinutos() { return duracionRealMinutos; }
-    public void setDuracionRealMinutos(Integer duracionRealMinutos) { this.duracionRealMinutos = duracionRealMinutos; }
-
-    public String getComentarios() { return comentarios; }
-    public void setComentarios(String comentarios) { this.comentarios = comentarios; }
-
-    public String getImagenUrl() { return imagenUrl; }
-    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
 
     // toString() devuelve el texto con el que se imprime el objeto.
     // Sin sobrescribirlo, println() mostraría algo ilegible como com.shop.guaridaludica_torneos.model.Juego.

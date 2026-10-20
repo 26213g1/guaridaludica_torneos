@@ -5,8 +5,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "juegos")
 public class Juego {
 
@@ -39,10 +45,6 @@ public class Juego {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    // Constructor vacío obligatorio para JPA
-    public Juego() {
-    }
-
     // Constructor con parámetros
     public Juego(String nombre, Integer minJugadores, Integer maxJugadores, Integer duracionMinutos, String categoria, String imagenUrl, String descripcion) {
         this.nombre = nombre;
@@ -51,72 +53,6 @@ public class Juego {
         this.duracionMinutos = duracionMinutos;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
-        this.descripcion = descripcion;
-    }
-
-    // --- GETTERS Y SETTERS ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Integer getMinJugadores() {
-        return minJugadores;
-    }
-
-    public void setMinJugadores(Integer minJugadores) {
-        this.minJugadores = minJugadores;
-    }
-
-    public Integer getMaxJugadores() {
-        return maxJugadores;
-    }
-
-    public void setMaxJugadores(Integer maxJugadores) {
-        this.maxJugadores = maxJugadores;
-    }
-
-    public Integer getDuracionMinutos() {
-        return duracionMinutos;
-    }
-
-    public void setDuracionMinutos(Integer duracionMinutos) {
-        this.duracionMinutos = duracionMinutos;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 

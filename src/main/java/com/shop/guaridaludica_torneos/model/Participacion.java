@@ -1,10 +1,16 @@
 package com.shop.guaridaludica_torneos.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "participaciones")
 public class Participacion {
 
@@ -37,77 +43,9 @@ public class Participacion {
     @Column(name = "estado_inscripcion")
     private String estadoInscripcion = "INSCRITO"; // Ej: INSCRITO, CONFIRMADO, CANCELADO
 
-    // Constructores
-    public Participacion() {}
-
     public Participacion(Torneo torneo, Jugador jugador) {
         this.torneo = torneo;
         this.jugador = jugador;
-    }
-
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Torneo getTorneo() {
-        return torneo;
-    }
-
-    public void setTorneo(Torneo torneo) {
-        this.torneo = torneo;
-    }
-
-    public Jugador getJugador() {
-        return jugador;
-    }
-
-    public void setJugador(Jugador jugador) {
-        this.jugador = jugador;
-    }
-
-    public Integer getPuntuacion() {
-        return puntuacion;
-    }
-
-    public void setPuntuacion(Integer puntuacion) {
-        this.puntuacion = puntuacion;
-    }
-
-    public Boolean getEsGanador() {
-        return esGanador;
-    }
-
-    public void setEsGanador(Boolean esGanador) {
-        this.esGanador = esGanador;
-    }
-
-    public Integer getPosicion() {
-        return posicion;
-    }
-
-    public void setPosicion(Integer posicion) {
-        this.posicion = posicion;
-    }
-
-    public String getEstadoInscripcion() {
-        return estadoInscripcion;
-    }
-
-    public void setEstadoInscripcion(String estadoInscripcion) {
-        this.estadoInscripcion = estadoInscripcion;
     }
 
     @Override

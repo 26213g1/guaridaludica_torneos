@@ -3,7 +3,7 @@
         <h2>🏆 Gestión de Resultados del Torneo</h2>
         <p class="text-muted">Introduce la puntuación obtenida por cada participante. Al guardar, el sistema ordenará la clasificación, asignará el ganador y actualizará el ELO automáticamente.</p>
 
-        <form th:action="@{/torneos/{id}/participantes/procesar(id=${torneoId})}" th:object="${wrapper}" method="post">
+        <form th:action="@{/participaciones/torneo/{id}/finalizar(id=${torneoId})}" th:object="${wrapper}" method="post">
             
             <table class="table table-striped table-hover align-middle">
                 <thead class="table-dark">
