@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <body>
 <div th:fragment="sidebar" class="card shadow-sm border-0 p-3">
     <h5 class="text-secondary fw-bold mb-3 px-2">
         <i class="bi bi-list-nested"></i> Panel de Gestión
     </h5>
     <div class="list-group list-group-flush rounded">
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2 text-danger fw-semibold">
+            <i class="bi bi-speedometer2"></i> Panel de Administración
+        </a>
         <a href="/" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2">
             <i class="bi bi-house-door text-primary"></i> Inicio
         </a>

@@ -10,4 +10,6 @@ import java.util.List;
 public interface TorneoRepository extends JpaRepository<Torneo, Long> {
     List<Torneo> findByEstado(String estado);
     List<Torneo> findByJuegoId(Long juegoId);
+    // Cuenta cuántos torneos hay según su estado (ABIERTO, EN_CURSO, FINALIZADO)
+    long countByEstado(String estado);
 }

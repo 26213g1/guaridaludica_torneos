@@ -71,7 +71,7 @@ public class ParticipacionService {
 
         boolean yaInscrito = participacionRepository.findByTorneoIdAndJugadorId(torneoId, jugadorId).isPresent();
         if (yaInscrito) {
-            throw new IllegalStateException("El jugador " + jugador.getApodo() + "ya está inscrito en este torneo.");
+            throw new IllegalStateException("El jugador " + jugador.getApodo() + " ya está inscrito en este torneo.");
         }
 
         long inscritosActuales = participacionRepository.countByTorneoId(torneoId);

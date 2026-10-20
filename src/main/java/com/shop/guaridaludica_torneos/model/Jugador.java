@@ -51,14 +51,18 @@ public class Jugador {
     @Column(name = "puntos_elo")
     private Integer puntosElo = 1000;
 
+    @Column(name = "torneos_ganados")
+    private Integer torneosGanados = 0;
 
-    public Jugador(String nombre, String apodo, String email, String password, String rol, Integer puntosElo) {
+
+    public Jugador(String nombre, String apodo, String email, String password, String rol, Integer puntosElo, Integer torneosGanados) {
         this.nombre = nombre;
         this.apodo = apodo;
         this.email = email;
         this.password = password;
         this.rol = rol;
         this.puntosElo = puntosElo;
+        this.torneosGanados = torneosGanados;
     }
 
     // toString() devuelve el texto con el que se imprime el objeto.

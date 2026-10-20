@@ -128,4 +128,21 @@ public class JugadorController {
         }
         return "redirect:/jugadores";
     }
+
+    // Endpoint específico para el Ranking Público (Accesible por TODOS, incluido ADMIN)
+    @GetMapping("/ranking")
+    public String verRankingPublico(Authentication authentication, Model model) {
+        // Cargar datos del jugador si está autenticado (para la cabecera / accesos rápidos)
+        if (authentication != null && authentication.isAuthenticated()
+                && !authentication.getName().equals("anonymousUser")) {
+            String emailActual = authentication.getName();
+            jugadorService.obtenerJugadorPorEmail(emailActual).ifPresent(jugadorLogado -> {
+                model.addAttribute("jugador", jugadorLogado);
+            });
+        }
+
+        model.addAttribute("ranking", jugadorService.obtenerRankingPublico());
+        model.addAttribute("template", "jugadores/ranking_publico");
+        return "layout";
+    }
 }

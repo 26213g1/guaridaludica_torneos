@@ -17,4 +17,6 @@ public interface JugadorRepository extends JpaRepository<Jugador, Long> {
     List<Jugador> findByRolNot(String rol);
     // Devuelve todos los jugadores que no sean ADMIN, ordenados por puntos_elo de mayor a menor
     List<Jugador> findByRolNotOrderByPuntosEloDesc(String rol);
+    // Cuenta el total de jugadores registrados
+    long count();
 }
