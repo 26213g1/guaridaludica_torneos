@@ -74,6 +74,17 @@
                                 <span th:unless="${p.esGanador}" th:text="${p.posicion != null ? p.posicion + 'º' : '-'}">-</span>
                             </td>
                             <td class="text-end">
+                                <!-- Botón de desinscripción: Solo aparece si el torneo está ABIERTO -->
+                                <form th:if="${p.torneo != null and p.torneo.estado == 'ABIERTO'}" 
+                                    th:action="@{/participaciones/torneo/{id}/desinscribir(id=${p.torneo.id})}" 
+                                    method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger me-1" 
+                                            title="Desinscribirme"
+                                            onclick="return confirm('¿Estás seguro de que deseas desinscribirte de este torneo?');">
+                                        <i class="bi bi-x-circle"></i> Salir
+                                    </button>
+                                </form>
+
                                 <a th:if="${p.torneo != null}" th:href="@{/torneos/{id}(id=${p.torneo.id})}" class="btn btn-sm btn-outline-primary" title="Ver detalle">
                                     <i class="bi bi-eye"></i> Ver
                                 </a>

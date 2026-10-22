@@ -1,6 +1,8 @@
 package com.shop.guaridaludica_torneos.repository;
 
 import com.shop.guaridaludica_torneos.model.Participacion;
+import com.shop.guaridaludica_torneos.model.Torneo;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +24,6 @@ public interface ParticipacionRepository extends JpaRepository<Participacion, Lo
 
     // Contar cuántos inscritos hay en un torneo para validar el límite de plazas
     long countByTorneoId(Long torneoId);
+
+    Optional<Participacion> findByTorneoIdAndJugadorEmail(Long torneoId, String emailJugador);
 }

@@ -34,6 +34,8 @@ public class SecurityConfig {
                                 .requestMatchers("/torneos/nuevo", "/torneos/guardar", "/torneos/editar/**",
                                                 "/torneos/eliminar/**")
                                 .hasRole("ADMIN")
+                                // Permitir que cualquier usuario logueado pueda desinscribirse
+                                .requestMatchers("/participaciones/torneo/*/desinscribir").authenticated()
                                 .requestMatchers("/participaciones/torneo/**").hasRole("ADMIN") // 👈 Solo ADMIN
                                                                                                 // gestiona y puntúa
 

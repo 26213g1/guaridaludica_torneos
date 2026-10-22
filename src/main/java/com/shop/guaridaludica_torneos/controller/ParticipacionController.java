@@ -138,4 +138,21 @@ public class ParticipacionController {
         model.addAttribute("template", "participaciones/lista");
         return "layout";
     }
+
+    @PostMapping("/torneo/{id}/desinscribir")
+    public String desinscribir(@PathVariable Long id, Authentication authentication, RedirectAttributes redirectAttributes) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        try {
+            String email = authentication.getName();
+            participacionService.desinscribirJugadorDeTorneo(id, email);
+            redirectAttributes.addFlashAttribute("mensaje", "Te has desinscrito del torneo correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/jugadores/perfil";
+    }
 }

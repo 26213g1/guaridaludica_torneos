@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ParticipacionService {
@@ -139,5 +140,23 @@ public class ParticipacionService {
         }
 
         participacionRepository.saveAll(participaciones);
+    }
+
+    public void desinscribirJugadorDeTorneo(Long torneoId, String emailJugador) {
+        // Buscamos el torneo y validamos que esté abierto
+        Torneo torneo = torneoRepository.findById(torneoId)
+                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+                
+        if (!"ABIERTO".equals(torneo.getEstado())) {
+            throw new RuntimeException("No te puedes desinscribir de un torneo que ya ha comenzado o ha finalizado.");
+        }
+
+        // 1. Buscamos la participación en la base de datos
+        Optional<Participacion> participacion = participacionRepository.findByTorneoIdAndJugadorEmail(torneoId, emailJugador);
+
+        // 2. Si existe, la borramos
+        if (participacion.isPresent()) {
+            participacionRepository.deleteById(participacion.get().getId());
+        }
     }
 }

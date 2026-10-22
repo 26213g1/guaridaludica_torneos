@@ -2,7 +2,6 @@ package com.shop.guaridaludica_torneos.controller;
 
 import com.shop.guaridaludica_torneos.repository.JugadorRepository;
 import com.shop.guaridaludica_torneos.repository.TorneoRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,11 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
-@RequiredArgsConstructor
 public class AdminController {
 
     private final JugadorRepository jugadorRepository;
     private final TorneoRepository torneoRepository;
+
+    public AdminController(JugadorRepository jugadorRepository, TorneoRepository torneoRepository) {
+        this.jugadorRepository = jugadorRepository;
+        this.torneoRepository = torneoRepository;
+    }
 
     @GetMapping({"", "/", "/dashboard"})
     public String dashboard(Model model) {
