@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 // juegos y jugadores)
                                 .requestMatchers("/", "/juegos", "/juegos/**", "/torneos", "/torneos/{id}",
                                                 "/jugadores", "/jugadores/**", "/login", "/registro",
-                                                "/css/**", "/js/**", "/images/**", "/api/health")
+                                                "/css/**", "/js/**", "/images/**", "/api/health",
+                                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
                                 .permitAll()
 
                                 // 4. ÚLTIMO: Cualquier otra cosa requiere estar autenticado
@@ -55,6 +56,8 @@ public class SecurityConfig {
                                 .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
                                 .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/logout")
                                                 .permitAll());
+
+                                
 
                 return http.securityContext(context -> context.requireExplicitSave(false)).build();
         }
