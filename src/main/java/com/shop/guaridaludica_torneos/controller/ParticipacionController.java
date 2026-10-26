@@ -6,6 +6,7 @@ import com.shop.guaridaludica_torneos.model.Torneo;
 import com.shop.guaridaludica_torneos.service.JugadorService;
 import com.shop.guaridaludica_torneos.service.ParticipacionService;
 import com.shop.guaridaludica_torneos.service.TorneoService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,27 +116,50 @@ public class ParticipacionController {
     }
 
     // 5. Vista general para listar participaciones (según rol)
+//    @GetMapping("")
+//    public String listarParticipaciones(Authentication authentication, Model model) {
+//        String email = authentication.getName();
+//        Jugador jugador = jugadorService.obtenerJugadorPorEmail(email).orElse(null);
+//
+//        boolean esAdmin = authentication.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+//
+//        List<Participacion> participaciones;
+//
+//        if (esAdmin) {
+//            participaciones = participacionService.listarParticipaciones();
+//        } else if (jugador != null) {
+//            participaciones = participacionService.listarPorJugador(jugador.getId());
+//        } else {
+//            participaciones = List.of();
+//        }
+//
+//        model.addAttribute("participaciones", participaciones);
+//        model.addAttribute("esAdmin", esAdmin);
+//        model.addAttribute("template", "participaciones/lista");
+//        return "layout";
+//    }
+
     @GetMapping("")
-    public String listarParticipaciones(Authentication authentication, Model model) {
+    public String listarMisParticipaciones(Authentication authentication, Model model) {
         String email = authentication.getName();
         Jugador jugador = jugadorService.obtenerJugadorPorEmail(email).orElse(null);
 
-        boolean esAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        List<Participacion> participaciones;
-
-        if (esAdmin) {
-            participaciones = participacionService.listarParticipaciones();
-        } else if (jugador != null) {
-            participaciones = participacionService.listarPorJugador(jugador.getId());
-        } else {
-            participaciones = List.of();
-        }
+        List<Participacion> participaciones = (jugador != null)
+                ? participacionService.listarPorJugador(jugador.getId())
+                : List.of();
 
         model.addAttribute("participaciones", participaciones);
-        model.addAttribute("esAdmin", esAdmin);
-        model.addAttribute("template", "participaciones/lista");
+        model.addAttribute("template", "participaciones/usuario-lista");
+        return "layout";
+    }
+
+    @GetMapping("/admin/participaciones") // O dentro de tu controlador de administración
+    public String gestionarTodasLasParticipaciones(Model model) {
+        List<Participacion> participaciones = participacionService.listarParticipaciones();
+
+        model.addAttribute("participaciones", participaciones);
+        model.addAttribute("template", "participaciones/admin-lista");
         return "layout";
     }
 
