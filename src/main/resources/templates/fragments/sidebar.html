@@ -22,8 +22,13 @@
         <a href="/jugadores" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2">
             <i class="bi bi-people text-info"></i> Jugadores
         </a>
-        <a href="/participaciones" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2">
-            <i class="bi bi-journal-check text-danger"></i> Participaciones
+        <!-- Participaciones para Administrador -->
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/participaciones/admin/participaciones}" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2">
+            <i class="bi bi-journal-check text-danger"></i> Gestión de Participaciones
+        </a>
+        <!-- Participaciones para Usuario Normal -->
+        <a sec:authorize="hasRole('USER')" th:href="@{/participaciones}" class="list-group-item list-group-item-action py-3 d-flex align-items-center gap-2">
+            <i class="bi bi-journal-check text-danger"></i> Mis Participaciones
         </a>
     </div>
 </div>
