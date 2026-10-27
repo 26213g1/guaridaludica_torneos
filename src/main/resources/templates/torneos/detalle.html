@@ -66,7 +66,7 @@
                             </div>
 
                             <!-- Botón de Inscripción (Para usuarios públicos/autenticados) -->
-                            <div class="d-grid mb-2" th:if="${torneo.estado == 'ABIERTO' and plazasDisponibles > 0}">
+                            <div sec:authorize="hasRole('USER')" class="d-grid mb-2" th:if="${torneo.estado == 'ABIERTO' and plazasDisponibles > 0}">
                                 <a th:href="@{/participaciones/inscribir/{id}(id=${torneo.id})}" class="btn btn-success">
                                     <i class="bi bi-check-circle me-1"></i> Inscribirme
                                 </a>
