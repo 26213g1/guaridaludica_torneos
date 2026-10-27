@@ -1,82 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <body>
-<div th:fragment="content">
-    <div class="container py-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <span class="badge bg-primary mb-2" th:text="${torneo.estado}">ABIERTO</span>
-                        <h2 class="fw-bold text-dark" th:text="${torneo.nombre}">Nombre del Torneo</h2>
-                    </div>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="badge bg-primary mb-2" th:text="${torneo.estado}">ABIERTO</span>
+                            <h2 class="fw-bold text-dark" th:text="${torneo.nombre}">Nombre del Torneo</h2>
+                        </div>
 
-                    <!-- Botones de acción según el rol -->
-                    <div>
-                        <a th:href="@{/torneos}" class="btn btn-outline-secondary btn-sm me-2">
-                            <i class="bi bi-arrow-left"></i> Volver al listado
-                        </a>
-                        <!-- Botón de editar solo visible para admin -->
-                        <a th:if="${isAdmin}" th:href="@{/torneos/editar/{id}(id=${torneo.id})}" class="btn btn-primary">
-                            <i class="bi bi-pencil-fill"></i> Editar Torneo
-                        </a>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row g-4">
-                    <!-- Columna Izquierda: Descripción, Reglas y Cartel -->
-                    <div class="col-md-8">
-                        <h5 class="fw-bold text-secondary">Descripción</h5>
-                        <p class="text-muted" th:text="${torneo.descripcion}">Descripción del torneo...</p>
-
-                        <h5 class="fw-bold text-secondary mt-4">Comentarios / Reglas adicionales</h5>
-                        <p class="text-muted" th:text="${torneo.comentarios}">Ninguno</p>
-
-                        <!-- Cartel del Torneo -->
-                        <div class="mt-4" th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}">
-                            <h5 class="fw-bold text-secondary mb-3">Cartel del Evento</h5>
-                            <div class="card shadow-sm p-2 bg-light text-center">
-                                <img th:src="${torneo.imagenUrl}"
-                                     alt="Cartel del Torneo"
-                                     class="img-fluid rounded"
-                                     style="max-height: 450px; object-fit: contain;" />
-                            </div>
+                        <!-- Botones de acción según el rol -->
+                        <div>
+                            <a th:href="@{/torneos}" class="btn btn-outline-secondary btn-sm me-2">
+                                <i class="bi bi-arrow-left"></i> Volver al listado
+                            </a>
+                            <!-- Botón de editar solo visible para admin -->
+                            <a th:if="${isAdmin}" th:href="@{/torneos/editar/{id}(id=${torneo.id})}"
+                                class="btn btn-primary">
+                                <i class="bi bi-pencil-fill"></i> Editar Torneo
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Detalles del Evento, Plazas y Acciones -->
-                    <div class="col-md-4">
-                        <div class="bg-light p-3 rounded shadow-sm">
-                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle me-1"></i> Detalles del Evento</h6>
-                            <p class="mb-2"><strong>Juego:</strong> <span th:text="${torneo.juego != null ? torneo.juego.nombre : 'Libre'}">Catan</span></p>
-                            <p class="mb-2"><strong>Fecha y Hora:</strong> <span th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">24/10/2026 17:00</span></p>
-                            <p class="mb-2"><strong>Máx. Participantes:</strong> <span th:text="${torneo.maxParticipantes}">8</span></p>
-                            <p class="mb-3"><strong>Inscritos actuales:</strong> <span th:text="${numInscritos}">0</span></p>
+                    <hr>
 
-                            <!-- Indicador visual de plazas libres -->
-                            <div class="alert p-2 text-center mb-3" th:classappend="${plazasDisponibles > 0} ? 'alert-success' : 'alert-danger'">
-                                <small class="fw-bold" th:if="${plazasDisponibles > 0}">
-                                    <i class="bi bi-people-fill"></i> ¡Quedan <span th:text="${plazasDisponibles}"></span> plazas libres!
-                                </small>
-                                <small class="fw-bold" th:unless="${plazasDisponibles > 0}">
-                                    <i class="bi bi-exclamation-triangle-fill"></i> Torneo Completo
-                                </small>
+                    <div class="row g-4">
+                        <!-- Columna Izquierda: Descripción, Reglas y Cartel -->
+                        <div class="col-md-8">
+                            <h5 class="fw-bold text-secondary">Descripción</h5>
+                            <p class="text-muted" th:text="${torneo.descripcion}">Descripción del torneo...</p>
+
+                            <h5 class="fw-bold text-secondary mt-4">Comentarios / Reglas adicionales</h5>
+                            <p class="text-muted" th:text="${torneo.comentarios}">Ninguno</p>
+
+                            <!-- Cartel del Torneo -->
+                            <div class="mt-4" th:if="${torneo.imagenUrl != null and !torneo.imagenUrl.isEmpty()}">
+                                <h5 class="fw-bold text-secondary mb-3">Cartel del Evento</h5>
+                                <div class="card shadow-sm p-2 bg-light text-center">
+                                    <img th:src="${torneo.imagenUrl}" alt="Cartel del Torneo" class="img-fluid rounded"
+                                        style="max-height: 450px; object-fit: contain;" />
+                                </div>
                             </div>
+                        </div>
 
-                            <!-- Botón de Inscripción (Para usuarios públicos/autenticados) -->
-                            <div sec:authorize="hasRole('USER')" class="d-grid mb-2" th:if="${torneo.estado == 'ABIERTO' and plazasDisponibles > 0}">
-                                <a th:href="@{/participaciones/inscribir/{id}(id=${torneo.id})}" class="btn btn-success">
-                                    <i class="bi bi-check-circle me-1"></i> Inscribirme
-                                </a>
-                            </div>
+                        <!-- Columna Derecha: Detalles del Evento, Plazas y Acciones -->
+                        <div class="col-md-4">
+                            <div class="bg-light p-3 rounded shadow-sm">
+                                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle me-1"></i> Detalles del
+                                    Evento</h6>
+                                <p class="mb-2"><strong>Juego:</strong> <span
+                                        th:text="${torneo.juego != null ? torneo.juego.nombre : 'Libre'}">Catan</span>
+                                </p>
+                                <p class="mb-2"><strong>Fecha y Hora:</strong> <span
+                                        th:text="${#temporals.format(torneo.fecha, 'dd/MM/yyyy HH:mm')}">24/10/2026
+                                        17:00</span></p>
+                                <p class="mb-2"><strong>Máx. Participantes:</strong> <span
+                                        th:text="${torneo.maxParticipantes}">8</span></p>
+                                <p class="mb-3"><strong>Inscritos actuales:</strong> <span
+                                        th:text="${numInscritos}">0</span></p>
 
-                            <!-- Botón de Gestión para Administradores -->
-                            <div class="d-grid" sec:authorize="hasRole('ROLE_ADMIN')">
-                                <a th:href="@{/participaciones/torneo/{id}(id=${torneo.id})}" class="btn btn-warning text-dark">
-                                    <i class="bi bi-gear me-1"></i> Gestionar Puntuaciones
-                                </a>
+                                <!-- Indicador visual de plazas libres -->
+                                <div class="alert p-2 text-center mb-3"
+                                    th:classappend="${plazasDisponibles > 0} ? 'alert-success' : 'alert-danger'">
+                                    <small class="fw-bold" th:if="${plazasDisponibles > 0}">
+                                        <i class="bi bi-people-fill"></i> ¡Quedan <span
+                                            th:text="${plazasDisponibles}"></span> plazas libres!
+                                    </small>
+                                    <small class="fw-bold" th:unless="${plazasDisponibles > 0}">
+                                        <i class="bi bi-exclamation-triangle-fill"></i> Torneo Completo
+                                    </small>
+                                </div>
+
+                                <!-- Botón de Inscripción (Para usuarios públicos/autenticados) -->
+                                <div sec:authorize="hasRole('USER')" class="d-grid mb-2"
+                                    th:if="${torneo.estado == 'ABIERTO' and plazasDisponibles > 0}">
+                                    <a th:href="@{/participaciones/inscribir/{id}(id=${torneo.id})}"
+                                        class="btn btn-success">
+                                        <i class="bi bi-check-circle me-1"></i> Inscribirme
+                                    </a>
+                                </div>
+
+                                <!-- Botón de Gestión para Administradores (Solo si el torneo NO está FINALIZADO) -->
+                                <div class="d-grid" sec:authorize="hasRole('ROLE_ADMIN')"
+                                    th:if="${torneo.estado != 'FINALIZADO'}">
+                                    <a th:href="@{/participaciones/torneo/{id}(id=${torneo.id})}"
+                                        class="btn btn-warning text-dark">
+                                        <i class="bi bi-gear me-1"></i> Gestionar Puntuaciones
+                                    </a>
+                                </div>
+
+                                <!-- Aviso alternativo para el Admin si el torneo ya finalizó -->
+                                <div class="text-center mt-2" sec:authorize="hasRole('ROLE_ADMIN')"
+                                    th:unless="${torneo.estado != 'FINALIZADO'}">
+                                    <span class="badge bg-secondary w-100 py-2">Torneo Finalizado (Bloqueado)</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,6 +104,5 @@
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

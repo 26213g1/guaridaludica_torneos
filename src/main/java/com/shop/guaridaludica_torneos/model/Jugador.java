@@ -49,7 +49,7 @@ public class Jugador {
     private String rol = "ROLE_USER";
 
     @Column(name = "puntos_elo")
-    private Integer puntosElo = 1000;
+    private Integer puntosElo = 0;
 
     @Column(name = "torneos_ganados")
     private Integer torneosGanados = 0;

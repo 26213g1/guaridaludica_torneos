@@ -19,7 +19,7 @@
                         
                         <td th:text="${p.jugador.apodo}">Apodo del Jugador</td>
                         <td>
-                            <input type="number" class="form-control" th:field="*{participaciones[__${stat.index}__].puntuacion}" required min="0" />
+                            <input type="number" id="puntuacion" class="form-control" th:field="*{participaciones[__${stat.index}__].puntuacion}" required min="0" />
                         </td>
                     </tr>
                 </tbody>

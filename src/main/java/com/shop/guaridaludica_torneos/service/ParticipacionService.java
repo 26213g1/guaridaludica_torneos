@@ -131,6 +131,7 @@ public class ParticipacionService {
                 p.setEsGanador(true);
                 Jugador j = p.getJugador();
                 j.setPuntosElo(j.getPuntosElo() + 25);
+                j.setTorneosGanados(j.getTorneosGanados() + 1);
                 jugadorRepository.save(j);
             } else {
                 p.setEsGanador(false);

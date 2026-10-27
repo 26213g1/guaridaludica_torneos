@@ -32,12 +32,16 @@
             </thead>
             <tbody>
             <tr th:each="j, iterStat : ${ranking}">
-                <!-- Posición con medallas especiales para el podio -->
+                <!-- Posición y medallas: Solo se muestran si el jugador tiene ELO superior al base (>1200) o torneos ganados (>0) -->
                 <td class="fw-bold">
-                    <span th:if="${iterStat.count == 1}" class="badge bg-warning text-dark fs-6">🥇 1</span>
-                    <span th:if="${iterStat.count == 2}" class="badge bg-secondary fs-6">🥈 2</span>
-                    <span th:if="${iterStat.count == 3}" class="badge bg-danger fs-6">🥉 3</span>
-                    <span th:if="${iterStat.count > 3}" th:text="${iterStat.count}" class="ms-2"></span>
+                    <th:block th:if="${(j.puntosElo != null and j.puntosElo > 1200) or (j.torneosGanados != null and j.torneosGanados > 0)}">
+                        <span th:if="${iterStat.count == 1}" class="badge bg-warning text-dark fs-6">🥇 1</span>
+                        <span th:if="${iterStat.count == 2}" class="badge bg-secondary fs-6">🥈 2</span>
+                        <span th:if="${iterStat.count == 3}" class="badge bg-danger fs-6">🥉 3</span>
+                        <span th:if="${iterStat.count > 3}" th:text="${iterStat.count}" class="ms-2"></span>
+                    </th:block>
+                    <!-- Si nadie ha competido todavía, mostramos un guión o dejamos el espacio limpio -->
+                    <span th:unless="${(j.puntosElo != null and j.puntosElo > 1200) or (j.torneosGanados != null and j.torneosGanados > 0)}" class="text-muted">-</span>
                 </td>
 
                 <td>
@@ -45,24 +49,23 @@
                     <span class="fw-semibold" th:text="${j.nombre}">Nombre</span>
                 </td>
 
-                <!-- Estadísticas de torneos ganados (asumiendo que tienes este campo o método) -->
+                <!-- Estadísticas de torneos ganados -->
                 <td class="text-center">
-                    <span class="badge bg-info text-dark" th:text="${j.torneosGanados ?: 0}">0</span>
+                    <span class="badge bg-light text-dark border" th:text="${j.torneosGanados ?: 0}">0</span>
                 </td>
 
                 <!-- Puntuación ELO -->
-                <td class="text-center fw-bold text-success" th:text="${j.puntosElo}">1200</td>
+                <td class="text-center fw-bold text-secondary" th:text="${j.puntosElo ?: 1200}">1200</td>
 
-                <!-- Estado o Rango dinámico según su ELO o actividad -->
+                <!-- Estado o Rango dinámico -->
                 <td class="text-end">
-                    <span th:if="${j.puntosElo >= 1400}" class="badge bg-warning text-dark">Maestro Lúdico</span>
-                    <span th:if="${j.puntosElo >= 1250 and j.puntosElo < 1400}" class="badge bg-primary">Estratega</span>
-                    <span th:if="${j.puntosElo < 1250}" class="badge bg-success">Competidor</span>
+                    <span th:if="${j.puntosElo > 20}" class="badge bg-success">Competidor</span>
+                    <span th:unless="${j.puntosElo > 20}" class="badge bg-secondary">Sin estrenar</span>
                 </td>
             </tr>
 
             <tr th:if="${#lists.isEmpty(ranking)}">
-                <td colspan="5" class="text-center text-muted py-4">Aún no hay jugadores en el ranking. ¡Participa en un torneo para estrenar la tabla!</td>
+                <td colspan="5" class="text-center text-muted py-4">Aún no hay jugadores registrados en el ranking. ¡Regístrate y participa en el primer torneo!</td>
             </tr>
             </tbody>
         </table>
