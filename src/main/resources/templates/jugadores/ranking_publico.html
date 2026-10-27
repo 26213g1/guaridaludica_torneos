@@ -12,7 +12,7 @@
         <h2>🏆 Ranking de Jugadores</h2>
 
         <!-- Si está logueado, le mostramos un acceso directo a su perfil -->
-        <div sec:authorize="isAuthenticated()">
+        <div sec:authorize="hasRole('USER')">
             <a th:href="@{/jugadores/perfil}" class="btn btn-outline-primary">
                 <i class="bi bi-person-gear"></i> Mi Perfil y Datos
             </a>
