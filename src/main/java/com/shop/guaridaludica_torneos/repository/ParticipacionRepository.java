@@ -4,6 +4,8 @@ import com.shop.guaridaludica_torneos.model.Participacion;
 import com.shop.guaridaludica_torneos.model.Torneo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +28,16 @@ public interface ParticipacionRepository extends JpaRepository<Participacion, Lo
     long countByTorneoId(Long torneoId);
 
     Optional<Participacion> findByTorneoIdAndJugadorEmail(Long torneoId, String emailJugador);
+
+    @Query("SELECT p FROM Participacion p JOIN p.jugador j WHERE " +
+           "LOWER(j.email) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "OR LOWER(j.nombre) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Participacion> findByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT p FROM Participacion p JOIN p.jugador j WHERE " +
+           "p.torneo.id = :torneoId AND (" +
+           "LOWER(j.email) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "OR LOWER(j.nombre) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Participacion> findByTorneoIdAndKeyword(@Param("torneoId") Long torneoId, @Param("keyword") String keyword);
+
 }

@@ -22,9 +22,9 @@ public class ParticipacionController {
     private final JugadorService jugadorService;
     private final TorneoService torneoService;
 
-    public ParticipacionController(ParticipacionService participacionService, 
-                                   JugadorService jugadorService,
-                                   TorneoService torneoService) {
+    public ParticipacionController(ParticipacionService participacionService,
+            JugadorService jugadorService,
+            TorneoService torneoService) {
         this.participacionService = participacionService;
         this.jugadorService = jugadorService;
         this.torneoService = torneoService;
@@ -56,7 +56,8 @@ public class ParticipacionController {
 
     // 2. Vista de Admin: Ver participantes de un torneo e introducir puntuaciones
     @GetMapping("/torneo/{torneoId}")
-    public String gestionarParticipantesTorneo(@PathVariable Long torneoId, Model model, RedirectAttributes redirectAttributes) {
+    public String gestionarParticipantesTorneo(@PathVariable Long torneoId, Model model,
+            RedirectAttributes redirectAttributes) {
         try {
             Torneo torneo = torneoService.obtenerTorneoPorId(torneoId)
                     .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
@@ -91,7 +92,8 @@ public class ParticipacionController {
         return "redirect:/participaciones/torneo/" + torneoId;
     }
 
-    // 4. Finalizar torneo definitivamente (calcula posiciones, asigna ELO y cambia estado a FINALIZADO)
+    // 4. Finalizar torneo definitivamente (calcula posiciones, asigna ELO y cambia
+    // estado a FINALIZADO)
     @PostMapping("/torneo/{torneoId}/finalizar")
     public String finalizarTorneoDefinitivamente(@PathVariable Long torneoId,
             @ModelAttribute WrapperParticipaciones wrapper,
@@ -106,7 +108,8 @@ public class ParticipacionController {
             torneo.setEstado("FINALIZADO");
             torneoService.guardarTorneo(torneo, null);
 
-            redirectAttributes.addFlashAttribute("mensaje", "¡Torneo finalizado con éxito! Posiciones y ELO calculados.");
+            redirectAttributes.addFlashAttribute("mensaje",
+                    "¡Torneo finalizado con éxito! Posiciones y ELO calculados.");
             return "redirect:/torneos/" + torneoId;
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al finalizar el torneo: " + e.getMessage());
@@ -128,17 +131,25 @@ public class ParticipacionController {
         return "layout";
     }
 
-    @GetMapping("/admin/participaciones") // O dentro de tu controlador de administración
-    public String gestionarTodasLasParticipaciones(Model model) {
-        List<Participacion> participaciones = participacionService.listarParticipaciones();
+    @GetMapping("/admin/participaciones")
+    public String gestionarTodasLasParticipaciones(
+            @RequestParam(required = false) Long torneoId,
+            @RequestParam(required = false) String keyword,
+            Model model) {
+
+        // Llamamos al repositorio con los filtros (si son nulos, traerá todo)
+        List<Participacion> participaciones = participacionService.listarParticipaciones(torneoId, keyword);
 
         model.addAttribute("participaciones", participaciones);
+        model.addAttribute("listaTorneos", torneoService.listarTorneos()); // Para poblar el <select> del filtro
         model.addAttribute("template", "participaciones/admin-lista");
+
         return "layout";
     }
 
     @PostMapping("/torneo/{id}/desinscribir")
-    public String desinscribir(@PathVariable Long id, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String desinscribir(@PathVariable Long id, Authentication authentication,
+            RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }

@@ -32,16 +32,16 @@
             </thead>
             <tbody>
             <tr th:each="j, iterStat : ${ranking}">
-                <!-- Posición y medallas: Solo se muestran si el jugador tiene ELO superior al base (>1200) o torneos ganados (>0) -->
+                <!-- Posición y medallas: Solo se muestran si el jugador tiene ELO superior al base (>20) o torneos ganados (>0) -->
                 <td class="fw-bold">
-                    <th:block th:if="${(j.puntosElo != null and j.puntosElo > 1200) or (j.torneosGanados != null and j.torneosGanados > 0)}">
+                    <th:block th:if="${(j.puntosElo != null and j.puntosElo > 20) or (j.torneosGanados != null and j.torneosGanados > 0)}">
                         <span th:if="${iterStat.count == 1}" class="badge bg-warning text-dark fs-6">🥇 1</span>
                         <span th:if="${iterStat.count == 2}" class="badge bg-secondary fs-6">🥈 2</span>
                         <span th:if="${iterStat.count == 3}" class="badge bg-danger fs-6">🥉 3</span>
                         <span th:if="${iterStat.count > 3}" th:text="${iterStat.count}" class="ms-2"></span>
                     </th:block>
                     <!-- Si nadie ha competido todavía, mostramos un guión o dejamos el espacio limpio -->
-                    <span th:unless="${(j.puntosElo != null and j.puntosElo > 1200) or (j.torneosGanados != null and j.torneosGanados > 0)}" class="text-muted">-</span>
+                    <span th:unless="${(j.puntosElo != null and j.puntosElo > 20) or (j.torneosGanados != null and j.torneosGanados > 0)}" class="text-muted">-</span>
                 </td>
 
                 <td>
@@ -55,7 +55,7 @@
                 </td>
 
                 <!-- Puntuación ELO -->
-                <td class="text-center fw-bold text-secondary" th:text="${j.puntosElo ?: 1200}">1200</td>
+                <td class="text-center fw-bold text-secondary" th:text="${j.puntosElo ?: 20}">1200</td>
 
                 <!-- Estado o Rango dinámico -->
                 <td class="text-end">

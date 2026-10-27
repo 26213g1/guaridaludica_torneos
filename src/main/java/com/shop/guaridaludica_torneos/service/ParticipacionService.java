@@ -28,8 +28,20 @@ public class ParticipacionService {
         this.jugadorRepository = jugadorRepository;
     }
 
-    public List<Participacion> listarParticipaciones() {
-        return participacionRepository.findAll();
+    public List<Participacion> listarParticipaciones(Long torneoId, String keyword) {
+        // Limpiamos los espacios vacíos para tratarlos como null real
+        String searchKeyword = (keyword != null && keyword.trim().isEmpty()) ? null : keyword;
+
+        // Decidimos la consulta exacta según los filtros presentes
+        if (torneoId != null && searchKeyword != null) {
+            return participacionRepository.findByTorneoIdAndKeyword(torneoId, searchKeyword);
+        } else if (torneoId != null) {
+            return participacionRepository.findByTorneoId(torneoId);
+        } else if (searchKeyword != null) {
+            return participacionRepository.findByKeyword(searchKeyword);
+        } else {
+            return participacionRepository.findAll();
+        }
     }
 
     public List<Participacion> listarPorTorneo(Long torneoId) {
@@ -62,7 +74,8 @@ public class ParticipacionService {
         Torneo torneo = torneoRepository.findById(torneoId)
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
-        // VALIDACIÓN NUEVA: Si el torneo ya no está ABIERTO, no se permite la inscripción
+        // VALIDACIÓN NUEVA: Si el torneo ya no está ABIERTO, no se permite la
+        // inscripción
         if (!"ABIERTO".equalsIgnoreCase(torneo.getEstado())) {
             throw new IllegalStateException("No te puedes inscribir. El torneo ya ha comenzado o ha finalizado.");
         }
@@ -88,7 +101,8 @@ public class ParticipacionService {
         participacionRepository.save(participacion);
     }
 
-    // 2. Guardar puntuaciones de forma provisional (sin tocar ELO ni posiciones definitivas)
+    // 2. Guardar puntuaciones de forma provisional (sin tocar ELO ni posiciones
+    // definitivas)
     @Transactional
     public void guardarPuntuacionesProvisionales(Long torneoId, List<Participacion> resultadosForm) {
         List<Participacion> participaciones = participacionRepository.findByTorneoId(torneoId);
@@ -104,7 +118,8 @@ public class ParticipacionService {
         participacionRepository.saveAll(participaciones);
     }
 
-    // 3. Procesar resultados definitivos del torneo (Admin finaliza, calcula posiciones, ganador y ELO)
+    // 3. Procesar resultados definitivos del torneo (Admin finaliza, calcula
+    // posiciones, ganador y ELO)
     @Transactional
     public void procesarResultadosTorneo(Long torneoId, List<Participacion> resultadosForm) {
         List<Participacion> participaciones = participacionRepository.findByTorneoId(torneoId);
@@ -147,13 +162,14 @@ public class ParticipacionService {
         // Buscamos el torneo y validamos que esté abierto
         Torneo torneo = torneoRepository.findById(torneoId)
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
-                
+
         if (!"ABIERTO".equals(torneo.getEstado())) {
             throw new RuntimeException("No te puedes desinscribir de un torneo que ya ha comenzado o ha finalizado.");
         }
 
         // 1. Buscamos la participación en la base de datos
-        Optional<Participacion> participacion = participacionRepository.findByTorneoIdAndJugadorEmail(torneoId, emailJugador);
+        Optional<Participacion> participacion = participacionRepository.findByTorneoIdAndJugadorEmail(torneoId,
+                emailJugador);
 
         // 2. Si existe, la borramos
         if (participacion.isPresent()) {

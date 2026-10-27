@@ -2,37 +2,72 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="mb-0">Gestión Global de Participaciones</h3>
-            <p class="text-muted small mb-0">Vista de Administrador: Control general de inscripciones y puntuaciones.</p>
+            <p class="text-muted small mb-0">Vista de Administrador: Control general de inscripciones y puntuaciones.
+            </p>
         </div>
         <a th:href="@{/torneos}" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-arrow-left"></i> Volver a Torneos
         </a>
     </div>
 
+    <!-- Barra de Filtros -->
+    <div class="card bg-light border-0 p-3 mb-4">
+        <form method="get" th:action="@{/participaciones/admin/participaciones}" class="row g-3 align-items-end">
+            <!-- Filtrar por Torneo -->
+            <div class="col-md-4">
+                <label for="torneoId" class="form-label small fw-bold text-muted mb-1">Filtrar por Torneo</label>
+                <select name="torneoId" id="torneoId" class="form-select form-select-sm">
+                    <option value="">-- Todos los torneos --</option>
+                    <option th:each="t : ${listaTorneos}" th:value="${t.id}" th:text="${t.nombre}"
+                        th:selected="${t.id == param.torneoId}">Torneo</option>
+                </select>
+            </div>
+
+            <!-- Buscar por Jugador -->
+            <div class="col-md-4">
+                <label for="keyword" class="form-label small fw-bold text-muted mb-1">Buscar Jugador</label>
+                <input type="text" name="keyword" id="keyword" class="form-control form-control-sm"
+                    placeholder="Email o nombre..." th:value="${param.keyword}">
+            </div>
+
+            <!-- Botones de acción perfectamente alineados -->
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-search"></i> Filtrar
+                </button>
+                <a th:href="@{/participaciones/admin/participaciones}" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center px-3"
+                    title="Limpiar filtros">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+
     <!-- Tabla global de participaciones -->
     <div class="table-responsive" th:if="${not #lists.isEmpty(participaciones)}">
         <table class="table table-striped table-hover align-middle">
             <thead class="table-dark">
-            <tr>
-                <th>Torneo</th>
-                <th>Jugador (Email / Usuario)</th>
-                <th class="text-center">Puntuación</th>
-                <th class="text-center">Posición</th>
-                <th class="text-end">Acciones</th>
-            </tr>
+                <tr>
+                    <th>Torneo</th>
+                    <th>Jugador</th>
+                    <th class="text-center">Puntuación</th>
+                    <th class="text-center">Posición</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="p : ${participaciones}">
-                <td class="fw-bold" th:text="${p.torneo != null ? p.torneo.nombre : 'Torneo eliminado'}">Torneo</td>
-                <td th:text="${p.jugador != null ? p.jugador.email : 'Jugador desconocido'}">Jugador</td>
-                <td class="text-center" th:text="${p.puntuacion}">0</td>
-                <td class="text-center" th:text="${p.posicion != null ? p.posicion : '-'}">-</td>
-                <td class="text-end">
-                    <a th:href="@{/torneos/{id}(id=${p.torneo.id})}" class="btn btn-sm btn-outline-primary" title="Ver Torneo">
-                        <i class="bi bi-eye"></i> Ver
-                    </a>
-                </td>
-            </tr>
+                <tr th:each="p : ${participaciones}">
+                    <td class="fw-bold" th:text="${p.torneo != null ? p.torneo.nombre : 'Torneo eliminado'}">Torneo</td>
+                    <td th:text="${p.jugador != null ? p.jugador.email : 'Jugador desconocido'}">Jugador</td>
+                    <td class="text-center" th:text="${p.puntuacion}">0</td>
+                    <td class="text-center" th:text="${p.posicion != null ? p.posicion : '-'}">-</td>
+                    <td class="text-end">
+                        <a th:href="@{/torneos/{id}(id=${p.torneo.id})}" class="btn btn-sm btn-outline-primary"
+                            title="Ver Torneo">
+                            <i class="bi bi-eye"></i> Ver
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
