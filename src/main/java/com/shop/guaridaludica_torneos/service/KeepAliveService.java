@@ -12,7 +12,7 @@ public class KeepAliveService {
     // Se ejecuta cada 14 minutos (840,000 milisegundos)
     //@Scheduled(fixedRate = 840000)
     // Se ejecuta cada 14 minutos (minutos 0, 14, 28 y 42), exclusivamente entre las 09:00 y las 23:00, todos los días.
-    @Scheduled(cron = "0 0,14,28,42 9-23 * * *")
+    @Scheduled(cron = "0 0,14,28,42 10-20 * * *")
     public void mantenerDespierta() {
         try {
             String url = "https://guaridaludica-torneos.onrender.com/"; // Pon tu URL pública aquí
