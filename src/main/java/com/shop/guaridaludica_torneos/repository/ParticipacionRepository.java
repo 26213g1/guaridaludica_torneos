@@ -1,7 +1,6 @@
 package com.shop.guaridaludica_torneos.repository;
 
 import com.shop.guaridaludica_torneos.model.Participacion;
-import com.shop.guaridaludica_torneos.model.Torneo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

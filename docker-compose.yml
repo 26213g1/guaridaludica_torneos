@@ -1,0 +1,45 @@
+services:
+  # Servicio 1: Base de Datos PostgreSQL
+  # postgres-db:
+  #   image: postgres:15-alpine
+  #   container_name: guarida_postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: guaridadb
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: guaridaL02
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #   networks:
+  #     - guarida-network
+
+  # Servicio 2: Aplicación Spring Boot
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.HUB
+    image: jmmoraj/guaridaludica_torneos:latest
+    container_name: guaridaludica_torneos
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0
+      - SPRING_DATASOURCE_USERNAME=postgres.pazftusbmxpdvycstexm
+      - SPRING_DATASOURCE_PASSWORD=C0y0t3_02_03_04
+      - MAIL_PASSWORD=xsmtpsib-33fd4572d7e1400c5f657dcf7a46b855e3265d38a0b261dffb0ece4c99756400-e2PSbUtj6weGyF2R
+    # depends_on:
+    #   - postgres-db
+    networks:
+      - guarida-network
+
+# volumes:
+#   postgres_data:
+
+networks:
+  guarida-network:
+    driver: bridge
